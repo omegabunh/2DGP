@@ -1,6 +1,6 @@
 from pico2d import *
 
-def handle_events():
+def character_handle_events():
     global running
     global dir_x
     global dir_y
@@ -9,6 +9,9 @@ def handle_events():
     global side_3
     global attack
     global prone
+    global jumpstate
+    global jumpforce
+
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -27,13 +30,22 @@ def handle_events():
                     side_3 = 1
                 elif side_1 == 1:
                     side_3 = 0
-            elif event.key == SDLK_LALT:
+            elif event.key == SDLK_LALT and jumpstate == False:
                 if side_1 == 0:
-                    dir_y += 4
+                    jumpstate = True
+                    jumpforce = 60
                     side_1 = 4
                 elif side_1 == 1:
-                    dir_y += 4
+                    jumpstate = True
+                    jumpforce = 60
                     side_1 = 5
+           # elif event.key == SDLK_LALT:
+               # if side_1 == 0:
+                #    dir_y += 4
+                 #   side_1 = 4
+               # elif side_1 == 1:
+                  #  dir_y += 4
+                 #   side_1 = 5
             elif event.key == SDLK_LCTRL:
                 attack = True
                 if side_1 == 0:
@@ -56,12 +68,10 @@ def handle_events():
                     side_1 = 0
                 elif side_3 == 0:
                     side_1 = 1
-            elif event.key == SDLK_LALT:
+            elif event.key == SDLK_LALT and jumpstate == True:
                 if side_1 == 4:
-                    dir_y -= 4
                     side_1 = 0
                 elif side_1 == 5:
-                    dir_y -= 4
                     side_1 = 1
             elif event.key == SDLK_LCTRL:
                 attack = False
@@ -88,6 +98,8 @@ dir_y = 0
 side_1 = 0
 side_2 = 0
 side_3 = 0
+jumpstate = False
+jumpforce = 0
 
 while running:
     clear_canvas()
@@ -102,11 +114,19 @@ while running:
         character_prone.clip_draw(frame * 140, side_3 * 55, 140, 55, x, y - 15)
     update_canvas()
 
-    handle_events()
+    character_handle_events()
     frame = (frame + 1) % 4
     x += dir_x * 5
-    y = 170 + dir_y * 15
-    delay(0.08)
+
+    if jumpstate == True:
+        y = 170 + jumpforce
+        jumpforce -=8
+        print(jumpforce)
+        if y <= 170:
+            jumpstate = False
+            y = 170
+
+    delay(0.05)
 
 
 close_canvas()

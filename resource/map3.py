@@ -1,15 +1,23 @@
 from pico2d import *
-MAP_WIDTH, MAP_HEIGHT = 800, 600
+import random
+MAP_WIDTH, MAP_HEIGHT = 2050, 1550
 class Boss:
     def __init__(self):
         self.x, self.y = 1070, 470
         self.frame = 0
-        self.image = load_image('boss_phase1(248x245).png')
+        self.image = load_image('boss_phase2(356x384).png')
     def update(self):
         self.frame = (self.frame + 1) % 8
+    def move(self, p1, p2, p3, p4):
+        for i in range(0, 100, 2):
+            t = i / 100
+            self.x = ((-t ** 3 + 2 * t ** 2 - t) * p4[0] + (3 * t ** 3 - 5 * t ** 2 + 2) * p1[0] + (
+                        -3 * t ** 3 + 4 * t ** 2 + t) * p2[0] + (t ** 3 - t ** 2) * p3[0]) / 2
+            self.y = ((-t ** 3 + 2 * t ** 2 - t) * p4[1] + (3 * t ** 3 - 5 * t ** 2 + 2) * p1[1] + (
+                        -3 * t ** 3 + 4 * t ** 2 + t) * p2[1] + (t ** 3 - t ** 2) * p3[1]) / 2
 
     def draw(self):
-        self.image.clip_draw(self.frame * 248, 0, 248, 245, self.x, self.y)
+        self.image.clip_draw(self.frame * 356, 0, 356, 384, self.x, self.y)
 
 def character_handle_events():
     global running
@@ -100,13 +108,17 @@ dir_y = 0
 side_character_idle = 0
 side_character_attack = 0
 side_character_prone = 0
-
+size = 10
+points = [(random.randint(0 + 100, MAP_WIDTH-100), random.randint(0+100, MAP_HEIGHT-100)) for i in range(size)]
+n = 1
 
 while running:
     boss.update()
     clear_canvas()
-    map1.draw(874, 489.5)
-
+    map1.draw(MAP_WIDTH // 2, MAP_HEIGHT // 2)
+    p1, p2, p3, p4 = points[n - 3], points[n - 2], points[n - 1], points[n]
+    n = (n + 1) % size
+    boss.move(p1, p2, p3, p4)
     boss.draw()
     if attack == False:
         character.clip_draw(frame * 92, side_character_idle * 96, 92, 96, x, y)

@@ -4,9 +4,9 @@ def character_handle_events():
     global running
     global dir_x
     global dir_y
-    global side_1
-    global side_2
-    global side_3
+    global side_character_idle
+    global side_character_attack
+    global side_character_prone
     global attack
     global prone
     global jumpstate
@@ -95,9 +95,9 @@ y = 170
 frame = 0
 dir_x = 0
 dir_y = 0
-side_1 = 0
-side_2 = 0
-side_3 = 0
+side_character_idle = 0
+side_character_attack = 0
+side_character_prone = 0
 jumpstate = False
 jumpforce = 0
 
@@ -106,12 +106,12 @@ while running:
     map1.draw(874, 489.5)
     if attack == False:
         if prone == False:
-            character.clip_draw(frame * 92, side_1 * 96, 92, 96, x, y)
+            character.clip_draw(frame * 92, side_character_idle * 96, 92, 96, x, y)
     elif attack == True:
         if prone == False:
-            character_attack.clip_draw(frame * 260, side_2 * 172, 260, 172, x, y+23)
+            character_attack.clip_draw(frame * 260, side_character_attack * 172, 260, 172, x, y + 23)
     if prone == True:
-        character_prone.clip_draw(frame * 140, side_3 * 55, 140, 55, x, y - 15)
+        character_prone.clip_draw(frame * 140, side_character_prone * 55, 140, 55, x, y - 15)
     update_canvas()
 
     character_handle_events()

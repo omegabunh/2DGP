@@ -29,9 +29,9 @@ def character_handle_events():
     global running
     global dir_x
     global dir_y
-    global side_1
-    global side_2
-    global side_3
+    global side_character_idle
+    global side_character_attack
+    global side_character_prone
     global attack
     global prone
     global jumpstate
@@ -45,59 +45,59 @@ def character_handle_events():
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_RIGHT:
                 dir_x += 2
-                side_1 = 2
+                side_character_idle = 2
             elif event.key == SDLK_LEFT:
                 dir_x -= 2
-                side_1 = 3
+                side_character_idle = 3
             elif event.key == SDLK_DOWN:
                 prone = True
-                if side_1 == 0:
-                    side_3 = 1
-                elif side_1 == 1:
-                    side_3 = 0
+                if side_character_idle == 0:
+                    side_character_prone = 1
+                elif side_character_idle == 1:
+                    side_character_prone = 0
             elif event.key == SDLK_LALT and jumpstate == False:
-                if side_1 == 0:
+                if side_character_idle == 0:
                     jumpstate = True
                     jumpforce = 60
-                    side_1 = 4
-                elif side_1 == 1:
+                    side_character_idle = 4
+                elif side_character_idle == 1:
                     jumpstate = True
                     jumpforce = 60
-                    side_1 = 5
+                    side_character_idle = 5
 
             elif event.key == SDLK_LCTRL:
                 attack = True
-                if side_1 == 0:
-                    side_2 = 1
-                elif side_1 == 1:
-                    side_2 = 0
+                if side_character_idle == 0:
+                    side_character_attack = 1
+                elif side_character_idle == 1:
+                    side_character_attack = 0
             elif event.key == SDLK_ESCAPE:
                 running = False
 
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
                 dir_x -= 2
-                side_1 = 0
+                side_character_idle = 0
             elif event.key == SDLK_LEFT:
                 dir_x += 2
-                side_1 = 1
+                side_character_idle = 1
             elif event.key == SDLK_DOWN:
                 prone = False
-                if side_3 == 1:
-                    side_1 = 0
-                elif side_3 == 0:
-                    side_1 = 1
+                if side_character_prone == 1:
+                    side_character_idle = 0
+                elif side_character_prone == 0:
+                    side_character_idle = 1
             elif event.key == SDLK_LALT and jumpstate == True:
-                if side_1 == 4:
-                    side_1 = 0
-                elif side_1 == 5:
-                    side_1 = 1
+                if side_character_idle == 4:
+                    side_character_idle = 0
+                elif side_character_idle == 5:
+                    side_character_idle = 1
             elif event.key == SDLK_LCTRL:
                 attack = False
-                if side_2 == 0:
-                    side_1 = 1
-                elif side_2 == 1:
-                    side_1 = 0
+                if side_character_attack == 0:
+                    side_character_idle = 1
+                elif side_character_attack == 1:
+                    side_character_idle = 0
 
     pass
 
@@ -117,9 +117,9 @@ boss = Boss()
 frame_character = 0
 dir_x = 0
 dir_y = 0
-side_1 = 0
-side_2 = 0
-side_3 = 0
+side_character_idle = 0
+side_character_attack = 0
+side_character_prone = 0
 jumpstate = False
 jumpforce = 0
 t = random.randint(1, 4)
@@ -137,12 +137,12 @@ while running:
     boss.draw()
     if attack == False:
         if prone == False:
-            character.clip_draw(frame_character * 92, side_1 * 96, 92, 96, x, y)
+            character.clip_draw(frame_character * 92, side_character_idle * 96, 92, 96, x, y)
     elif attack == True:
         if prone == False:
-            character_attack.clip_draw(frame_character * 260, side_2 * 172, 260, 172, x, y+23)
+            character_attack.clip_draw(frame_character * 260, side_character_attack * 172, 260, 172, x, y + 23)
     if prone == True:
-        character_prone.clip_draw(frame_character * 140, side_3 * 55, 140, 55, x, y - 15)
+        character_prone.clip_draw(frame_character * 140, side_character_prone * 55, 140, 55, x, y - 15)
 
 
     update_canvas()

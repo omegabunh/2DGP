@@ -1,9 +1,18 @@
+import random
+import json
+import os
 
 from pico2d import *
-import random
+import game_framework
+import title_state
+
 MAP_WIDTH, MAP_HEIGHT = 1997, 950
 
-
+boss = None
+monster = None
+character = None
+monsters = None
+key = None
 class Boss:
     def __init__(self):
         self.x, self.y = 1070, 470
@@ -102,11 +111,11 @@ class Character:
                 elif event.key == SDLK_LALT and jump_state == False:
                     if side_character_idle == 0:
                         jump_state = True
-                        jump_force = 60
+                        jump_force = 100
                         side_character_idle = 4
                     elif side_character_idle == 1:
                         jump_state = True
-                        jump_force = 60
+                        jump_force = 100
                         side_character_idle = 5
                 elif event.key == SDLK_LCTRL:
                     attack = True
@@ -172,13 +181,163 @@ class Character:
                             side_character_idle = 0
                         elif side_character_skill2 == 1:
                             side_character_idle = 1
+t = random.randint(1, 4)
+
+def enter():
+    global image, key
+    global boss, monster, character, monsters
+    image = load_image('map2.png')
+    key = load_image('key.png')
+    boss = Boss()
+    monster = Monster()
+    character = Character()
+
+def exit():
+    global boss, monster, character, monsters
+    global image, key
+    del(image)
+    del(key)
+    del(boss)
+    del(monster)
+    del(character)
+
+def pause():
+    pass
 
 
-open_canvas(MAP_WIDTH, MAP_HEIGHT)
-map1 = load_image('map2.png')
-character = load_image('character.png')
-character_attack = load_image('character_attack.png')
-character_prone = load_image('character_prone.png')
+def resume():
+    pass
+
+
+def handle_events():
+    global running
+    global dir_x
+    global dir_y
+    global side_character_idle
+    global side_character_attack
+    global side_character_prone
+    global side_character_skill1
+    global side_character_skill2
+    global attack
+    global skill
+    global skill2
+    global prone
+    global jump_state
+    global jump_force
+    global count
+    events = get_events()
+    #character.handle_events()
+    for event in events:
+        if event.type == SDL_QUIT:
+            game_framework.quit()
+        #elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            #game_framework.change_state(title_state)
+        elif event.type == SDL_KEYDOWN:
+            if event.key == SDLK_ESCAPE:
+                game_framework.change_state(title_state)
+            elif event.key == SDLK_RIGHT:
+                dir_x += 2
+                side_character_idle = 2
+            elif event.key == SDLK_LEFT:
+                dir_x -= 2
+                side_character_idle = 3
+            elif event.key == SDLK_DOWN:
+                prone = True
+                if side_character_idle == 0:
+                    side_character_prone = 1
+                elif side_character_idle == 1:
+                    side_character_prone = 0
+            elif event.key == SDLK_LALT and jump_state == False:
+                if side_character_idle == 0:
+                    jump_state = True
+                    jump_force = 60
+                    side_character_idle = 4
+                elif side_character_idle == 1:
+                    jump_state = True
+                    jump_force = 60
+                    side_character_idle = 5
+            elif event.key == SDLK_LCTRL:
+                attack = True
+                if side_character_idle == 0:
+                    side_character_attack = 1
+                elif side_character_idle == 1:
+                    side_character_attack = 0
+            elif event.key == SDLK_HOME:
+                count += 1
+                if count % 2 == 1:
+                    skill2 = True
+                elif count % 2 == 0:
+                    skill2 = False
+            elif event.key == SDLK_LSHIFT:
+                skill = True
+                if skill2 == False:
+                    if side_character_idle == 0:
+                        side_character_skill1 = 0
+                    elif side_character_idle == 1:
+                        side_character_skill1 = 1
+                elif skill2 == True:
+                    if side_character_idle == 0:
+                        side_character_skill2 = 0
+                    elif side_character_idle == 1:
+                        side_character_skill2 = 1
+
+            elif event.key == SDLK_ESCAPE:
+                running = False
+
+        elif event.type == SDL_KEYUP:
+            if event.key == SDLK_RIGHT:
+                dir_x -= 2
+                side_character_idle = 0
+            elif event.key == SDLK_LEFT:
+                dir_x += 2
+                side_character_idle = 1
+            elif event.key == SDLK_DOWN:
+                prone = False
+                if side_character_prone == 1:
+                    side_character_idle = 0
+                elif side_character_prone == 0:
+                    side_character_idle = 1
+            elif event.key == SDLK_LALT and jump_state == True:
+                if side_character_idle == 4:
+                    side_character_idle = 0
+                elif side_character_idle == 5:
+                    side_character_idle = 1
+            elif event.key == SDLK_LCTRL:
+                attack = False
+                if side_character_attack == 0:
+                    side_character_idle = 1
+                elif side_character_attack == 1:
+                    side_character_idle = 0
+            elif event.key == SDLK_LSHIFT:
+                skill = False
+                if skill2 == False:
+                    if side_character_skill1 == 0:
+                        side_character_idle = 0
+                    elif side_character_skill1 == 1:
+                        side_character_idle = 1
+                elif skill2 == True:
+                    if side_character_skill2 == 0:
+                        side_character_idle = 0
+                    elif side_character_skill2 == 1:
+                        side_character_idle = 1
+
+def update():
+    boss.update()
+    character.update()
+    monster.update()
+
+def draw():
+    global image
+    clear_canvas()
+    image.draw(MAP_WIDTH//2, MAP_HEIGHT//2)
+    boss.draw()
+    monster.draw()
+    character.draw()
+    key.draw(1700, 50)
+    update_canvas()
+    delay(0.05)
+#open_canvas(MAP_WIDTH, MAP_HEIGHT)
+
 
 dir_x = 0
 dir_y = 0
@@ -195,27 +354,7 @@ skill2 = False
 jump_state = False
 jump_force = 0
 count = 0
-character = Character()
-
-boss = Boss()
-t = random.randint(1, 4)
-monsters = [Monster() for i in range(t)]
-while running:
-    boss.update()
-    character.handle_events()
-    character.update()
-    for monster in monsters:
-        monster.update()
-    clear_canvas()
 
 
-    map1.draw(MAP_WIDTH//2, MAP_HEIGHT//2)
-    for monster in monsters:
-        monster.draw()
-    boss.draw()
 
-    character.draw()
-    update_canvas()
 
-    delay(0.05)
-close_canvas()

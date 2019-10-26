@@ -8,16 +8,42 @@ import main_state
 name = "TitleState"
 image = None
 character = None
+dir_x = 0
+dir_y = 0
+side_character_idle = 0
+side_character_attack = 0
+side_character_prone = 0
+side_character_skill1 = 0
+side_character_skill2 = 0
+running = True
+attack = False
+prone = False
+skill = False
+skill2 = False
+jump_state = False
+jump_force = 0
+count = 0
+
 class Character:
+    idle = None
+    attack = None
+    prone = None
+    skill = None
+    skill2 = None
     def __init__(self):
         self.x, self.y = MAP_WIDTH // 2, 170
         self.frame = 0
         self.frame1 = 0
-        self.character = load_image('character.png')
-        self.character_attack = load_image('character_attack.png')
-        self.character_prone = load_image('character_prone.png')
-        self.character_skill = load_image('character_skill(457x260).png')
-        self.character_skill2 = load_image('character_skill2(572x406).png')
+        if Character.idle == None:
+            Character.idle = load_image('character.png')
+        if Character.attack == None:
+            Character.attack = load_image('character_attack.png')
+        if Character.prone == None:
+            Character.prone = load_image('character_prone.png')
+        if Character.skill == None:
+            Character.skill = load_image('character_skill(457x260).png')
+        if Character.skill2 == None:
+            Character.skill2 = load_image('character_skill2(572x406).png')
 
     def update(self):
         global jump_state
@@ -34,15 +60,15 @@ class Character:
     def draw(self):
         if attack == False:
             if prone == False and skill == False:
-                self.character.clip_draw(self.frame * 92, side_character_idle * 96, 92, 96, self.x, self.y)
+                self.idle.clip_draw(self.frame * 92, side_character_idle * 96, 92, 96, self.x, self.y)
             if skill == True and skill2 == False:
-                self.character_skill.clip_draw(self.frame1 * 457, side_character_skill1 * 260, 457, 260, self.x, self.y + 70)
+                self.skill.clip_draw(self.frame1 * 457, side_character_skill1 * 260, 457, 260, self.x, self.y + 70)
             if skill2 == True and skill == True:
-                self.character_skill2.clip_draw(self.frame1 * 572, side_character_skill2 * 406, 573, 406, self.x, self.y + 40)
+                self.skill2.clip_draw(self.frame1 * 572, side_character_skill2 * 406, 573, 406, self.x, self.y + 40)
             if prone == True:
-                self.character_prone.clip_draw(self.frame * 140, side_character_prone * 55, 140, 55, self.x, self.y - 15)
+                self.prone.clip_draw(self.frame * 140, side_character_prone * 55, 140, 55, self.x, self.y - 15)
         elif attack == True:
-            self.character_attack.clip_draw(self.frame * 260, side_character_attack * 172, 260, 172, self.x, self.y + 23)
+            self.attack.clip_draw(self.frame * 260, side_character_attack * 172, 260, 172, self.x, self.y + 23)
 
 def enter():
     global image, key
@@ -193,19 +219,4 @@ MAP_WIDTH, MAP_HEIGHT = 1748, 979
 
 #open_canvas(MAP_WIDTH, MAP_HEIGHT)
 #map1 = load_image('map1.png')
-dir_x = 0
-dir_y = 0
-side_character_idle = 0
-side_character_attack = 0
-side_character_prone = 0
-side_character_skill1 = 0
-side_character_skill2 = 0
-running = True
-attack = False
-prone = False
-skill = False
-skill2 = False
-jump_state = False
-jump_force = 0
-count = 0
 

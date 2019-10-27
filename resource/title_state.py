@@ -8,6 +8,8 @@ import main_state
 name = "TitleState"
 image = None
 character = None
+npc = None
+npc_chat = None
 dir_x = 0
 dir_y = 0
 side_character_idle = 0
@@ -23,7 +25,9 @@ skill2 = False
 jump_state = False
 jump_force = 0
 count = 0
-
+space_cnt = 0
+up_cnt = 0
+down_cnt = 0
 class Character:
     idle = None
     attack = None
@@ -69,20 +73,40 @@ class Character:
                 self.prone.clip_draw(self.frame * 140, side_character_prone * 55, 140, 55, self.x, self.y - 15)
         elif attack == True:
             self.attack.clip_draw(self.frame * 260, side_character_attack * 172, 260, 172, self.x, self.y + 23)
+class Npc:
+    image_n = None
+    def __init__(self):
+        self.x, self.y = 1200, 182
+        if Npc.image_n == None:
+            Npc.image_n = load_image('npc.png')
+
+    def update(self):
+        pass
+    def draw(self):
+        self.image_n.draw(self.x, self.y)
 
 def enter():
     global image, key
     global character
+    global npc
+    global npc_chat
     image = load_image('map1.png')
     key = load_image('key.png')
     character = Character()
+    npc = Npc()
+    npc_chat = load_image('npc_chat.png')
 
 def exit():
     global image, key
     global character
+    global npc
+    global npc_chat
     del(image)
     del(key)
     del(character)
+    del(npc)
+    del(npc_chat)
+
 
 
 def handle_events():
@@ -101,6 +125,7 @@ def handle_events():
     global jump_state
     global jump_force
     global count
+    global space_cnt
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -109,8 +134,10 @@ def handle_events():
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
             elif event.type == SDL_KEYDOWN:
-                if event.key == SDLK_SPACE:
-                    game_framework.change_state(main_state)
+                if event.key == SDLK_SPACE and (character.x >= 1170 and character.x <= 1240 ):
+                    space_cnt += 1
+                    if event.key == SDLK_SPACE and (space_cnt != 0 and space_cnt % 2 == 0):
+                        game_framework.change_state(main_state)
                 elif event.key == SDLK_RIGHT:
                     dir_x += 2
                     side_character_idle = 2
@@ -199,14 +226,17 @@ def handle_events():
 def draw():
     clear_canvas()
     image.draw(MAP_WIDTH//2, MAP_HEIGHT//2)
+    npc.draw()
+    if space_cnt % 2 == 1:
+        npc_chat.draw(MAP_WIDTH//2, MAP_HEIGHT//2)
     character.draw()
     key.draw(1700, 50)
     update_canvas()
     delay(0.05)
 def update():
     character.update()
-
-
+    npc.update()
+    #npc_chat.update()
 def pause():
     pass
 

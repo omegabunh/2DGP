@@ -60,7 +60,7 @@ class Character:
         if self.y <= 170:
             self.y = 170
             jump_state = False
-
+        self.x = clamp(635, self.x, 1432)
     def draw(self):
         if attack == False:
             if prone == False and skill == False:

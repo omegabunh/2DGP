@@ -28,7 +28,7 @@ count = 0
 size = 10
 points = [(random.randint(0 + 50, MAP_WIDTH-50), random.randint(0+50, MAP_HEIGHT-50)) for i in range(size)]
 n = 1
-
+character_hp = 10000
 class Boss:
     image = None
     def __init__(self):

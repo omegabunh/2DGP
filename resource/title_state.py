@@ -28,6 +28,7 @@ count = 0
 space_cnt = 0
 up_cnt = 0
 down_cnt = 0
+character_hp = 10000
 class Character:
     idle = None
     attack = None

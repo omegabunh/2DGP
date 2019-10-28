@@ -28,7 +28,7 @@ skill2 = False
 jump_state = False
 jump_force = 0
 count = 0
-
+character_hp = 10000
 class Boss:
     image = None
     def __init__(self):

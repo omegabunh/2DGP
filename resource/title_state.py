@@ -17,6 +17,7 @@ side_character_attack = 0
 side_character_prone = 0
 side_character_skill1 = 0
 side_character_skill2 = 0
+idle = False
 running = True
 attack = False
 prone = False
@@ -55,6 +56,7 @@ class Character:
         global jump_force
         self.frame = (self.frame + 1) % 4
         self.frame1 = (self.frame + 1) % 14
+        self.frame2 = (self.frame + 1) % 3
         self.x += dir_x * 5
         self.y = 170 + jump_force
         jump_force -= 8
@@ -73,7 +75,7 @@ class Character:
             if prone == True:
                 self.prone.clip_draw(self.frame * 140, side_character_prone * 55, 140, 55, self.x, self.y - 15)
         elif attack == True:
-            self.attack.clip_draw(self.frame * 260, side_character_attack * 172, 260, 172, self.x, self.y + 23)
+            self.attack.clip_draw(self.frame2 * 260, side_character_attack * 172, 260, 172, self.x, self.y + 23)
 class Npc:
     image_n = None
     def __init__(self):

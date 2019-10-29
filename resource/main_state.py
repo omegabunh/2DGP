@@ -83,6 +83,7 @@ class Character:
         global jump_force
         self.frame = (self.frame + 1) % 4
         self.frame1 = (self.frame + 1) % 14
+        self.frame2 = (self.frame + 1) % 3
         self.x += dir_x * 5
         self.y = 300 + jump_force
         jump_force -= 8
@@ -101,7 +102,7 @@ class Character:
             if prone == True:
                 self.prone.clip_draw(self.frame * 140, side_character_prone * 55, 140, 55, self.x, self.y - 15)
         elif attack == True:
-            self.attack.clip_draw(self.frame * 260, side_character_attack * 172, 260, 172, self.x, self.y + 23)
+            self.attack.clip_draw(self.frame2 * 260, side_character_attack * 172, 260, 172, self.x, self.y + 23)
 
 t = random.randint(1, 4)
 
@@ -195,14 +196,14 @@ def handle_events():
             elif event.key == SDLK_LSHIFT:
                 skill = True
                 if skill2 == False:
-                    if side_character_idle == 0:
+                    if side_character_idle == 0 or side_character_idle == 2:
                         side_character_skill1 = 0
-                    elif side_character_idle == 1:
+                    elif side_character_idle == 1 or side_character_idle == 3:
                         side_character_skill1 = 1
                 elif skill2 == True:
-                    if side_character_idle == 0:
+                    if side_character_idle == 0 or side_character_idle == 2:
                         side_character_skill2 = 0
-                    elif side_character_idle == 1:
+                    elif side_character_idle == 1 or side_character_idle == 3:
                         side_character_skill2 = 1
 
             elif event.key == SDLK_ESCAPE:

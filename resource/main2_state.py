@@ -77,6 +77,7 @@ class Character:
         global jump_force
         self.frame = (self.frame + 1) % 4
         self.frame1 = (self.frame + 1) % 14
+        self.frame2 = (self.frame + 1) % 3
         self.x += dir_x * 5
         self.y += dir_y * 5
 
@@ -89,7 +90,7 @@ class Character:
             if skill2 == True and skill == True:
                 self.skill2.clip_draw(self.frame1 * 572, side_character_skill2 * 406, 573, 406, self.x, self.y + 40)
         elif attack == True:
-            self.attack.clip_draw(self.frame * 260, side_character_attack * 172, 260, 172, self.x, self.y + 23)
+            self.attack.clip_draw(self.frame2 * 260, side_character_attack * 172, 260, 172, self.x, self.y + 23)
 
 def enter():
     global image, key

@@ -1,7 +1,8 @@
 from pico2d import *
 
 count = 0
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SHIFT_DOWN, SHIFT_UP, ALT_DOWN, ALT_UP, HOME_DOWN, HOME_UP, CTRL_DOWN, CTRL_UP, DOWN_DOWN, DOWN_UP = range(14)
+
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SHIFT_DOWN, SHIFT_UP, ALT_DOWN, ALT_UP, HOME_UP, CTRL_DOWN, CTRL_UP, DOWN_DOWN, DOWN_UP = range(13)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
@@ -10,7 +11,6 @@ key_event_table = {
     (SDL_KEYDOWN, SDLK_LSHIFT): SHIFT_DOWN,
     (SDL_KEYDOWN, SDLK_LALT): ALT_DOWN,
     (SDL_KEYDOWN, SDLK_LCTRL): CTRL_DOWN,
-    (SDL_KEYDOWN, SDLK_HOME): HOME_DOWN,
     (SDL_KEYUP, SDLK_LSHIFT): SHIFT_UP,
     (SDL_KEYUP, SDLK_RIGHT): RIGHT_UP,
     (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
@@ -33,6 +33,8 @@ class IdleState:
             character.velocity -= 1
         elif event == LEFT_UP:
             character.velocity += 1
+        elif event == ALT_DOWN:
+            character.up += 100
         character.timer = 300
 
     @staticmethod
@@ -63,8 +65,10 @@ class RunState:
             character.velocity -= 1
         elif event == RIGHT_UP:
             character.velocity -= 1
-        elif event == LEFT_UP:
+        elif event == LEFT_DOWN:
             character.velocity += 1
+        elif event == LEFT_UP:
+            character.velocity -= 1
         character.dir = character.velocity
 
     @staticmethod
@@ -76,7 +80,7 @@ class RunState:
     def do(character):
         character.frame = (character.frame + 1) % 4
         character.timer -= 1
-        character.x += character.velocity
+        character.x += character.velocity * 10
         character.x = clamp(25, character.x, 1600 - 25)
 
     @staticmethod
@@ -108,8 +112,6 @@ class JumpState:
     def enter(character, event):
         if event == ALT_DOWN:
             character.up += 100
-        elif event == ALT_UP:
-            character.up -= 100
 
         character.jump_force = character.up
 
@@ -122,7 +124,9 @@ class JumpState:
     def do(character):
         character.frame = (character.frame + 1) % 4
         character.timer -= 1
-        character.y = character.up
+        character.y += character.up
+        if character.y > 170:
+            character.up -= 100
         character.y = clamp(170, character.y, 270)
 
     @staticmethod
@@ -150,10 +154,13 @@ class AttackState:
             character.attack.clip_draw(character.frame * 260, 0 * 172, 260, 172, character.x, character.y + 23)
 
 class SkillState:
+
     @staticmethod
     def enter(character, event):
+        global count
         character.frame1 = 0
-
+        if event == HOME_UP:
+            count = count + 1
     @staticmethod
     def exit(character, event):
         pass
@@ -170,31 +177,34 @@ class SkillState:
             character.skill.clip_draw(character.frame1 * 457, 1 * 260, 457, 260, character.x, character.y + 70)
         if character.dir == 1 and count % 2 == 1:
             character.skill2.clip_draw(character.frame1 * 572, 0 * 406, 573, 406, character.x, character.y + 40)
-        elif character.dir != 1 and count % 2 ==1:
+        elif character.dir != 1 and count % 2 == 1:
             character.skill2.clip_draw(character.frame1 * 572, 1 * 406, 573, 406, character.x, character.y + 40)
 
 next_state_table = {
-    IdleState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState,
-                LEFT_DOWN: RunState, SHIFT_UP: IdleState, SHIFT_DOWN: SkillState,
-                DOWN_DOWN: ProneState, DOWN_UP: IdleState, ALT_UP: IdleState, ALT_DOWN: JumpState,
-                CTRL_UP: IdleState, CTRL_DOWN: AttackState},
-    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState,
-               RIGHT_DOWN: IdleState, CTRL_UP: IdleState, CTRL_DOWN: AttackState,ALT_UP: IdleState, ALT_DOWN: JumpState,
-               DOWN_DOWN: ProneState, DOWN_UP: IdleState},
-    ProneState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState,
-                LEFT_DOWN: RunState, SHIFT_UP: IdleState, SHIFT_DOWN: SkillState,
-                DOWN_DOWN: ProneState, DOWN_UP: IdleState,  CTRL_UP: IdleState, CTRL_DOWN: AttackState,
-                 ALT_UP: IdleState, ALT_DOWN: JumpState, },
-    AttackState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState,
-                LEFT_DOWN: RunState, SHIFT_UP: IdleState, SHIFT_DOWN: SkillState,ALT_UP: IdleState, ALT_DOWN: JumpState,
-                DOWN_DOWN: ProneState, DOWN_UP: IdleState, CTRL_UP: IdleState, CTRL_DOWN: AttackState},
-    SkillState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState,
-                LEFT_DOWN: RunState, SHIFT_UP: IdleState, SHIFT_DOWN: SkillState,ALT_UP: IdleState, ALT_DOWN: JumpState,
-                DOWN_DOWN: ProneState, DOWN_UP: IdleState,  CTRL_UP: IdleState, CTRL_DOWN: AttackState,
+    IdleState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState,
+                SHIFT_UP: IdleState, SHIFT_DOWN: SkillState, DOWN_DOWN: ProneState, DOWN_UP: IdleState,
+                ALT_UP: IdleState, ALT_DOWN: JumpState, CTRL_UP: IdleState, CTRL_DOWN: AttackState, HOME_UP: IdleState
+                },
+    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, CTRL_UP: IdleState,
+               CTRL_DOWN: AttackState, ALT_UP: IdleState, ALT_DOWN: JumpState, DOWN_DOWN: ProneState, DOWN_UP: IdleState,
+               HOME_UP: IdleState
+               },
+    ProneState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SHIFT_UP: IdleState,
+                 SHIFT_DOWN: SkillState, DOWN_DOWN: ProneState, DOWN_UP: IdleState,  CTRL_UP: IdleState,
+                 CTRL_DOWN: AttackState, ALT_UP: IdleState, ALT_DOWN: JumpState, HOME_UP: IdleState
                  },
-    JumpState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState,
-                LEFT_DOWN: RunState, SHIFT_UP: IdleState, SHIFT_DOWN: SkillState, ALT_UP: IdleState, ALT_DOWN: JumpState,
-                DOWN_DOWN: ProneState, DOWN_UP: IdleState,  CTRL_UP: IdleState, CTRL_DOWN: AttackState,
+    AttackState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState,
+                  SHIFT_UP: IdleState, SHIFT_DOWN: SkillState, ALT_UP: JumpState, ALT_DOWN: JumpState,
+                  DOWN_DOWN: ProneState, DOWN_UP: IdleState, CTRL_UP: IdleState, CTRL_DOWN: AttackState,
+                  HOME_UP: IdleState
+                  },
+    SkillState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SHIFT_UP: IdleState,
+                 SHIFT_DOWN: SkillState, ALT_UP: IdleState, ALT_DOWN: JumpState, DOWN_DOWN: ProneState,
+                 DOWN_UP: IdleState,  CTRL_UP: IdleState, CTRL_DOWN: AttackState, HOME_UP: IdleState
+                 },
+    JumpState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SHIFT_UP: IdleState,
+                SHIFT_DOWN: SkillState, ALT_UP: IdleState, ALT_DOWN: JumpState, DOWN_DOWN: ProneState,
+                DOWN_UP: IdleState,  CTRL_UP: IdleState, CTRL_DOWN: AttackState,
                 }
 }
 

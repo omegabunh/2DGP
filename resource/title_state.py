@@ -6,44 +6,17 @@ from pico2d import *
 import main_state
 
 from character import Character
+from npc import Npc
 
 name = "TitleState"
 image = None
 character = None
 npc = None
 npc_chat = None
-dir_x = 0
-dir_y = 0
-side_character_idle = 0
-side_character_attack = 0
-side_character_prone = 0
-side_character_skill1 = 0
-side_character_skill2 = 0
-idle = False
 running = True
-attack = False
-prone = False
-skill = False
-skill2 = False
-jump_state = False
-jump_force = 0
-count = 0
 space_cnt = 0
-up_cnt = 0
-down_cnt = 0
-character_hp = 10000
-bottom = 170
-class Npc:
-    image_n = None
-    def __init__(self):
-        self.x, self.y = 1200, 182
-        if Npc.image_n == None:
-            Npc.image_n = load_image('npc.png')
 
-    def update(self):
-        pass
-    def draw(self):
-        self.image_n.draw(self.x, self.y)
+character_hp = 10000
 
 def enter():
     global image, key

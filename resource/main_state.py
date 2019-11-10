@@ -8,6 +8,7 @@ import title_state
 import main2_state
 from character1 import Character
 from boss1 import Boss
+from monster import Monster
 MAP_WIDTH, MAP_HEIGHT = 1997, 950
 
 boss = None
@@ -18,22 +19,6 @@ key = None
 running = True
 
 character_hp = 10000
-
-class Monster:
-    image = None
-    def __init__(self):
-        self.x, self.y = random.randint(0, 1748), 800
-        self.frame = 0
-        if Monster.image == None:
-            Monster.image = load_image('monster(191x224).png')
-    def update(self):
-        self.frame = random.randint(0, 5)
-        if self.y > 330:
-            self.y -= 50
-        elif self.y < 330:
-            self.y = 330
-    def draw(self):
-        self.image.clip_draw(self.frame * 191, 0, 191, 224, self.x, self.y)
 
 t = random.randint(1, 4)
 

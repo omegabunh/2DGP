@@ -6,6 +6,8 @@ from pico2d import *
 import game_framework
 import title_state
 import main2_state
+from boss2 import Boss
+
 MAP_WIDTH, MAP_HEIGHT = 1997, 950
 
 boss = None

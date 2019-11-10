@@ -4,7 +4,7 @@ import os
 import game_framework
 from pico2d import *
 import main_state
-
+import game_world
 from character import Character
 from npc import Npc
 
@@ -28,19 +28,14 @@ def enter():
     character = Character()
     npc = Npc()
     npc_chat = load_image('npc_chat.png')
+    game_world.add_object(image, 0)
+    game_world.add_object(key, 1)
+    game_world.add_object(character, 2)
+    game_world.add_object(npc, 3)
+    game_world.add_object(npc_chat, 4)
 
 def exit():
-    global image, key
-    global character
-    global npc
-    global npc_chat
-    del(image)
-    del(key)
-    del(character)
-    del(npc)
-    del(npc_chat)
-
-
+    game_world.clear()
 
 def handle_events():
     global space_cnt

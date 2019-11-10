@@ -6,6 +6,7 @@ from pico2d import *
 import game_framework
 import title_state
 import main2_state
+import game_world
 from character1 import Character
 from boss1 import Boss
 from monster import Monster
@@ -30,15 +31,14 @@ def enter():
     boss = Boss()
     monster = Monster()
     character = Character()
+    game_world.add_object(image, 0)
+    game_world.add_object(key, 1)
+    game_world.add_object(character, 2)
+    game_world.add_object(monster, 3)
+    game_world.add_object(boss, 4)
 
 def exit():
-    global boss, monster, character, monsters
-    global image, key
-    del(image)
-    del(key)
-    del(boss)
-    del(monster)
-    del(character)
+    game_world.clear()
 
 def pause():
     pass

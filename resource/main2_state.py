@@ -5,6 +5,7 @@ from pico2d import *
 import game_framework
 import title_state
 import main_state
+import game_world
 from boss2 import Boss
 MAP_WIDTH, MAP_HEIGHT = 1997, 950
 
@@ -74,14 +75,13 @@ def enter():
     key = load_image('key.png')
     boss = Boss()
     character = Character()
+    game_world.add_object(image, 0)
+    game_world.add_object(key, 1)
+    game_world.add_object(character, 2)
+    game_world.add_object(boss, 3)
 
 def exit():
-    global boss, monster, character
-    global image, key
-    del(image)
-    del(key)
-    del(boss)
-    del(character)
+    game_world.clear()
 
 def pause():
     pass

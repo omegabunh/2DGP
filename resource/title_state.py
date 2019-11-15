@@ -30,9 +30,9 @@ def enter():
     npc_chat = load_image('npc_chat.png')
     game_world.add_object(image, 0)
     game_world.add_object(key, 1)
-    game_world.add_object(character, 2)
-    game_world.add_object(npc, 3)
-    game_world.add_object(npc_chat, 4)
+    game_world.add_object(character, 1)
+    game_world.add_object(npc, 1)
+    game_world.add_object(npc_chat, 1)
 
 def exit():
     game_world.clear()

@@ -77,8 +77,8 @@ def enter():
     character = Character()
     game_world.add_object(image, 0)
     game_world.add_object(key, 1)
-    game_world.add_object(character, 2)
-    game_world.add_object(boss, 3)
+    game_world.add_object(character, 1)
+    game_world.add_object(boss, 1)
 
 def exit():
     game_world.clear()

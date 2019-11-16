@@ -194,7 +194,7 @@ next_state_table = {
                 },
     RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, CTRL_UP: IdleState,
                CTRL_DOWN: AttackState, ALT_DOWN: RunState, DOWN_DOWN: ProneState, DOWN_UP: IdleState,
-               HOME_UP: IdleState
+               HOME_UP: IdleState, SHIFT_UP: IdleState, SHIFT_DOWN: SkillState,
                },
     ProneState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState,
                  SHIFT_UP: IdleState,

@@ -52,6 +52,7 @@ def handle_events():
                     game_framework.change_state(main_state)
         else:
             character.handle_event(event)
+
 def draw():
     clear_canvas()
     image.draw(MAP_WIDTH//2, MAP_HEIGHT//2)
@@ -62,6 +63,7 @@ def draw():
     key.draw(1700, 50)
     update_canvas()
     delay(0.05)
+
 def update():
     character.update()
     npc.update()

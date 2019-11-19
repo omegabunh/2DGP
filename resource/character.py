@@ -62,19 +62,21 @@ class IdleState:
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         character.timer -= 1
         character.idleing = True
+        character.idlestate = True
 
     @staticmethod
     def draw(character):
-        draw_rectangle(*character.get_idle_collide())
-        if character.dir == 1 and character.idleing:
-            character.idle.clip_draw(int(character.frame) * 92, 0 * 96, 92, 96, character.x, character.y)
-        elif character.dir == 1 and character.idleing == False:
-            character.idle.clip_draw(int(character.frame) * 92, 4 * 96, 92, 96, character.x, character.y)
+        if character.idlestate:
+            draw_rectangle(*character.get_idle_collide())
+            if character.dir == 1 and character.idleing:
+                character.idle.clip_draw(int(character.frame) * 92, 0 * 96, 92, 96, character.x, character.y)
+            elif character.dir == 1 and character.idleing == False:
+                character.idle.clip_draw(int(character.frame) * 92, 4 * 96, 92, 96, character.x, character.y)
 
-        elif character.dir == -1 and character.idleing:
-            character.idle.clip_draw(int(character.frame) * 92, 1 * 96, 92, 96, character.x, character.y)
-        elif character.dir == -1 and character.idleing == False:
-            character.idle.clip_draw(int(character.frame) * 92, 5 * 96, 92, 96, character.x, character.y)
+            elif character.dir == -1 and character.idleing:
+                character.idle.clip_draw(int(character.frame) * 92, 1 * 96, 92, 96, character.x, character.y)
+            elif character.dir == -1 and character.idleing == False:
+                character.idle.clip_draw(int(character.frame) * 92, 5 * 96, 92, 96, character.x, character.y)
 
 
 class RunState:
@@ -98,6 +100,7 @@ class RunState:
             character.jumping = True
             character.running = False
 
+
     @staticmethod
     def do(character):
         draw_rectangle(*character.get_idle_collide())
@@ -105,19 +108,21 @@ class RunState:
         character.x += character.velocity * game_framework.frame_time
         character.x = clamp(25, character.x, 1600 - 25)
         character.running = True
+        character.runstate = True
 
     @staticmethod
     def draw(character):
-        draw_rectangle(*character.get_idle_collide())
-        if character.dir == 1 and character.running:
-            character.idle.clip_draw(int(character.frame) * 92, 2 * 96, 92, 96, character.x, character.y)
-        elif character.dir == 1 and character.running == False:
-            character.idle.clip_draw(int(character.frame) * 92, 4 * 96, 92, 96, character.x, character.y)
+        if character.runstate:
+            draw_rectangle(*character.get_idle_collide())
+            if character.dir == 1 and character.running:
+                character.idle.clip_draw(int(character.frame) * 92, 2 * 96, 92, 96, character.x, character.y)
+            elif character.dir == 1 and character.running == False:
+                character.idle.clip_draw(int(character.frame) * 92, 4 * 96, 92, 96, character.x, character.y)
 
-        elif character.dir == -1 and character.running:
-            character.idle.clip_draw(int(character.frame) * 92, 3 * 96, 92, 96, character.x, character.y)
-        elif character.dir == -1 and character.running == False:
-            character.idle.clip_draw(int(character.frame) * 92, 5 * 96, 92, 96, character.x, character.y)
+            elif character.dir == -1 and character.running:
+                character.idle.clip_draw(int(character.frame) * 92, 3 * 96, 92, 96, character.x, character.y)
+            elif character.dir == -1 and character.running == False:
+                character.idle.clip_draw(int(character.frame) * 92, 5 * 96, 92, 96, character.x, character.y)
 
 
 class ProneState:
@@ -132,14 +137,15 @@ class ProneState:
     @staticmethod
     def do(character):
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
-
+        character.pronestate = True
     @staticmethod
     def draw(character):
-        draw_rectangle(*character.get_prone_collide())
-        if character.dir == 1:
-            character.prone.clip_draw(int(character.frame) * 140, 1 * 55, 140, 55, character.x, character.y - 15)
-        else:
-            character.prone.clip_draw(int(character.frame) * 140, 0 * 55, 140, 55, character.x, character.y - 15)
+        if character.pronestate:
+            draw_rectangle(*character.get_prone_collide())
+            if character.dir == 1:
+                character.prone.clip_draw(int(character.frame) * 140, 1 * 55, 140, 55, character.x, character.y - 15)
+            else:
+                character.prone.clip_draw(int(character.frame) * 140, 0 * 55, 140, 55, character.x, character.y - 15)
 
 
 class AttackState:
@@ -154,14 +160,16 @@ class AttackState:
     @staticmethod
     def do(character):
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        character.attackstate = True
 
     @staticmethod
     def draw(character):
-        draw_rectangle(*character.get_attack_collide())
-        if character.dir == 1:
-            character.attack.clip_draw(int(character.frame) * 260, 1 * 172, 260, 172, character.x, character.y + 23)
-        else:
-            character.attack.clip_draw(int(character.frame) * 260, 0 * 172, 260, 172, character.x, character.y + 23)
+        if character.attackstate:
+            draw_rectangle(*character.get_attack_collide())
+            if character.dir == 1:
+                character.attack.clip_draw(int(character.frame) * 260, 1 * 172, 260, 172, character.x, character.y + 23)
+            else:
+                character.attack.clip_draw(int(character.frame) * 260, 0 * 172, 260, 172, character.x, character.y + 23)
 
 
 class SkillState:
@@ -180,18 +188,19 @@ class SkillState:
     @staticmethod
     def do(character):
         character.frame1 = (character.frame1 + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 14
-
+        character.skillstate = True
     @staticmethod
     def draw(character):
-        draw_rectangle(*character.get_skill_collide())
-        if character.dir == 1 and count % 2 == 0:
-            character.skill.clip_draw(int(character.frame1) * 457, 0 * 260, 457, 260, character.x, character.y + 70)
-        elif character.dir != 1 and count % 2 == 0:
-            character.skill.clip_draw(int(character.frame1) * 457, 1 * 260, 457, 260, character.x, character.y + 70)
-        if character.dir == 1 and count % 2 == 1:
-            character.skill2.clip_draw(int(character.frame1) * 572, 0 * 406, 573, 406, character.x, character.y + 40)
-        elif character.dir != 1 and count % 2 == 1:
-            character.skill2.clip_draw(int(character.frame1) * 572, 1 * 406, 573, 406, character.x, character.y + 40)
+        if character.skillstate:
+            draw_rectangle(*character.get_skill_collide())
+            if character.dir == 1 and count % 2 == 0:
+                character.skill.clip_draw(int(character.frame1) * 457, 0 * 260, 457, 260, character.x, character.y + 70)
+            elif character.dir != 1 and count % 2 == 0:
+                character.skill.clip_draw(int(character.frame1) * 457, 1 * 260, 457, 260, character.x, character.y + 70)
+            if character.dir == 1 and count % 2 == 1:
+                character.skill2.clip_draw(int(character.frame1) * 572, 0 * 406, 573, 406, character.x, character.y + 40)
+            elif character.dir != 1 and count % 2 == 1:
+                character.skill2.clip_draw(int(character.frame1) * 572, 1 * 406, 573, 406, character.x, character.y + 40)
 
 
 next_state_table = {
@@ -236,6 +245,11 @@ class Character:
         self.jumping = False
         self.idleing = True
         self.running = True
+        self.idlestate = False
+        self.runstate = False
+        self.pronestate = False
+        self.attackstate = False
+        self.skillstate = False
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
@@ -246,25 +260,29 @@ class Character:
         Character.skill2 = load_image('character_skill2(572x406).png')
 
     def get_idle_collide(self):
-        return self.x - 30, self.y - 38, self.x + 20, self.y + 42
+        if self.idlestate:
+            return self.x - 30, self.y - 38, self.x + 20, self.y + 42
 
     def get_prone_collide(self):
-        if self.dir == 1:
-            return self.x - 70, self.y - 38, self.x + 10, self.y + 20
-        else:
-            return self.x + 70, self.y - 38, self.x - 10, self.y + 20
+        if self.pronestate:
+            if self.dir == 1:
+                return self.x - 70, self.y - 38, self.x + 10, self.y + 20
+            else:
+                return self.x + 70, self.y - 38, self.x - 10, self.y + 20
 
     def get_attack_collide(self):
-        if self.dir == 1:
-            return self.x - 50, self.y - 38, self.x + 120, self.y + 100
-        else:
-            return self.x + 50, self.y - 38, self.x - 120, self.y + 100
+        if self.attackstate:
+            if self.dir == 1:
+                return self.x - 50, self.y - 38, self.x + 120, self.y + 100
+            else:
+                return self.x + 50, self.y - 38, self.x - 120, self.y + 100
 
     def get_skill_collide(self):
-        if self.dir == 1:
-            return self.x - 50, self.y - 38, self.x + 280, self.y + 200
-        else:
-            return self.x + 50, self.y - 38, self.x - 280, self.y + 200
+        if self.skillstate:
+            if self.dir == 1:
+                return self.x - 50, self.y - 38, self.x + 280, self.y + 200
+            else:
+                return self.x + 50, self.y - 38, self.x - 280, self.y + 200
 
     def jump(self):
         if self.jumping:
@@ -290,7 +308,6 @@ class Character:
     def draw(self):
         self.cur_state.draw(self)
         #draw_rectangle(*self.get_bb())
-        print(self.jump_y)
 
     def handle_event(self, event):
         global count

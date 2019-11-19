@@ -24,7 +24,7 @@ character_hp = 10000
 
 t = random.randint(1, 4)
 
-def collide(a, b):
+def idle_collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_idle_collide()
     left_b, bottom_b, right_b, top_b = b.get_bb()
 
@@ -32,6 +32,40 @@ def collide(a, b):
     if right_a < left_b: return False
     if top_a < bottom_b: return False
     if bottom_a > top_b: return False
+
+    return True
+
+def prone_collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_prone_collide()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
+
+def attack_collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_attack_collide()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
+
+def skill_collide(a, b):
+    if character.skillstate == True:
+        left_a, bottom_a, right_a, top_a = a.get_skill_collide()
+        left_b, bottom_b, right_b, top_b = b.get_bb()
+
+        if left_a > right_b: return False
+        if right_a < left_b: return False
+        if top_a < bottom_b: return False
+        if bottom_a > top_b: return False
 
     return True
 
@@ -89,6 +123,11 @@ def update():
     boss.update()
     character.update()
     monster.update()
+
+    if skill_collide(character, boss):
+        if character.skillstate == True:
+            print('skill collide to boss')
+            boss.hp_x += -0.01
 
 
 

@@ -1,37 +1,76 @@
 from pico2d import *
 import random
+import math
+import game_framework
+from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
 
 MAP_WIDTH, MAP_HEIGHT = 1997, 950
-size = 10
-points = [(random.randint(0 + 50, MAP_WIDTH-50), random.randint(0+50, MAP_HEIGHT-50)) for i in range(size)]
-n = 1
+
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 10.0  # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+# zombie Action Speed
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 10
+
 
 class Boss:
     image = None
+
     def __init__(self):
         self.x, self.y = 1070, 470
+        self.dir = random.random() * 2 * math.pi  # random moving direction
+        self.timer = 1.0  # change direction every 1 sec when wandering
+        self.build_behavior_tree()
+        self.speed = 0
         self.frame = 0
         self.count = 0
-        if Boss.image == None:
+        if Boss.image is None:
             Boss.image = load_image('boss_phase2(356x384).png')
 
-    def move(self, p1, p2, p3, p4):
-        for i in range(0, 50, 2):
-            t = i / 1000
-            self.x = ((-t ** 3 + 2 * t ** 2 - t) * p2[0] + (3 * t ** 3 - 5 * t ** 2 + 2) * p3[0] + (
-                    -3 * t ** 3 + 4 * t ** 2 + t) * p4[0] + (t ** 3 - t ** 2) * p1[0]) / 2
-            self.y = ((-t ** 3 + 2 * t ** 2 - t) * p2[1] + (3 * t ** 3 - 5 * t ** 2 + 2) * p3[1] + (
-                    -3 * t ** 3 + 4 * t ** 2 + t) * p4[1] + (t ** 3 - t ** 2) * p1[1]) / 2
+    def calculate_current_position(self):
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
+        self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
+        self.x = clamp(50, self.x, 1280 - 50)
+        self.y = clamp(50, self.y, 1024 - 50)
+
+    def wander(self):
+        self.speed = RUN_SPEED_PPS
+        self.calculate_current_position()
+        self.timer -= game_framework.frame_time
+        if self.timer < 0:
+            self.timer += 1.0
+            self.dir = random.random() * 2 * math.pi
+        return BehaviorTree.SUCCESS
+
+    def find_player(self):
+        # fill here
+        pass
+
+    def move_to_player(self):
+        # fill here
+        pass
+
+    def get_next_position(self):
+        # fill here
+        pass
+
+    def move_to_target(self):
+        # fill here
+        pass
+
+    def build_behavior_tree(self):
+        wander_node = LeafNode("Wander", self.wander)
+        self.bt = BehaviorTree(wander_node)
 
     def update(self):
-        global p1, p2, p3, p4
-        global n
+        self.bt.run()
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 16
 
-        if self.count % 10 == 0:
-            p1, p2, p3, p4 = points[n - 3], points[n - 2], points[n - 1], points[n]
-            n = (n + 1) % size
-            Boss.move(self, p1, p2, p3, p4)
-        self.count += 1
-        self.frame = (self.frame + 1) % 8
     def draw(self):
-        self.image.clip_draw(self.frame * 356, 0, 356, 384, self.x, self.y)
+        self.image.clip_draw(int(self.frame) * 356, 0, 356, 384, self.x, self.y)

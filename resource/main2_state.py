@@ -16,35 +16,38 @@ running = True
 character_hp = 10000
 
 def idle_collide(a, b):
-    left_a, bottom_a, right_a, top_a = a.get_idle_collide()
-    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if character.idlestate:
+        left_a, bottom_a, right_a, top_a = a.get_idle_collide()
+        left_b, bottom_b, right_b, top_b = b.get_bb()
 
-    if left_a > right_b: return False
-    if right_a < left_b: return False
-    if top_a < bottom_b: return False
-    if bottom_a > top_b: return False
+        if left_a > right_b: return False
+        if right_a < left_b: return False
+        if top_a < bottom_b: return False
+        if bottom_a > top_b: return False
 
     return True
 
-def prone_collide(a, b):
-    left_a, bottom_a, right_a, top_a = a.get_prone_collide()
-    left_b, bottom_b, right_b, top_b = b.get_bb()
+def run_collide(a, b):
+    if character.runstate:
+        left_a, bottom_a, right_a, top_a = a.get_idle_collide()
+        left_b, bottom_b, right_b, top_b = b.get_bb()
 
-    if left_a > right_b: return False
-    if right_a < left_b: return False
-    if top_a < bottom_b: return False
-    if bottom_a > top_b: return False
+        if left_a > right_b: return False
+        if right_a < left_b: return False
+        if top_a < bottom_b: return False
+        if bottom_a > top_b: return False
 
     return True
 
 def attack_collide(a, b):
-    left_a, bottom_a, right_a, top_a = a.get_attack_collide()
-    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if character.attackstate:
+        left_a, bottom_a, right_a, top_a = a.get_attack_collide()
+        left_b, bottom_b, right_b, top_b = b.get_bb()
 
-    if left_a > right_b: return False
-    if right_a < left_b: return False
-    if top_a < bottom_b: return False
-    if bottom_a > top_b: return False
+        if left_a > right_b: return False
+        if right_a < left_b: return False
+        if top_a < bottom_b: return False
+        if bottom_a > top_b: return False
 
     return True
 
@@ -94,6 +97,31 @@ def handle_events():
 def update():
     boss.update()
     character.update()
+
+    if idle_collide(character, boss):
+        if character.idlestate:
+            character.hp -= 2
+            if character.hp <= 0:
+                game_framework.quit()
+
+    if run_collide(character, boss):
+        if character.runstate:
+            character.hp -= 2
+            if character.hp <= 0:
+                game_framework.quit()
+
+    if skill_collide(character, boss):
+        if character.skillstate:
+            boss.hp -= 2
+            if boss.hp <= 0:
+                game_world.remove_object(boss)
+
+    if attack_collide(character, boss):
+        if character.attackstate:
+            boss.hp -= 1
+            if boss.hp <= 0:
+                game_world.remove_object(boss)
+
 
 def draw():
     global image

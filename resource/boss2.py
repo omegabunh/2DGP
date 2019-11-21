@@ -29,8 +29,11 @@ class Boss:
         self.speed = 0
         self.frame = 0
         self.count = 0
+        self.hp = 1000
+        self.font = load_font('ENCR10B.TTF', 16)
         if Boss.image is None:
             Boss.image = load_image('boss_phase2(356x384).png')
+
 
     def calculate_current_position(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
@@ -47,6 +50,9 @@ class Boss:
             self.timer += 1.0
             self.dir = random.random() * 2 * math.pi
         return BehaviorTree.SUCCESS
+
+    def get_bb(self):
+        return self.x - 150, self.y - 140, self.x + 130, self.y + 180
 
     def find_player(self):
         # fill here
@@ -73,4 +79,7 @@ class Boss:
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 16
 
     def draw(self):
+        self.font.draw(self.x - 60, self.y + 150, '(hp: %0.0f)' % self.hp, (255, 255, 0))
         self.image.clip_draw(int(self.frame) * 356, 0, 356, 384, self.x, self.y)
+        draw_rectangle(*self.get_bb())
+        #self.hp_image.draw_now(self.hp_x, self.hp_y)

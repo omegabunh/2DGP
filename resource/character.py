@@ -17,7 +17,6 @@ FRAMES_PER_ACTION = 4
 FRAMES_PER_ACTION1 = 8
 FRAMES_PER_ACTION2 = 3
 
-
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SHIFT_DOWN, SHIFT_UP, ALT_DOWN, HOME_UP, CTRL_DOWN, CTRL_UP, DOWN_DOWN, DOWN_UP = range(
     12)
 
@@ -103,7 +102,6 @@ class RunState:
             character.jumping = True
             character.running = False
 
-
     @staticmethod
     def do(character):
         draw_rectangle(*character.get_idle_collide())
@@ -141,6 +139,7 @@ class ProneState:
     def do(character):
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         character.pronestate = True
+
     @staticmethod
     def draw(character):
         if character.pronestate:
@@ -192,6 +191,7 @@ class SkillState:
     def do(character):
         character.frame1 = (character.frame1 + FRAMES_PER_ACTION1 * ACTION_PER_TIME * game_framework.frame_time) % 14
         character.skillstate = True
+
     @staticmethod
     def draw(character):
         if character.skillstate:
@@ -201,9 +201,11 @@ class SkillState:
             elif character.dir != 1 and count % 2 == 0:
                 character.skill.clip_draw(int(character.frame1) * 457, 1 * 260, 457, 260, character.x, character.y + 70)
             if character.dir == 1 and count % 2 == 1:
-                character.skill2.clip_draw(int(character.frame1) * 572, 0 * 406, 573, 406, character.x, character.y + 40)
+                character.skill2.clip_draw(int(character.frame1) * 572, 0 * 406, 573, 406, character.x,
+                                           character.y + 40)
             elif character.dir != 1 and count % 2 == 1:
-                character.skill2.clip_draw(int(character.frame1) * 572, 1 * 406, 573, 406, character.x, character.y + 40)
+                character.skill2.clip_draw(int(character.frame1) * 572, 1 * 406, 573, 406, character.x,
+                                           character.y + 40)
 
 
 next_state_table = {
@@ -239,6 +241,7 @@ class Character:
     prone = None
     skill = None
     skill2 = None
+
     def __init__(self):
         self.x, self.y = 1700 // 2, 170
         self.frame = 0
@@ -260,15 +263,15 @@ class Character:
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
-        if Character.idle == None:
+        if Character.idle is None:
             Character.idle = load_image('character.png')
-        if Character.attack == None:
+        if Character.attack is None:
             Character.attack = load_image('character_attack.png')
-        if Character.prone == None:
+        if Character.prone is None:
             Character.prone = load_image('character_prone.png')
-        if Character.skill == None:
+        if Character.skill is None:
             Character.skill = load_image('character_skill(457x260).png')
-        if Character.skill2 == None:
+        if Character.skill2 is None:
             Character.skill2 = load_image('character_skill2(572x406).png')
 
     def get_idle_collide(self):
@@ -280,21 +283,21 @@ class Character:
             if self.dir == 1:
                 return self.x - 70, self.y - 38, self.x + 10, self.y + 20
             else:
-                return self.x + 70, self.y - 38, self.x - 10, self.y + 20
+                return self.x - 10, self.y - 38, self.x + 70, self.y + 20
 
     def get_attack_collide(self):
         if self.attackstate:
             if self.dir == 1:
                 return self.x - 50, self.y - 38, self.x + 120, self.y + 100
             else:
-                return self.x + 50, self.y - 38, self.x - 120, self.y + 100
+                return self.x - 120, self.y - 38, self.x + 50, self.y + 100
 
     def get_skill_collide(self):
         if self.skillstate:
             if self.dir == 1:
                 return self.x - 50, self.y - 38, self.x + 280, self.y + 200
             else:
-                return self.x + 50, self.y - 38, self.x - 280, self.y + 200
+                return self.x - 280, self.y - 38, self.x + 50, self.y + 200
 
     def jump(self):
         if self.jumping:
@@ -319,7 +322,7 @@ class Character:
 
     def draw(self):
         self.cur_state.draw(self)
-        #draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
         global count

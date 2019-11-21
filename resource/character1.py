@@ -104,11 +104,7 @@ class RunState:
         if event == ALT_DOWN:
             character.jump()
             character.jumping = True
-            character.idlestate = False
-            character.runstate = True
-            character.attackstate = False
-            character.skillstate = False
-            character.pronestate = False
+
 
     @staticmethod
     def do(character):
@@ -116,7 +112,11 @@ class RunState:
         character.x += character.velocity * game_framework.frame_time
         character.x = clamp(25, character.x, 1600 - 25)
         character.running = True
+        character.idlestate = False
         character.runstate = True
+        character.attackstate = False
+        character.skillstate = False
+        character.pronestate = False
 
     @staticmethod
     def draw(character):
@@ -306,22 +306,22 @@ class Character:
         if self.pronestate:
             if self.dir == 1:
                 return self.x - 70, self.y - 38, self.x + 10, self.y + 20
-            elif self.dir == -1:
-                return self.x + 70, self.y - 38, self.x - 10, self.y + 20
+            else:
+                return self.x - 10, self.y - 38, self.x + 70, self.y + 20
 
     def get_attack_collide(self):
         if self.attackstate:
             if self.dir == 1:
                 return self.x - 50, self.y - 38, self.x + 120, self.y + 100
-            elif self.dir == -1:
-                return self.x + 50, self.y - 38, self.x - 120, self.y + 100
+            else:
+                return self.x - 120, self.y - 38, self.x + 50, self.y + 100
 
     def get_skill_collide(self):
         if self.skillstate:
             if self.dir == 1:
                 return self.x - 50, self.y - 38, self.x + 280, self.y + 200
-            elif self.dir == -1:
-                return self.x + 50, self.y - 38, self.x - 280, self.y + 200
+            else:
+                return self.x - 280, self.y - 38, self.x + 50, self.y + 200
 
     def jump(self):
         if self.jumping:
@@ -345,7 +345,7 @@ class Character:
             self.cur_state.enter(self, event)
 
     def draw(self):
-        self.font.draw(self.x - 60, self.y + 150, '(hp: %0.0f)' % self.hp, (255, 255, 0))
+        self.font.draw(self.x - 60, self.y + 50, '(hp: %0.0f)' % self.hp, (255, 255, 0))
         self.cur_state.draw(self)
 
     def handle_event(self, event):

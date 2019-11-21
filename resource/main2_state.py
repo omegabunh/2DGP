@@ -6,7 +6,7 @@ from character2 import Character
 from boss2 import Boss
 MAP_WIDTH, MAP_HEIGHT = 1997, 950
 
-boss2 = None
+boss = None
 monster = None
 character = None
 monsters = None
@@ -62,15 +62,15 @@ def skill_collide(a, b):
 
 def enter():
     global image, key
-    global boss2, monster, character
+    global boss, monster, character
     image = load_image('map3.png')
     key = load_image('key.png')
-    boss2 = Boss()
+    boss = Boss()
     character = Character()
     game_world.add_object(image, 0)
     game_world.add_object(key, 1)
     game_world.add_object(character, 1)
-    game_world.add_object(boss2, 1)
+    game_world.add_object(boss, 1)
 
 def exit():
     game_world.clear()
@@ -92,14 +92,14 @@ def handle_events():
             character.handle_event(event)
 
 def update():
-    boss2.update()
+    boss.update()
     character.update()
 
 def draw():
     global image
     clear_canvas()
     image.draw(MAP_WIDTH // 2, MAP_HEIGHT // 2)
-    boss2.draw()
+    boss.draw()
     character.draw()
     key.draw(1700, 50)
     update_canvas()

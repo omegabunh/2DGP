@@ -108,7 +108,6 @@ class RunState:
             character.skillstate = False
             character.pronestate = False
 
-
     @staticmethod
     def do(character):
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
@@ -219,9 +218,11 @@ class SkillState:
             elif character.dir != 1 and count % 2 == 0:
                 character.skill.clip_draw(int(character.frame1) * 457, 1 * 260, 457, 260, character.x, character.y + 70)
             if character.dir == 1 and count % 2 == 1:
-                character.skill2.clip_draw(int(character.frame1) * 572, 0 * 406, 573, 406, character.x, character.y + 40)
+                character.skill2.clip_draw(int(character.frame1) * 572, 0 * 406, 573, 406, character.x,
+                                           character.y + 40)
             elif character.dir != 1 and count % 2 == 1:
-                character.skill2.clip_draw(int(character.frame1) * 572, 1 * 406, 573, 406, character.x, character.y + 40)
+                character.skill2.clip_draw(int(character.frame1) * 572, 1 * 406, 573, 406, character.x,
+                                           character.y + 40)
 
 
 next_state_table = {
@@ -249,6 +250,7 @@ next_state_table = {
                  DOWN_UP: IdleState, CTRL_UP: IdleState, CTRL_DOWN: AttackState, HOME_UP: IdleState
                  },
 }
+
 
 class Character:
 
@@ -291,23 +293,21 @@ class Character:
         if self.pronestate:
             if self.dir == 1:
                 return self.x - 70, self.y - 38, self.x + 10, self.y + 20
-            else:
+            elif self.dir == -1:
                 return self.x + 70, self.y - 38, self.x - 10, self.y + 20
-
 
     def get_attack_collide(self):
         if self.attackstate:
             if self.dir == 1:
                 return self.x - 50, self.y - 38, self.x + 120, self.y + 100
-            else:
+            elif self.dir == -1:
                 return self.x + 50, self.y - 38, self.x - 120, self.y + 100
 
-
     def get_skill_collide(self):
-        if self.skillstate == True:
+        if self.skillstate:
             if self.dir == 1:
                 return self.x - 50, self.y - 38, self.x + 280, self.y + 200
-            else:
+            elif self.dir == -1:
                 return self.x + 50, self.y - 38, self.x - 280, self.y + 200
 
     def jump(self):

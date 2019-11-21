@@ -15,23 +15,23 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
-RIGHT_DOWN, LEFT_DOWN, UP_DOWN, DOWN_DOWN, CTRL_DOWN, SHIFT_DOWN, UP_UP, RIGHT_UP, LEFT_UP, SHIFT_UP, HOME_UP, CTRL_UP, DOWN_UP = range(13)
+RIGHT_DOWN, LEFT_DOWN, UPKEY_DOWN, DOWNKEY_DOWN, CTRL_DOWN, SHIFT_DOWN, UPKEY_UP, RIGHT_UP, LEFT_UP, SHIFT_UP, HOME_UP, CTRL_UP, DOWNKEY_UP = range(13)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
     (SDL_KEYDOWN, SDLK_LEFT): LEFT_DOWN,
-    (SDL_KEYDOWN, SDLK_DOWN): DOWN_DOWN,
-    (SDL_KEYDOWN, SDLK_UP): UP_DOWN,
+    (SDL_KEYDOWN, SDLK_DOWN): DOWNKEY_DOWN,
+    (SDL_KEYDOWN, SDLK_UP): UPKEY_DOWN,
     (SDL_KEYDOWN, SDLK_LSHIFT): SHIFT_DOWN,
     (SDL_KEYDOWN, SDLK_LCTRL): CTRL_DOWN,
 
     (SDL_KEYUP, SDLK_LSHIFT): SHIFT_UP,
     (SDL_KEYUP, SDLK_RIGHT): RIGHT_UP,
     (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
-    (SDL_KEYUP, SDLK_UP): UP_UP,
+    (SDL_KEYUP, SDLK_UP): UPKEY_UP,
     (SDL_KEYUP, SDLK_LCTRL): CTRL_UP,
     (SDL_KEYUP, SDLK_HOME): HOME_UP,
-    (SDL_KEYUP, SDLK_DOWN): DOWN_UP
+    (SDL_KEYUP, SDLK_DOWN): DOWNKEY_UP
 
 }
 
@@ -43,19 +43,22 @@ class IdleState:
 
         if event == RIGHT_DOWN:
             character.velocity += RUN_SPEED_PPS
-        elif event == LEFT_DOWN:
-            character.velocity -= RUN_SPEED_PPS
-        elif event == UP_DOWN:
-            character.velocity_y += RUN_SPEED_PPS
-        elif event == DOWN_DOWN:
-            character.velocity_y -= RUN_SPEED_PPS
         elif event == RIGHT_UP:
+            character.velocity -= RUN_SPEED_PPS
+
+        if event == LEFT_DOWN:
             character.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
             character.velocity += RUN_SPEED_PPS
-        elif event == UP_UP:
+
+        if event == UPKEY_DOWN:
+            character.velocity_y += RUN_SPEED_PPS
+        elif event == UPKEY_UP:
             character.velocity_y -= RUN_SPEED_PPS
-        elif event == DOWN_UP:
+
+        if event == DOWNKEY_DOWN:
+            character.velocity_y -= RUN_SPEED_PPS
+        elif event == DOWNKEY_UP:
             character.velocity_y += RUN_SPEED_PPS
         character.timer = 300
 
@@ -91,21 +94,23 @@ class RunState:
     def enter(character, event):
         if event == RIGHT_DOWN:
             character.velocity += RUN_SPEED_PPS
-        elif event == LEFT_DOWN:
-            character.velocity -= RUN_SPEED_PPS
-        elif event == UP_DOWN:
-            character.velocity_y += RUN_SPEED_PPS
-        elif event == DOWN_DOWN:
-            character.velocity_y -= RUN_SPEED_PPS
         elif event == RIGHT_UP:
+            character.velocity -= RUN_SPEED_PPS
+
+        if event == LEFT_DOWN:
             character.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
             character.velocity += RUN_SPEED_PPS
-        elif event == UP_UP:
-            character.velocity_y -= RUN_SPEED_PPS
-        elif event == DOWN_UP:
+
+        if event == UPKEY_DOWN:
             character.velocity_y += RUN_SPEED_PPS
-        character.dir = clamp(-1, character.velocity, 1)
+        elif event == UPKEY_UP:
+            character.velocity_y -= RUN_SPEED_PPS
+
+        if event == DOWNKEY_DOWN:
+            character.velocity_y -= RUN_SPEED_PPS
+        elif event == DOWNKEY_UP:
+            character.velocity_y += RUN_SPEED_PPS
 
     @staticmethod
     def exit(character, event):
@@ -122,6 +127,7 @@ class RunState:
         character.x += character.velocity * game_framework.frame_time
         character.y += character.velocity_y * game_framework.frame_time
         character.x = clamp(25, character.x, 1600 - 25)
+        character.y = clamp(25, character.y, 1550 - 25 )
         character.running = True
         character.runstate = True
 
@@ -129,10 +135,18 @@ class RunState:
     def draw(character):
         if character.runstate:
             draw_rectangle(*character.get_run_collide())
-            if character.dir == 1:
+            if character.velocity > 0:
                 character.idle.clip_draw(int(character.frame) * 92, 2 * 96, 92, 96, character.x, character.y)
-            elif character.dir == -1:
+                character.dir = 1
+            elif character.velocity < 0:
                 character.idle.clip_draw(int(character.frame) * 92, 3 * 96, 92, 96, character.x, character.y)
+                character.dir = -1
+            else:
+                if character.velocity_y > 0 or character.velocity_y <0:
+                    if character.dir == 1:
+                        character.idle.clip_draw(int(character.frame) * 92, 2 * 96, 92, 96, character.x, character.y)
+                    else:
+                        character.idle.clip_draw(int(character.frame) * 92, 3 * 96, 92, 96, character.x, character.y)
 
 
 class AttackState:
@@ -201,21 +215,21 @@ class SkillState:
 
 next_state_table = {
     IdleState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState,
-                SHIFT_UP: IdleState, SHIFT_DOWN: SkillState, DOWN_DOWN: IdleState, DOWN_UP: IdleState,
-                CTRL_UP: IdleState, CTRL_DOWN: AttackState, HOME_UP: IdleState, UP_DOWN: IdleState, UP_UP: IdleState,
+                SHIFT_UP: IdleState, SHIFT_DOWN: SkillState, DOWNKEY_DOWN: RunState, DOWNKEY_UP: IdleState,
+                CTRL_UP: IdleState, CTRL_DOWN: AttackState, HOME_UP: IdleState, UPKEY_DOWN: RunState, UPKEY_UP: IdleState,
                 },
     RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, CTRL_UP: IdleState,
-               CTRL_DOWN: AttackState, DOWN_DOWN: IdleState, DOWN_UP: IdleState, UP_DOWN: IdleState, UP_UP: IdleState,
+               CTRL_DOWN: AttackState, DOWNKEY_DOWN: RunState, DOWNKEY_UP: IdleState, UPKEY_DOWN: RunState, UPKEY_UP: IdleState,
                HOME_UP: IdleState, SHIFT_UP: IdleState, SHIFT_DOWN: SkillState,
                },
     AttackState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState,
-                  SHIFT_UP: IdleState, SHIFT_DOWN: SkillState, UP_DOWN: IdleState, UP_UP: IdleState,
-                  DOWN_DOWN: IdleState, DOWN_UP: IdleState, CTRL_UP: IdleState, CTRL_DOWN: AttackState,
+                  SHIFT_UP: IdleState, SHIFT_DOWN: SkillState, UPKEY_DOWN: RunState, UPKEY_UP: IdleState,
+                  DOWNKEY_DOWN: RunState, DOWNKEY_UP: IdleState, CTRL_UP: IdleState, CTRL_DOWN: AttackState,
                   HOME_UP: IdleState
                   },
     SkillState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState,
-                 SHIFT_UP: IdleState, SHIFT_DOWN: SkillState, DOWN_DOWN: IdleState, UP_DOWN: IdleState, UP_UP: IdleState,
-                 DOWN_UP: IdleState, CTRL_UP: IdleState, CTRL_DOWN: AttackState, HOME_UP: IdleState
+                 SHIFT_UP: IdleState, SHIFT_DOWN: SkillState, DOWNKEY_DOWN: RunState, UPKEY_DOWN: RunState, UPKEY_UP: IdleState,
+                 DOWNKEY_UP: IdleState, CTRL_UP: IdleState, CTRL_DOWN: AttackState, HOME_UP: IdleState
                  },
 }
 

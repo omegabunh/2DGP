@@ -7,22 +7,19 @@ import game_framework
 import title_state
 import main2_state
 import game_world
+
+from map2 import Map
+from key import Key
 from character1 import Character
 from boss1 import Boss
 from monster import Monster
 
-MAP_WIDTH, MAP_HEIGHT = 1997, 950
-
 boss = None
-monster = None
 character = None
-monsters = None
-key = None
+monsters = []
 running = True
-
 character_hp = 10000
 
-t = random.randint(1, 4)
 
 def idle_collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_idle_collide()
@@ -35,6 +32,7 @@ def idle_collide(a, b):
 
     return True
 
+
 def prone_collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_prone_collide()
     left_b, bottom_b, right_b, top_b = b.get_bb()
@@ -45,6 +43,7 @@ def prone_collide(a, b):
     if bottom_a > top_b: return False
 
     return True
+
 
 def attack_collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_attack_collide()
@@ -57,8 +56,9 @@ def attack_collide(a, b):
 
     return True
 
+
 def skill_collide(a, b):
-    if character.skillstate == True:
+    if character.skillstate:
         left_a, bottom_a, right_a, top_a = a.get_skill_collide()
         left_b, bottom_b, right_b, top_b = b.get_bb()
 
@@ -69,19 +69,26 @@ def skill_collide(a, b):
 
     return True
 
+
 def enter():
-    global image, key
-    global boss, monster, character, monsters
-    image = load_image('map2.png')
-    key = load_image('key.png')
-    boss = Boss()
-    monster = Monster()
-    character = Character()
-    game_world.add_object(image, 0)
+    map2 = Map()
+    game_world.add_object(map2, 0)
+
+    key = Key()
     game_world.add_object(key, 1)
-    game_world.add_object(character, 1)
-    game_world.add_object(monster, 1)
+
+    global boss
+    boss = Boss()
     game_world.add_object(boss, 1)
+
+    global character
+    character = Character()
+    game_world.add_object(character, 1)
+
+    global monsters
+    # monsters = [Monster() for i in range(3)]
+    monsters = Monster()
+    game_world.add_object(monsters, 1)
 
 
 def exit():
@@ -108,27 +115,33 @@ def handle_events():
         else:
             character.handle_event(event)
 
-def draw():
-    global image
-    clear_canvas()
-    image.draw(MAP_WIDTH // 2, MAP_HEIGHT // 2)
-    boss.draw()
-    monster.draw()
-    character.draw()
-    key.draw(1700, 50)
-    update_canvas()
-    delay(0.05)
 
 def update():
-    boss.update()
-    character.update()
-    monster.update()
+    for game_object in game_world.all_objects():
+        game_object.update()
 
     if skill_collide(character, boss):
-        if character.skillstate == True:
+        if character.skillstate:
             print('skill collide to boss')
-            boss.hp_x += -0.01
+            boss.hp_x += -0.1
+            boss.hp -= 2
+            if boss.hp <= 0:
+                game_world.remove_object(boss)
+                game_framework.change_state(main2_state)
+
+    if skill_collide(character, monsters):
+        if character.skillstate:
+            monsters.hit += 1
+            game_world.remove_object(monsters)
+            if monsters.hit == 100:
+                game_world.remove_object(monsters)
 
 
+def draw():
+    clear_canvas()
+    for game_object in game_world.all_objects():
+        game_object.draw()
+    update_canvas()
+    delay(0.05)
 
 # open_canvas(MAP_WIDTH, MAP_HEIGHT)

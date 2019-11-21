@@ -259,6 +259,8 @@ class Character:
         self.skillstate = False
         self.font = load_font('ENCR10B.TTF', 16)
         self.hp = 1000
+        self.skill_damage = False
+        self.skill_damage_count = 0
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
@@ -304,6 +306,14 @@ class Character:
         self.event_que.insert(0, event)
 
     def update(self):
+
+        if self.skill_damage == True:
+            self.skill_damage_count += 1
+            print(self.skill_damage_count)
+            if self.skill_damage_count == 18:
+                self.skill_damage = False
+                self.skill_damage_count = 0
+
         self.cur_state.do(self)
         if len(self.event_que) > 0:
             event = self.event_que.pop()

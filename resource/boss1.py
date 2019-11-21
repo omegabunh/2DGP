@@ -4,7 +4,7 @@ import game_framework
 PIXEL_PER_METER = (10.0 / 0.3)
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 5
+FRAMES_PER_ACTION = 3
 
 
 class Boss:
@@ -38,7 +38,7 @@ class Boss:
     def draw(self):
         self.font.draw(self.x - 60, self.y + 150, '(hp: %0.0f)' % self.hp, (255, 255, 0))
 
-        if self.hp < 700:
+        if 690 < self.hp < 700:
             self.attack_image.clip_draw(int(self.frame) * 340, 0, 340, 420, self.x, self.y)
         else:
             self.image.clip_draw(int(self.frame) * 320, 0, 320, 410, self.x, self.y)

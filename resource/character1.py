@@ -50,7 +50,7 @@ class IdleState:
             character.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
             character.velocity += RUN_SPEED_PPS
-        character.timer = 300
+
 
     @staticmethod
     def exit(character, event):
@@ -62,7 +62,6 @@ class IdleState:
     @staticmethod
     def do(character):
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
-        character.timer -= 1
         character.idleing = True
         character.idlestate = True
         character.runstate = False
@@ -197,7 +196,7 @@ class SkillState:
         character.frame1 = 0
         if event == HOME_UP:
             count = count + 1
-
+        character.timer = 8
     @staticmethod
     def exit(character, event):
         pass
@@ -278,8 +277,11 @@ class Character:
         self.pronestate = False
         self.attackstate = False
         self.skillstate = False
+        self.test = False
         self.font = load_font('ENCR10B.TTF', 16)
         self.hp = 1000
+        self.skill_damage = False
+        self.skill_damage_count = 0
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
@@ -336,6 +338,13 @@ class Character:
             self.y += self.jump_y * game_framework.frame_time
             self.jump_y -= GRAVITY_PPS * game_framework.frame_time
             self.y = clamp(300, self.jump_y, 430)
+
+        if self.skill_damage == True:
+            self.skill_damage_count += 1
+            print(self.skill_damage_count)
+            if self.skill_damage_count == 18:
+                self.skill_damage = False
+                self.skill_damage_count = 0
 
         self.cur_state.do(self)
         if len(self.event_que) > 0:

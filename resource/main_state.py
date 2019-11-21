@@ -35,7 +35,7 @@ def idle_collide(a, b):
 
 def run_collide(a, b):
     if character.runstate:
-        left_a, bottom_a, right_a, top_a = a.get_idle_collide()
+        left_a, bottom_a, right_a, top_a = a.get_run_collide()
         left_b, bottom_b, right_b, top_b = b.get_bb()
 
         if left_a > right_b: return False
@@ -137,32 +137,41 @@ def draw():
     delay(0.05)
 
 def update():
+
     for game_object in game_world.all_objects():
         game_object.update()
 
     if idle_collide(character, boss):
         if character.idlestate:
-            character.hp -= 2
-            if character.hp <= 0:
-                game_framework.quit()
+            if character.skill_damage == False:
+                character.hp -= 2
+                character.skill_damage = True
+                if character.hp <= 0:
+                    game_framework.quit()
 
     if idle_collide(character, monsters):
         if character.idlestate:
-            character.hp -= 10
-            if character.hp <= 0:
-                game_framework.quit()
+            if character.skill_damage == False:
+                character.hp -= 10
+                character.skill_damage = True
+                if character.hp <= 0:
+                    game_framework.quit()
 
     if run_collide(character, boss):
         if character.runstate:
-            character.hp -= 2
-            if character.hp <= 0:
-                game_framework.quit()
+            if character.skill_damage == False:
+                character.hp -= 2
+                character.skill_damage = True
+                if character.hp <= 0:
+                    game_framework.quit()
 
     if run_collide(character, monsters):
         if character.runstate:
-            character.hp -= 10
-            if character.hp <= 0:
-                game_framework.quit()
+            if character.skill_damage == False:
+                character.hp -= 10
+                character.skill_damage = True
+                if character.hp <= 0:
+                    game_framework.quit()
 
     if prone_collide(character, boss):
         if character.pronestate:
@@ -178,18 +187,21 @@ def update():
 
     if skill_collide(character, boss):
         if character.skillstate:
-            boss.hp_x += -0.1
-            boss.hp -= 2
-            if boss.hp <= 0:
-                game_world.remove_object(boss)
-                game_framework.change_state(main2_state)
+            if character.skill_damage == False:
+                boss.hp_x += -0.1
+                boss.hp -= 2
+                character.skill_damage = True
+                if boss.hp <= 0:
+                    game_world.remove_object(boss)
+                    game_framework.change_state(main2_state)
 
     if skill_collide(character, monsters):
         if character.skillstate:
-            monsters.hit += 2
-            game_world.remove_object(monsters)
-            if monsters.hit == 200:
-                game_world.remove_object(monsters)
+            if character.skill_damage == False:
+                monsters.hit += 2
+                character.skill_damage = True
+                if monsters.hit == 200:
+                    game_world.remove_object(monsters)
 
     if attack_collide(character, boss):
         if character.attackstate:
@@ -202,7 +214,6 @@ def update():
     if attack_collide(character, monsters):
         if character.attackstate:
             monsters.hit += 1
-            game_world.remove_object(monsters)
             if monsters.hit == 200:
                 game_world.remove_object(monsters)
 

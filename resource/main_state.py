@@ -115,6 +115,12 @@ def handle_events():
         else:
             character.handle_event(event)
 
+def draw():
+    clear_canvas()
+    for game_object in game_world.all_objects():
+        game_object.draw()
+    update_canvas()
+    delay(0.05)
 
 def update():
     for game_object in game_world.all_objects():
@@ -137,11 +143,6 @@ def update():
                 game_world.remove_object(monsters)
 
 
-def draw():
-    clear_canvas()
-    for game_object in game_world.all_objects():
-        game_object.draw()
-    update_canvas()
-    delay(0.05)
+
 
 # open_canvas(MAP_WIDTH, MAP_HEIGHT)

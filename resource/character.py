@@ -13,7 +13,10 @@ GRAVITY_PPS = (9.8 * PIXEL_PER_METER)
 
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 8
+FRAMES_PER_ACTION = 4
+FRAMES_PER_ACTION1 = 8
+FRAMES_PER_ACTION2 = 3
+
 
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SHIFT_DOWN, SHIFT_UP, ALT_DOWN, HOME_UP, CTRL_DOWN, CTRL_UP, DOWN_DOWN, DOWN_UP = range(
     12)
@@ -159,7 +162,7 @@ class AttackState:
 
     @staticmethod
     def do(character):
-        character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        character.frame = (character.frame + FRAMES_PER_ACTION2 * ACTION_PER_TIME * game_framework.frame_time) % 3
         character.attackstate = True
 
     @staticmethod
@@ -187,7 +190,7 @@ class SkillState:
 
     @staticmethod
     def do(character):
-        character.frame1 = (character.frame1 + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 14
+        character.frame1 = (character.frame1 + FRAMES_PER_ACTION1 * ACTION_PER_TIME * game_framework.frame_time) % 14
         character.skillstate = True
     @staticmethod
     def draw(character):
@@ -231,7 +234,11 @@ next_state_table = {
 
 
 class Character:
-
+    idle = None
+    attack = None
+    prone = None
+    skill = None
+    skill2 = None
     def __init__(self):
         self.x, self.y = 1700 // 2, 170
         self.frame = 0
@@ -253,11 +260,16 @@ class Character:
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
-        Character.idle = load_image('character.png')
-        Character.attack = load_image('character_attack.png')
-        Character.prone = load_image('character_prone.png')
-        Character.skill = load_image('character_skill(457x260).png')
-        Character.skill2 = load_image('character_skill2(572x406).png')
+        if Character.idle == None:
+            Character.idle = load_image('character.png')
+        if Character.attack == None:
+            Character.attack = load_image('character_attack.png')
+        if Character.prone == None:
+            Character.prone = load_image('character_prone.png')
+        if Character.skill == None:
+            Character.skill = load_image('character_skill(457x260).png')
+        if Character.skill2 == None:
+            Character.skill2 = load_image('character_skill2(572x406).png')
 
     def get_idle_collide(self):
         if self.idlestate:

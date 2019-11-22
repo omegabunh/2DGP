@@ -205,16 +205,20 @@ def update():
 
     if attack_collide(character, boss):
         if character.attackstate:
-            boss.hp_x += -0.1
-            boss.hp -= 1
-            if boss.hp <= 0:
-                game_world.remove_object(boss)
-                game_framework.change_state(main2_state)
+            if character.attack_damage == False:
+                boss.hp_x += -0.1
+                boss.hp -= 1
+                character.attack_damage = True
+                if boss.hp <= 0:
+                    game_world.remove_object(boss)
+                    game_framework.change_state(main2_state)
 
     if attack_collide(character, monsters):
         if character.attackstate:
-            monsters.hit += 1
-            if monsters.hit == 200:
-                game_world.remove_object(monsters)
+            if character.attack_damage == False:
+                monsters.hit += 1
+                character.attack_damage = True
+                if monsters.hit == 200:
+                    game_world.remove_object(monsters)
 
 # open_canvas(MAP_WIDTH, MAP_HEIGHT)

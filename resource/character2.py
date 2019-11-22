@@ -261,6 +261,8 @@ class Character:
         self.hp = 1000
         self.skill_damage = False
         self.skill_damage_count = 0
+        self.attack_damage = False
+        self.attack_damage_count = 0
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
@@ -310,9 +312,16 @@ class Character:
         if self.skill_damage == True:
             self.skill_damage_count += 1
             print(self.skill_damage_count)
-            if self.skill_damage_count == 18:
+            if self.skill_damage_count == 15:
                 self.skill_damage = False
                 self.skill_damage_count = 0
+
+        if self.attack_damage == True:
+            self.attack_damage_count += 1
+            print(self.skill_damage_count)
+            if self.attack_damage_count == 12:
+                self.attack_damage = False
+                self.attack_damage_count = 0
 
         self.cur_state.do(self)
         if len(self.event_que) > 0:

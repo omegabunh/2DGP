@@ -4,6 +4,7 @@ import main_state
 import game_world
 from character2 import Character
 from boss2 import Boss
+
 MAP_WIDTH, MAP_HEIGHT = 1997, 950
 
 boss = None
@@ -14,6 +15,7 @@ key = None
 running = True
 
 character_hp = 10000
+
 
 def idle_collide(a, b):
     if character.idlestate:
@@ -27,6 +29,7 @@ def idle_collide(a, b):
 
     return True
 
+
 def run_collide(a, b):
     if character.runstate:
         left_a, bottom_a, right_a, top_a = a.get_run_collide()
@@ -38,6 +41,7 @@ def run_collide(a, b):
         if bottom_a > top_b: return False
 
     return True
+
 
 def attack_collide(a, b):
     if character.attackstate:
@@ -51,6 +55,7 @@ def attack_collide(a, b):
 
     return True
 
+
 def skill_collide(a, b):
     if character.skillstate == True:
         left_a, bottom_a, right_a, top_a = a.get_skill_collide()
@@ -62,6 +67,7 @@ def skill_collide(a, b):
         if bottom_a > top_b: return False
 
     return True
+
 
 def enter():
     global image, key
@@ -75,14 +81,18 @@ def enter():
     game_world.add_object(character, 1)
     game_world.add_object(boss, 1)
 
+
 def exit():
     game_world.clear()
+
 
 def pause():
     pass
 
+
 def resume():
     pass
+
 
 def handle_events():
     events = get_events()
@@ -93,6 +103,7 @@ def handle_events():
             game_framework.change_state(main_state)
         else:
             character.handle_event(event)
+
 
 def update():
     boss.update()
@@ -116,7 +127,7 @@ def update():
 
     if skill_collide(character, boss):
         if character.skillstate:
-            if character.skill_damage == False:
+            if not character.skill_damage:
                 boss.hp -= 2
                 character.skill_damage = True
                 if boss.hp <= 0:
@@ -124,9 +135,12 @@ def update():
 
     if attack_collide(character, boss):
         if character.attackstate:
-            boss.hp -= 1
-            if boss.hp <= 0:
-                game_world.remove_object(boss)
+            if not character.attack_damage:
+                boss.hp -= 1
+                character.attack_damage = True
+                if boss.hp <= 0:
+                    game_world.remove_object(boss)
+
 
 def draw():
     global image
@@ -137,8 +151,4 @@ def draw():
     key.draw(1700, 50)
     update_canvas()
     delay(0.05)
-#open_canvas(MAP_WIDTH, MAP_HEIGHT)
-
-
-
-
+# open_canvas(MAP_WIDTH, MAP_HEIGHT)

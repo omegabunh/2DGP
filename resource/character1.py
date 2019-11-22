@@ -280,6 +280,8 @@ class Character:
         self.test = False
         self.font = load_font('ENCR10B.TTF', 16)
         self.hp = 1000
+        self.attack_damage = False
+        self.attack_damage_count = 0
         self.skill_damage = False
         self.skill_damage_count = 0
         self.event_que = []
@@ -339,10 +341,16 @@ class Character:
             self.jump_y -= GRAVITY_PPS * game_framework.frame_time
             self.y = clamp(300, self.jump_y, 430)
 
+        if self.attack_damage == True:
+            self.attack_damage_count += 1
+            print(self.skill_damage_count)
+            if self.attack_damage_count == 12:
+                self.attack_damage = False
+                self.attack_damage_count = 0
+
         if self.skill_damage == True:
             self.skill_damage_count += 1
-            print(self.skill_damage_count)
-            if self.skill_damage_count == 18:
+            if self.skill_damage_count == 15:
                 self.skill_damage = False
                 self.skill_damage_count = 0
 

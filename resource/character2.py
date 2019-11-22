@@ -312,7 +312,7 @@ class Character:
         if self.skill_damage == True:
             self.skill_damage_count += 1
             print(self.skill_damage_count)
-            if self.skill_damage_count == 15:
+            if self.skill_damage_count == 14:
                 self.skill_damage = False
                 self.skill_damage_count = 0
 

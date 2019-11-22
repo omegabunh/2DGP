@@ -51,7 +51,6 @@ class IdleState:
         elif event == LEFT_UP:
             character.velocity += RUN_SPEED_PPS
 
-
     @staticmethod
     def exit(character, event):
         if event == ALT_DOWN:
@@ -103,7 +102,6 @@ class RunState:
         if event == ALT_DOWN:
             character.jump()
             character.jumping = True
-
 
     @staticmethod
     def do(character):
@@ -197,6 +195,7 @@ class SkillState:
         if event == HOME_UP:
             count = count + 1
         character.timer = 8
+
     @staticmethod
     def exit(character, event):
         pass
@@ -259,6 +258,7 @@ class Character:
     prone = None
     skill = None
     skill2 = None
+
     def __init__(self):
         self.x, self.y = 1700 // 2, 300
         self.frame = 0
@@ -284,6 +284,8 @@ class Character:
         self.attack_damage_count = 0
         self.skill_damage = False
         self.skill_damage_count = 0
+        self.skill2_damage = False
+        self.skill2_damage_count = 0
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
@@ -350,9 +352,15 @@ class Character:
 
         if self.skill_damage == True:
             self.skill_damage_count += 1
-            if self.skill_damage_count == 15:
+            if self.skill_damage_count == 14:
                 self.skill_damage = False
                 self.skill_damage_count = 0
+
+        if self.skill2_damage == True and count % 2 == 1:
+            self.skill2_damage_count += 1
+            if self.skill2_damage_count == 14:
+                self.skill2_damage = False
+                self.skill2_damage_count = 0
 
         self.cur_state.do(self)
         if len(self.event_que) > 0:

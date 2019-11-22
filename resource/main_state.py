@@ -197,9 +197,10 @@ def update():
 
     if skill_collide(character, monsters):
         if character.skillstate:
-            if character.skill_damage == False:
+            if character.skill_damage == False or character.skill2_damage == False:
                 monsters.hit += 2
                 character.skill_damage = True
+                character.skill2_damage = True
                 if monsters.hit == 200:
                     game_world.remove_object(monsters)
 

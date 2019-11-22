@@ -341,3 +341,5 @@ class Character:
             self.add_event(key_event)
         elif event.key == SDLK_HOME:
             count += 1
+        elif event.key == SDLK_DELETE:
+            self.hp = 1000

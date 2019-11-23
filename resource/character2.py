@@ -241,6 +241,7 @@ class Character:
     prone = None
     skill = None
     skill2 = None
+    dead = None
     def __init__(self):
         self.x, self.y = 1700 // 2, 300
         self.frame = 0
@@ -257,6 +258,7 @@ class Character:
         self.runstate = False
         self.attackstate = False
         self.skillstate = False
+        self.deadstate = False
         self.font = load_font('ENCR10B.TTF', 16)
         self.hp = 1000
         self.skill_damage = False
@@ -274,6 +276,8 @@ class Character:
             Character.skill = load_image('character_skill(457x260).png')
         if Character.skill2 == None:
             Character.skill2 = load_image('character_skill2(572x406).png')
+        if Character.dead == None:
+            Character.dead = load_image('character_dead.png')
 
     def get_idle_collide(self):
         if self.idlestate:
@@ -332,8 +336,10 @@ class Character:
 
     def draw(self):
         self.font.draw(self.x - 60, self.y + 50, '(hp: %0.0f)' % self.hp, (255, 255, 0))
-        self.cur_state.draw(self)
-
+        if self.deadstate:
+            self.dead.draw(self.x, self.y)
+        else:
+            self.cur_state.draw(self)
     def handle_event(self, event):
         global count
         if (event.type, event.key) in key_event_table:

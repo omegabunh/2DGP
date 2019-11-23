@@ -107,7 +107,7 @@ class RunState:
     def do(character):
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         character.x += character.velocity * game_framework.frame_time
-        character.x = clamp(25, character.x, 1600 - 25)
+        character.x = clamp(25, character.x, 1748 - 25)
         character.running = True
         character.idlestate = False
         character.runstate = True
@@ -235,9 +235,8 @@ next_state_table = {
                HOME_UP: IdleState, SHIFT_UP: IdleState, SHIFT_DOWN: SkillState,
                },
     ProneState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState,
-                 SHIFT_UP: IdleState,
-                 SHIFT_DOWN: SkillState, DOWN_DOWN: ProneState, DOWN_UP: IdleState, CTRL_UP: IdleState,
-                 CTRL_DOWN: AttackState, ALT_DOWN: IdleState, HOME_UP: IdleState
+                 SHIFT_UP: IdleState, SHIFT_DOWN: SkillState, DOWN_DOWN: ProneState, DOWN_UP: IdleState,
+                 CTRL_UP: IdleState, CTRL_DOWN: AttackState, ALT_DOWN: IdleState, HOME_UP: IdleState
                  },
     AttackState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState,
                   SHIFT_UP: IdleState, SHIFT_DOWN: SkillState, ALT_DOWN: IdleState,
@@ -245,10 +244,10 @@ next_state_table = {
                   HOME_UP: IdleState
                   },
     SkillState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState,
-                 SHIFT_UP: IdleState,
-                 SHIFT_DOWN: SkillState, ALT_DOWN: IdleState, DOWN_DOWN: ProneState,
+                 SHIFT_UP: IdleState, SHIFT_DOWN: SkillState, ALT_DOWN: IdleState, DOWN_DOWN: ProneState,
                  DOWN_UP: IdleState, CTRL_UP: IdleState, CTRL_DOWN: AttackState, HOME_UP: IdleState
-                 },
+                 }
+
 }
 
 
@@ -258,6 +257,7 @@ class Character:
     prone = None
     skill = None
     skill2 = None
+    dead = None
 
     def __init__(self):
         self.x, self.y = 1700 // 2, 300
@@ -277,6 +277,7 @@ class Character:
         self.pronestate = False
         self.attackstate = False
         self.skillstate = False
+        self.deadstate = False
         self.test = False
         self.font = load_font('ENCR10B.TTF', 16)
         self.hp = 1000
@@ -299,6 +300,8 @@ class Character:
             Character.skill = load_image('character_skill(457x260).png')
         if Character.skill2 == None:
             Character.skill2 = load_image('character_skill2(572x406).png')
+        if Character.dead == None:
+            Character.dead = load_image('character_dead.png')
 
     def get_idle_collide(self):
         if self.idlestate:
@@ -371,7 +374,11 @@ class Character:
 
     def draw(self):
         self.font.draw(self.x - 60, self.y + 50, '(hp: %0.0f)' % self.hp, (255, 255, 0))
-        self.cur_state.draw(self)
+        if self.deadstate:
+            self.dead.draw(self.x, self.y)
+        else:
+            self.cur_state.draw(self)
+
 
     def handle_event(self, event):
         global count

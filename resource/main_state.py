@@ -152,10 +152,12 @@ def update():
     if idle_collide(character, monsters):
         if character.idlestate:
             if character.skill_damage == False:
-                character.hp -= 10
+                character.hp -= 500
                 character.skill_damage = True
                 if character.hp <= 0:
-                    game_framework.quit()
+                    character.deadstate = True
+                    character.hp = 0
+                    #game_framework.quit()
 
     if run_collide(character, boss):
         if character.runstate:

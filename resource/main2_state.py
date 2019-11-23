@@ -123,7 +123,8 @@ def update():
                 character.hp -= 2
                 character.skill_damage = True
                 if character.hp <= 0:
-                    game_framework.quit()
+                    character.deadstate = True
+                    character.hp = 0
 
     if skill_collide(character, boss):
         if character.skillstate:

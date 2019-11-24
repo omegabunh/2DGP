@@ -93,5 +93,5 @@ class Boss:
         self.font.draw(self.x - 60, self.y + 150, '(hp: %0.0f)' % self.hp, (0, 255, 0))
         self.image.clip_draw(int(self.frame) * 356, 0, 356, 384, self.x, self.y)
         draw_rectangle(*self.get_bb())
-        self.hp_background.draw_now(self.hp_x1, self.hp_y1, self.w1, self.h1)
-        self.hp_image.draw_now(self.hp_x, self.hp_y, self.w, self.h)
+        self.hp_background.draw(self.hp_x1, self.hp_y1, self.w1, self.h1)
+        self.hp_image.draw(self.hp_x, self.hp_y, self.w, self.h)

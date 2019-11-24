@@ -37,7 +37,7 @@ class Boss:
             Boss.hp_background = load_image('boss_hp_background.png')
 
     def get_bb(self):
-        return self.x - 100, self.y - 100, self.x + 100, self.y + 100
+        return self.x - 100, self.y - 100, self.x + 140, self.y + 100
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 15
@@ -50,6 +50,6 @@ class Boss:
         else:
             self.image.clip_draw(int(self.frame) * 320, 0, 320, 410, self.x, self.y)
         draw_rectangle(*self.get_bb())
-        self.hp_background.draw_now(self.hp_x1, self.hp_y1, self.w1, self.h1)
-        self.hp_image.draw_now(self.hp_x, self.hp_y, self.w, self.h)
+        self.hp_background.draw(self.hp_x1, self.hp_y1, self.w1, self.h1)
+        self.hp_image.draw(self.hp_x, self.hp_y, self.w, self.h)
 

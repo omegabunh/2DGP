@@ -128,21 +128,23 @@ def update():
 
     if skill_collide(character, boss):
         if character.skillstate:
-            if not character.skill_damage:
+            if character.skill_damage == False and boss.hitstate == False:
                 boss.w += -3
                 boss.hp_x += -1.5
                 boss.hp -= 2
                 character.skill_damage = True
+                boss.hitstate = True
                 if boss.hp <= 0:
                     game_world.remove_object(boss)
 
     if attack_collide(character, boss):
         if character.attackstate:
-            if not character.attack_damage:
+            if not character.attack_damage and boss.hitstate == False:
                 boss.w += -1.5
                 boss.hp_x += -0.725
                 boss.hp -= 1
                 character.attack_damage = True
+                boss.hitstate = True
                 if boss.hp <= 0:
                     game_world.remove_object(boss)
 

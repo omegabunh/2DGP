@@ -195,33 +195,37 @@ def update():
 
     if skill_collide(character, boss):
         if character.skillstate:
-            if character.skill_damage == False:
+            if character.skill_damage == False and boss.hitstate == False:
                 boss.w += -3
                 boss.hp_x += -1.5
                 boss.hp -= 2
                 character.skill_damage = True
+                boss.hitstate = True
 
     if skill_collide(character, monsters):
         if monsters.hit >= 30:
             game_world.remove_object(monsters)
         if character.skillstate:
-            if character.skill_damage == False or character.skill2_damage == False:
+            if character.skill_damage == False or character.skill2_damage == False and monsters.hitstate == False:
                 monsters.hit += 2
                 character.skill_damage = True
                 character.skill2_damage = True
+                monsters.hitstate = True
 
     if attack_collide(character, boss):
         if character.attackstate:
-            if character.attack_damage == False:
+            if character.attack_damage == False and boss.hitstate == False:
                 boss.w += -1.5
                 boss.hp_x += -0.725
                 boss.hp -= 1
                 character.attack_damage = True
+                boss.hitstate = True
 
     if attack_collide(character, monsters):
         if character.attackstate:
-            if character.attack_damage == False:
+            if character.attack_damage == False and monsters.hitstate == False:
                 monsters.hit += 1
                 character.attack_damage = True
+                monsters.hitstate = True
 
 # open_canvas(MAP_WIDTH, MAP_HEIGHT)

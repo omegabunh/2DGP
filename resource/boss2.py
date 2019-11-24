@@ -38,6 +38,8 @@ class Boss:
         self.w1 = 1505
         self.h = 30
         self.h1 = 35
+        self.hitstate = False
+        self.hit_count = 0
         self.font = load_font('ENCR10B.TTF', 16)
         if Boss.image is None:
             Boss.image = load_image('boss_phase2(356x384).png')
@@ -88,6 +90,14 @@ class Boss:
     def update(self):
         self.bt.run()
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 16
+        if self.hitstate == True:
+            self.hit_count += 1
+            self.image.opacify(0.8)
+            if self.hit_count % 10 == 0:
+                self.image.opacify(1.0)
+            if self.hit_count == 30:
+                self.hitstate = False
+                self.hit_count = 0
 
     def draw(self):
         self.font.draw(self.x - 60, self.y + 150, '(hp: %0.0f)' % self.hp, (0, 255, 0))

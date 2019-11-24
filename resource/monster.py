@@ -18,6 +18,7 @@ class Monster:
         self.frame = 0
         self.hit = 0
         self.font = load_font('ENCR10B.TTF', 16)
+        self.deadstate = False
 
     def get_bb(self):
         return self.x - 80, self.y - 100, self.x + 80, self.y + 100
@@ -28,6 +29,8 @@ class Monster:
             self.y -= 50
         elif self.y < 330:
             self.y = 330
+        if self.hit >= 30:
+            self.deadstate = True
 
     def draw(self):
         self.font.draw(self.x - 60, self.y + 70, '(hit: %0.0f)' % self.hit, (0, 255, 0))

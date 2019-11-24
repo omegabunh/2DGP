@@ -16,7 +16,8 @@ from monster import Monster
 
 boss = None
 character = None
-monsters = []
+#monsters = []
+monsters = None
 running = True
 character_hp = 10000
 
@@ -144,39 +145,41 @@ def update():
     for game_object in game_world.all_objects():
         game_object.update()
 
+    if monsters.hit >= 30:
+        monsters.deadstate = True
+        game_world.remove_object(monsters)
+
+    if boss.hp <= 0:
+        game_world.remove_object(boss)
+        game_framework.change_state(main2_state)
+
+    if character.hp <= 0:
+        character.deadstate = True
+        character.hp = 0
+
     if idle_collide(character, boss):
         if character.idlestate:
-            if character.skill_damage == False:
+            if character.skill_damage == False and character.hp != 0:
                 character.hp -= 2
                 character.skill_damage = True
-                if character.hp <= 0:
-                    game_framework.quit()
 
     if idle_collide(character, monsters):
-        if character.idlestate:
-            if character.skill_damage == False:
+        if character.idlestate and monsters.deadstate == False:
+            if character.skill_damage == False and character.hp != 0:
                 character.hp -= 500
                 character.skill_damage = True
-                if character.hp <= 0:
-                    character.deadstate = True
-                    character.hp = 0
-                    # game_framework.quit()
 
     if run_collide(character, boss):
         if character.runstate:
-            if character.skill_damage == False:
+            if character.skill_damage == False and character.hp != 0:
                 character.hp -= 2
                 character.skill_damage = True
-                if character.hp <= 0:
-                    game_framework.quit()
 
     if run_collide(character, monsters):
-        if character.runstate:
-            if character.skill_damage == False:
-                character.hp -= 10
+        if character.runstate and monsters.deadstate == False:
+            if character.skill_damage == False and character.hp != 0:
+                character.hp -= 2
                 character.skill_damage = True
-                if character.hp <= 0:
-                    game_framework.quit()
 
     if prone_collide(character, boss):
         if character.pronestate:
@@ -185,7 +188,7 @@ def update():
                 game_framework.quit()
 
     if prone_collide(character, monsters):
-        if character.pronestate:
+        if character.pronestate and monsters.deadstate == False:
             character.hp -= 10
             if character.hp <= 0:
                 game_framework.quit()
@@ -197,18 +200,15 @@ def update():
                 boss.hp_x += -1.5
                 boss.hp -= 2
                 character.skill_damage = True
-                if boss.hp <= 0:
-                    game_world.remove_object(boss)
-                    game_framework.change_state(main2_state)
 
     if skill_collide(character, monsters):
+        if monsters.hit >= 30:
+            game_world.remove_object(monsters)
         if character.skillstate:
             if character.skill_damage == False or character.skill2_damage == False:
                 monsters.hit += 2
                 character.skill_damage = True
                 character.skill2_damage = True
-                if monsters.hit == 30:
-                    game_world.remove_object(monsters)
 
     if attack_collide(character, boss):
         if character.attackstate:
@@ -217,16 +217,12 @@ def update():
                 boss.hp_x += -0.725
                 boss.hp -= 1
                 character.attack_damage = True
-                if boss.hp <= 0:
-                    game_world.remove_object(boss)
-                    game_framework.change_state(main2_state)
 
     if attack_collide(character, monsters):
         if character.attackstate:
             if character.attack_damage == False:
                 monsters.hit += 1
                 character.attack_damage = True
-                if monsters.hit == 30:
-                    game_world.remove_object(monsters)
+
 
 # open_canvas(MAP_WIDTH, MAP_HEIGHT)

@@ -37,7 +37,7 @@ class Boss:
             Boss.hp_background = load_image('boss_hp_background.png')
 
     def get_bb(self):
-        return self.x - 100, self.y - 100, self.x + 140, self.y + 100
+        return self.x - 100, self.y - 100, self.x + 100, self.y + 130
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 15
@@ -46,7 +46,7 @@ class Boss:
         self.font.draw(self.x - 60, self.y + 150, '(hp: %0.0f)' % self.hp, (0, 255, 0))
 
         if self.hp % 50 < 4 and self.hp != 1000:
-            self.attack_image.clip_draw(int(self.frame) * 340, 0, 340, 420, self.x, self.y)
+            self.attack_image.clip_draw(int(self.frame) * 340, 0, 340, 420, self.x - 10, self.y + 4)
         else:
             self.image.clip_draw(int(self.frame) * 320, 0, 320, 410, self.x, self.y)
         draw_rectangle(*self.get_bb())

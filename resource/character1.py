@@ -373,7 +373,7 @@ class Character:
             self.cur_state.enter(self, event)
 
     def draw(self):
-        self.font.draw(self.x - 60, self.y + 50, '(hp: %0.0f)' % self.hp, (255, 255, 0))
+        self.font.draw(self.x - 60, self.y + 50, '(hp: %0.0f)' % self.hp, (0, 255, 0))
         if self.deadstate:
             self.dead.draw(self.x, self.y)
         else:

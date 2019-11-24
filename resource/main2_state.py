@@ -129,6 +129,8 @@ def update():
     if skill_collide(character, boss):
         if character.skillstate:
             if not character.skill_damage:
+                boss.w += -3
+                boss.hp_x += -1.5
                 boss.hp -= 2
                 character.skill_damage = True
                 if boss.hp <= 0:
@@ -137,6 +139,8 @@ def update():
     if attack_collide(character, boss):
         if character.attackstate:
             if not character.attack_damage:
+                boss.w += -1.5
+                boss.hp_x += -0.725
                 boss.hp -= 1
                 character.attack_damage = True
                 if boss.hp <= 0:

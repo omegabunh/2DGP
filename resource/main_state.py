@@ -33,6 +33,7 @@ def idle_collide(a, b):
 
     return True
 
+
 def run_collide(a, b):
     if character.runstate:
         left_a, bottom_a, right_a, top_a = a.get_run_collide()
@@ -44,6 +45,7 @@ def run_collide(a, b):
         if bottom_a > top_b: return False
 
     return True
+
 
 def prone_collide(a, b):
     if character.pronestate:
@@ -129,6 +131,7 @@ def handle_events():
         else:
             character.handle_event(event)
 
+
 def draw():
     clear_canvas()
     for game_object in game_world.all_objects():
@@ -136,8 +139,8 @@ def draw():
     update_canvas()
     delay(0.05)
 
-def update():
 
+def update():
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -157,7 +160,7 @@ def update():
                 if character.hp <= 0:
                     character.deadstate = True
                     character.hp = 0
-                    #game_framework.quit()
+                    # game_framework.quit()
 
     if run_collide(character, boss):
         if character.runstate:
@@ -190,7 +193,8 @@ def update():
     if skill_collide(character, boss):
         if character.skillstate:
             if character.skill_damage == False:
-                boss.hp_x += -0.1
+                boss.w += -3
+                boss.hp_x += -1.5
                 boss.hp -= 2
                 character.skill_damage = True
                 if boss.hp <= 0:
@@ -203,13 +207,14 @@ def update():
                 monsters.hit += 2
                 character.skill_damage = True
                 character.skill2_damage = True
-                if monsters.hit == 200:
+                if monsters.hit == 30:
                     game_world.remove_object(monsters)
 
     if attack_collide(character, boss):
         if character.attackstate:
             if character.attack_damage == False:
-                boss.hp_x += -0.1
+                boss.w += -1.5
+                boss.hp_x += -0.725
                 boss.hp -= 1
                 character.attack_damage = True
                 if boss.hp <= 0:
@@ -221,7 +226,7 @@ def update():
             if character.attack_damage == False:
                 monsters.hit += 1
                 character.attack_damage = True
-                if monsters.hit == 200:
+                if monsters.hit == 30:
                     game_world.remove_object(monsters)
 
 # open_canvas(MAP_WIDTH, MAP_HEIGHT)

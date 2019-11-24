@@ -14,13 +14,13 @@ class Monster:
     def __init__(self):
         if Monster.image == None:
             Monster.image = load_image('monster(191x224).png')
-        self.x, self.y = random.randint(0, 1748), 800
+        self.x, self.y = random.randint(100, 1748), 800
         self.frame = 0
         self.hit = 0
         self.font = load_font('ENCR10B.TTF', 16)
 
     def get_bb(self):
-        return self.x - 100, self.y - 100, self.x + 100, self.y + 100
+        return self.x - 80, self.y - 100, self.x + 80, self.y + 100
 
     def update(self):
         self.frame = random.randint(0, 5)
@@ -30,6 +30,6 @@ class Monster:
             self.y = 330
 
     def draw(self):
-        self.font.draw(self.x - 60, self.y + 70, '(hit: %0.0f)' % self.hit, (255, 255, 0))
+        self.font.draw(self.x - 60, self.y + 70, '(hit: %0.0f)' % self.hit, (0, 255, 0))
         draw_rectangle(*self.get_bb())
         self.image.clip_draw(self.frame * 191, 0, 191, 224, self.x, self.y)

@@ -111,17 +111,17 @@ def update():
 
     if idle_collide(character, boss):
         if character.idlestate:
-            if character.skill_damage == False:
+            if character.idle_op == False and character.hp != 0:
                 character.hp -= 2
-                character.skill_damage = True
+                character.idle_op = True
                 if character.hp <= 0:
                     game_framework.quit()
 
     if run_collide(character, boss):
         if character.runstate:
-            if character.skill_damage == False:
+            if character.run_op == False and character.hp != 0:
                 character.hp -= 2
-                character.skill_damage = True
+                character.run_op = True
                 if character.hp <= 0:
                     character.deadstate = True
                     character.hp = 0

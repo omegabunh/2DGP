@@ -259,6 +259,9 @@ class Character:
         self.attackstate = False
         self.skillstate = False
         self.deadstate = False
+        self.idle_op = False
+        self.run_op = False
+        self.idle_op_count, self.run_op_count = 0, 0
         self.font = load_font('ENCR10B.TTF', 16)
         self.hp = 1000
         self.skill_damage = False
@@ -312,6 +315,24 @@ class Character:
         self.event_que.insert(0, event)
 
     def update(self):
+
+        if self.idle_op == True:
+            self.idle_op_count += 1
+            self.idle.opacify(0.5)
+            if self.idle_op_count % 3 == 0:
+                self.idle.opacify(1.0)
+            if self.idle_op_count == 15:
+                self.idle_op = False
+                self.idle_op_count = 0
+
+        if self.run_op == True:
+            self.run_op_count += 1
+            self.idle.opacify(0.5)
+            if self.run_op_count % 3 == 0:
+                self.idle.opacify(1.0)
+            if self.run_op_count == 15:
+                self.run_op = False
+                self.run_op_count = 0
 
         if self.skill_damage == True:
             self.skill_damage_count += 1

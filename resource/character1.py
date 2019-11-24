@@ -281,6 +281,10 @@ class Character:
         self.test = False
         self.font = load_font('ENCR10B.TTF', 16)
         self.hp = 1000
+        self.idle_op = False
+        self.run_op = False
+        self.prone_op = False
+        self.idle_op_count, self.run_op_count, self.prone_op_count = 0, 0, 0
         self.attack_damage = False
         self.attack_damage_count = 0
         self.skill_damage = False
@@ -345,6 +349,33 @@ class Character:
             self.y += self.jump_y * game_framework.frame_time
             self.jump_y -= GRAVITY_PPS * game_framework.frame_time
             self.y = clamp(300, self.jump_y, 430)
+
+        if self.idle_op == True:
+            self.idle_op_count += 1
+            self.idle.opacify(0.5)
+            if self.idle_op_count % 3 == 0:
+                self.idle.opacify(1.0)
+            if self.idle_op_count == 15:
+                self.idle_op = False
+                self.idle_op_count = 0
+
+        if self.run_op == True:
+            self.run_op_count += 1
+            self.idle.opacify(0.5)
+            if self.run_op_count % 3 == 0:
+                self.idle.opacify(1.0)
+            if self.run_op_count == 15:
+                self.run_op = False
+                self.run_op_count = 0
+
+        if self.prone_op == True:
+            self.prone_op_count += 1
+            self.prone.opacify(0.5)
+            if self.prone_op_count % 3 == 0:
+                self.prone.opacify(1.0)
+            if self.prone_op_count == 15:
+                self.prone_op = False
+                self.prone_op_count = 0
 
         if self.attack_damage == True:
             self.attack_damage_count += 1

@@ -16,7 +16,7 @@ from monster import Monster
 
 boss = None
 character = None
-#monsters = []
+# monsters = []
 monsters = None
 running = True
 character_hp = 10000
@@ -159,39 +159,39 @@ def update():
 
     if idle_collide(character, boss):
         if character.idlestate:
-            if character.skill_damage == False and character.hp != 0:
+            if character.idle_op == False and character.hp != 0:
                 character.hp -= 2
-                character.skill_damage = True
+                character.idle_op = True
 
     if idle_collide(character, monsters):
         if character.idlestate and monsters.deadstate == False:
-            if character.skill_damage == False and character.hp != 0:
+            if character.idle_op == False and character.hp != 0:
                 character.hp -= 500
-                character.skill_damage = True
+                character.idle_op = True
 
     if run_collide(character, boss):
         if character.runstate:
-            if character.skill_damage == False and character.hp != 0:
+            if character.run_op == False and character.hp != 0:
                 character.hp -= 2
-                character.skill_damage = True
+                character.run_op = True
 
     if run_collide(character, monsters):
         if character.runstate and monsters.deadstate == False:
-            if character.skill_damage == False and character.hp != 0:
-                character.hp -= 2
-                character.skill_damage = True
+            if character.run_op == False and character.hp != 0:
+                character.hp -= 500
+                character.run_op = True
 
     if prone_collide(character, boss):
         if character.pronestate:
-            character.hp -= 2
-            if character.hp <= 0:
-                game_framework.quit()
+            if character.prone_op == False and character.hp != 0:
+                character.hp -= 2
+                character.prone_op = True
 
     if prone_collide(character, monsters):
         if character.pronestate and monsters.deadstate == False:
-            character.hp -= 10
-            if character.hp <= 0:
-                game_framework.quit()
+            if character.prone_op == False and character.hp != 0:
+                character.hp -= 500
+                character.prone_op = True
 
     if skill_collide(character, boss):
         if character.skillstate:
@@ -223,6 +223,5 @@ def update():
             if character.attack_damage == False:
                 monsters.hit += 1
                 character.attack_damage = True
-
 
 # open_canvas(MAP_WIDTH, MAP_HEIGHT)

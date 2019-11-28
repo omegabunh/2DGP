@@ -13,11 +13,13 @@ from key import Key
 from character1 import Character
 from boss1 import Boss
 from monster import Monster
+from mushroom import Mushroom
 
 boss = None
 character = None
 monsters = []
-#monsters = None
+mushroom = None
+# monsters = None
 running = True
 character_hp = 10000
 
@@ -104,8 +106,12 @@ def enter():
 
     global monsters
     monsters = [Monster() for i in range(3)]
-    #monsters = Monster()
+    # monsters = Monster()
     game_world.add_objects(monsters, 1)
+
+    global mushroom
+    mushroom = Mushroom()
+    game_world.add_object(mushroom, 1)
 
 
 def exit():
@@ -151,6 +157,10 @@ def update():
             monster.deadstate = True
             game_world.remove_object(monster)
 
+        if mushroom.hit >= 30:
+            mushroom.deadstate = True
+            game_world.remove_object(mushroom)
+
         if boss.hp <= 0:
             game_world.remove_object(boss)
             game_framework.change_state(main2_state)
@@ -165,34 +175,16 @@ def update():
                     character.hp -= 2
                     character.idle_op = True
 
-        if idle_collide(character, monster):
-            if character.idlestate and monster.deadstate == False:
-                if character.idle_op == False and character.hp != 0:
-                    character.hp -= 100
-                    character.idle_op = True
-
         if run_collide(character, boss):
             if character.runstate:
                 if character.run_op == False and character.hp != 0:
                     character.hp -= 2
                     character.run_op = True
 
-        if run_collide(character, monster):
-            if character.runstate and monster.deadstate == False:
-                if character.run_op == False and character.hp != 0:
-                    character.hp -= 100
-                    character.run_op = True
-
         if prone_collide(character, boss):
             if character.pronestate:
                 if character.prone_op == False and character.hp != 0:
                     character.hp -= 2
-                    character.prone_op = True
-
-        if prone_collide(character, monster):
-            if character.pronestate and monster.deadstate == False:
-                if character.prone_op == False and character.hp != 0:
-                    character.hp -= 500
                     character.prone_op = True
 
         if skill_collide(character, boss):
@@ -204,6 +196,33 @@ def update():
                     character.skill_damage = True
                     boss.hitstate = True
 
+        if attack_collide(character, boss):
+            if character.attackstate:
+                if character.attack_damage == False and boss.hitstate == False:
+                    boss.w += -1.5
+                    boss.hp_x += -0.725
+                    boss.hp -= 1
+                    character.attack_damage = True
+                    boss.hitstate = True
+
+        if idle_collide(character, monster):
+            if character.idlestate and monster.deadstate == False:
+                if character.idle_op == False and character.hp != 0:
+                    character.hp -= 100
+                    character.idle_op = True
+
+        if run_collide(character, monster):
+            if character.runstate and monster.deadstate == False:
+                if character.run_op == False and character.hp != 0:
+                    character.hp -= 100
+                    character.run_op = True
+
+        if prone_collide(character, monster):
+            if character.pronestate and monster.deadstate == False:
+                if character.prone_op == False and character.hp != 0:
+                    character.hp -= 500
+                    character.prone_op = True
+
         if skill_collide(character, monster):
             if monster.hit >= 30:
                 game_world.remove_object(monster)
@@ -214,20 +233,46 @@ def update():
                     character.skill2_damage = True
                     monster.hitstate = True
 
-        if attack_collide(character, boss):
-            if character.attackstate:
-                if character.attack_damage == False and boss.hitstate == False:
-                    boss.w += -1.5
-                    boss.hp_x += -0.725
-                    boss.hp -= 1
-                    character.attack_damage = True
-                    boss.hitstate = True
-
         if attack_collide(character, monster):
             if character.attackstate:
                 if character.attack_damage == False and monster.hitstate == False:
                     monster.hit += 1
                     character.attack_damage = True
                     monster.hitstate = True
+
+        if idle_collide(character, mushroom):
+            if character.idlestate and mushroom.deadstate == False:
+                if character.idle_op == False and character.hp != 0:
+                    character.hp -= 50
+                    character.idle_op = True
+
+        if run_collide(character, mushroom):
+            if character.runstate and mushroom.deadstate == False:
+                if character.run_op == False and character.hp != 0:
+                    character.hp -= 50
+                    character.run_op = True
+
+        if prone_collide(character, mushroom):
+            if character.pronestate and mushroom.deadstate == False:
+                if character.prone_op == False and character.hp != 0:
+                    character.hp -= 50
+                    character.prone_op = True
+
+        if skill_collide(character, mushroom):
+            if mushroom.hit >= 30:
+                game_world.remove_object(mushroom)
+            if character.skillstate:
+                if character.skill_damage == False or character.skill2_damage == False and mushroom.hitstate == False:
+                    mushroom.hit += 2
+                    character.skill_damage = True
+                    character.skill2_damage = True
+                    mushroom.hitstate = True
+
+        if attack_collide(character, mushroom):
+            if character.attackstate:
+                if character.attack_damage == False and mushroom.hitstate == False:
+                    mushroom.hit += 1
+                    character.attack_damage = True
+                    mushroom.hitstate = True
 
 # open_canvas(MAP_WIDTH, MAP_HEIGHT)

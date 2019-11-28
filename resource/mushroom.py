@@ -8,14 +8,16 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 5
 
-class Monster:
+class Mushroom:
     image = None
 
     def __init__(self):
-        if Monster.image == None:
-            Monster.image = load_image('monster(191x224).png')
-        self.x, self.y = random.randint(100, 1748), 800
+        if Mushroom.image == None:
+            Mushroom.image = load_image('mushroom.png')
+        self.x, self.y = random.randint(100, 1748), 350
         self.frame = 0
+        self.velocity = 10
+        self.side = 1
         self.hit = 0
         self.font = load_font('ENCR10B.TTF', 16)
         self.deadstate = False
@@ -23,15 +25,16 @@ class Monster:
         self.hit_count = 0
 
     def get_bb(self):
-        return self.x - 80, self.y - 100, self.x + 80, self.y + 100
+        return self.x - 80, self.y - 130, self.x + 80, self.y + 100
 
     def update(self):
         #self.frame = random.randint(0, 5)
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
-        if self.y > 330:
-            self.y -= 50
-        elif self.y < 330:
-            self.y = 330
+        if self.x > 1500:
+            self.side = -1
+        elif self.x < 100:
+            self.side = 1
+        self.x += self.velocity * game_framework.frame_time * self.side
         if self.hit >= 30:
             self.deadstate = True
         if self.hitstate == True:
@@ -46,4 +49,8 @@ class Monster:
     def draw(self):
         self.font.draw(self.x - 60, self.y + 70, '(hit: %0.0f)' % self.hit, (0, 255, 0))
         draw_rectangle(*self.get_bb())
-        self.image.clip_draw(int(self.frame) * 191, 0, 191, 224, self.x, self.y)
+        if self.side == 1:
+            self.image.clip_composite_draw(int(self.frame) * 175, 0, 175, 280, 0.0, 'h', self.x, self.y, 175, 280)
+
+        else:
+            self.image.clip_draw(int(self.frame) * 175, 0, 175, 280, self.x, self.y)

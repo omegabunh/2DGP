@@ -278,7 +278,6 @@ class Character:
         self.attackstate = False
         self.skillstate = False
         self.deadstate = False
-        self.test = False
         self.font = load_font('ENCR10B.TTF', 16)
         self.hp = 1000
         self.idle_op = False
@@ -350,7 +349,7 @@ class Character:
             self.jump_y -= GRAVITY_PPS * game_framework.frame_time
             self.y = clamp(300, self.jump_y, 430)
 
-        if self.idle_op == True:
+        if self.idle_op:
             self.idle_op_count += 1
             self.idle.opacify(0.5)
             if self.idle_op_count % 3 == 0:
@@ -359,7 +358,7 @@ class Character:
                 self.idle_op = False
                 self.idle_op_count = 0
 
-        if self.run_op == True:
+        if self.run_op:
             self.run_op_count += 1
             self.idle.opacify(0.5)
             if self.run_op_count % 3 == 0:
@@ -368,7 +367,7 @@ class Character:
                 self.run_op = False
                 self.run_op_count = 0
 
-        if self.prone_op == True:
+        if self.prone_op:
             self.prone_op_count += 1
             self.prone.opacify(0.5)
             if self.prone_op_count % 3 == 0:
@@ -377,14 +376,14 @@ class Character:
                 self.prone_op = False
                 self.prone_op_count = 0
 
-        if self.attack_damage == True:
+        if self.attack_damage:
             self.attack_damage_count += 1
             print(self.skill_damage_count)
             if self.attack_damage_count == 12:
                 self.attack_damage = False
                 self.attack_damage_count = 0
 
-        if self.skill_damage == True:
+        if self.skill_damage:
             self.skill_damage_count += 1
             if self.skill_damage_count == 14:
                 self.skill_damage = False
@@ -409,7 +408,6 @@ class Character:
             self.dead.draw(self.x, self.y)
         else:
             self.cur_state.draw(self)
-
 
     def handle_event(self, event):
         global count

@@ -189,11 +189,11 @@ def update():
 
         if skill_collide(character, boss):
             if character.skillstate:
-                if character.skill_damage == False and boss.hitstate == False:
+                if character.boss_skill_damage == False and boss.hitstate == False:
                     boss.w += -3
                     boss.hp_x += -1.5
                     boss.hp -= 2
-                    character.skill_damage = True
+                    character.boss_skill_damage = True
                     boss.hitstate = True
 
         if attack_collide(character, boss):
@@ -227,10 +227,10 @@ def update():
             if monster.hit >= 30:
                 game_world.remove_object(monster)
             if character.skillstate:
-                if character.skill_damage == False or character.skill2_damage == False and monster.hitstate == False:
+                if character.monster_skill_damage == False or character.monster_skill2_damage == False and monster.hitstate == False:
                     monster.hit += 2
-                    character.skill_damage = True
-                    character.skill2_damage = True
+                    character.monster_skill_damage = True
+                    character.monster_skill2_damage = True
                     monster.hitstate = True
 
         if attack_collide(character, monster):
@@ -262,10 +262,10 @@ def update():
             if mushroom.hit >= 30:
                 game_world.remove_object(mushroom)
             if character.skillstate:
-                if character.skill_damage == False or character.skill2_damage == False and mushroom.hitstate == False:
+                if character.mushroom_skill_damage == False or character.mushroom_skill2_damage == False and mushroom.hitstate == False:
                     mushroom.hit += 2
-                    character.skill_damage = True
-                    character.skill2_damage = True
+                    character.mushroom_skill_damage = True
+                    character.mushroom_skill2_damage = True
                     mushroom.hitstate = True
 
         if attack_collide(character, mushroom):

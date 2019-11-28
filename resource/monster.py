@@ -15,7 +15,7 @@ class Monster:
         if Monster.image == None:
             Monster.image = load_image('monster(191x224).png')
         self.x, self.y = random.randint(100, 1748), 800
-        self.frame = 0
+        self.frame = random.randint(0, 5)
         self.hit = 0
         self.font = load_font('ENCR10B.TTF', 16)
         self.deadstate = False

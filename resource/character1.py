@@ -286,10 +286,18 @@ class Character:
         self.idle_op_count, self.run_op_count, self.prone_op_count = 0, 0, 0
         self.attack_damage = False
         self.attack_damage_count = 0
-        self.skill_damage = False
-        self.skill_damage_count = 0
-        self.skill2_damage = False
-        self.skill2_damage_count = 0
+        self.boss_skill_damage = False
+        self.boss_skill_damage_count = 0
+        self.boss_skill2_damage = False
+        self.boss_skill2_damage_count = 0
+        self.monster_skill_damage = False
+        self.monster_skill_damage_count = 0
+        self.monster_skill2_damage = False
+        self.monster_skill2_damage_count = 0
+        self.mushroom_skill_damage = False
+        self.mushroom_skill_damage_count = 0
+        self.mushroom_skill2_damage = False
+        self.mushroom_skill2_damage_count = 0
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
@@ -383,17 +391,41 @@ class Character:
                 self.attack_damage = False
                 self.attack_damage_count = 0
 
-        if self.skill_damage:
-            self.skill_damage_count += 1
-            if self.skill_damage_count == 14:
-                self.skill_damage = False
-                self.skill_damage_count = 0
+        if self.boss_skill_damage:
+            self.boss_skill_damage_count += 1
+            if self.boss_skill_damage_count == 14:
+                self.boss_skill_damage = False
+                self.boss_skill_damage_count = 0
 
-        if self.skill2_damage == True and count % 2 == 1:
-            self.skill2_damage_count += 1
-            if self.skill2_damage_count == 14:
-                self.skill2_damage = False
-                self.skill2_damage_count = 0
+        if self.monster_skill_damage:
+            self.monster_skill_damage_count += 1
+            if self.monster_skill_damage_count == 14:
+                self.monster_skill_damage = False
+                self.monster_skill_damage_count = 0
+
+        if self.mushroom_skill_damage:
+            self.mushroom_skill_damage_count += 1
+            if self.mushroom_skill_damage_count == 14:
+                self.mushroom_skill_damage = False
+                self.mushroom_skill_damage_count = 0
+
+        if self.boss_skill2_damage == True and count % 2 == 1:
+            self.boss_skill2_damage_count += 1
+            if self.boss_skill2_damage_count == 14:
+                self.boss_skill2_damage = False
+                self.boss_skill2_damage_count = 0
+
+        if self.monster_skill2_damage == True and count % 2 == 1:
+            self.monster_skill2_damage_count += 1
+            if self.monster_skill2_damage_count == 14:
+                self.monster_skill2_damage = False
+                self.monster_skill2_damage_count = 0
+
+        if self.mushroom_skill2_damage == True and count % 2 == 1:
+            self.mushroom_skill2_damage_count += 1
+            if self.mushroom_skill2_damage_count == 14:
+                self.mushroom_skill2_damage = False
+                self.mushroom_skill2_damage_count = 0
 
         self.cur_state.do(self)
         if len(self.event_que) > 0:

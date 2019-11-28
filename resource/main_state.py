@@ -168,7 +168,7 @@ def update():
         if idle_collide(character, monster):
             if character.idlestate and monster.deadstate == False:
                 if character.idle_op == False and character.hp != 0:
-                    character.hp -= 500
+                    character.hp -= 100
                     character.idle_op = True
 
         if run_collide(character, boss):
@@ -180,7 +180,7 @@ def update():
         if run_collide(character, monster):
             if character.runstate and monster.deadstate == False:
                 if character.run_op == False and character.hp != 0:
-                    character.hp -= 500
+                    character.hp -= 100
                     character.run_op = True
 
         if prone_collide(character, boss):

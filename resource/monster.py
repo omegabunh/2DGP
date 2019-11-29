@@ -2,6 +2,7 @@ from pico2d import *
 import random
 import game_world
 import game_framework
+import main_state
 
 PIXEL_PER_METER = (10.0 / 0.3)
 TIME_PER_ACTION = 0.5
@@ -14,7 +15,7 @@ class Monster:
     def __init__(self):
         if Monster.image == None:
             Monster.image = load_image('monster(191x224).png')
-        self.x, self.y = random.randint(100, 1748), 800
+        self.x, self.y = random.randint(100, 1748), 1000
         self.frame = random.randint(0, 5)
         self.hit = 0
         self.font = load_font('ENCR10B.TTF', 16)
@@ -28,10 +29,11 @@ class Monster:
     def update(self):
         #self.frame = random.randint(0, 5)
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
-        if self.y > 330:
-            self.y -= 50
-        elif self.y < 330:
-            self.y = 330
+        if main_state.boss.hp % 50 == 0 and main_state.boss.hp != 1000 and main_state.boss.hp != 0:
+            if self.y > 330:
+                self.y -= 50
+            elif self.y < 330:
+                self.y = 330
         if self.hit >= 30:
             self.deadstate = True
         if self.hitstate == True:

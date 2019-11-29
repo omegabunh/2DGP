@@ -144,7 +144,7 @@ class RunState:
                 character.idle.clip_draw(int(character.frame) * 92, 3 * 96, 92, 96, character.x, character.y)
                 character.dir = -1
             else:
-                if character.velocity_y > 0 or character.velocity_y <0:
+                if character.velocity_y > 0 or character.velocity_y < 0:
                     if character.dir == 1:
                         character.idle.clip_draw(int(character.frame) * 92, 2 * 96, 92, 96, character.x, character.y)
                     else:

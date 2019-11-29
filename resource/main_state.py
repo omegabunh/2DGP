@@ -21,7 +21,7 @@ monsters = []
 mushroom = None
 running = True
 character_hp = 10000
-
+timer = 0
 
 def idle_collide(a, b):
     if character.idlestate:
@@ -99,9 +99,7 @@ def enter():
     boss = Boss()
     game_world.add_object(boss, 1)
 
-    global character
-    character = Character()
-    game_world.add_object(character, 1)
+
 
     global monsters
     monsters = [Monster() for i in range(3)]
@@ -111,6 +109,10 @@ def enter():
     global mushroom
     mushroom = Mushroom()
     game_world.add_object(mushroom, 1)
+
+    global character
+    character = Character()
+    game_world.add_object(character, 1)
 
 
 def exit():
@@ -147,6 +149,8 @@ def draw():
 
 
 def update():
+    global timer
+    timer += 1
     for game_object in game_world.all_objects():
         game_object.update()
 

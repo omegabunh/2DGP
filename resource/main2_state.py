@@ -19,6 +19,8 @@ butterflys = []
 horn = None
 
 spacestate = False
+spacecount = 0
+butterflydead = False
 
 def idle_collide(a, b):
     if character.idlestate:
@@ -79,14 +81,6 @@ def enter():
     key = Key()
     game_world.add_object(key, 1)
 
-    global character
-    character = Character()
-    game_world.add_object(character, 1)\
-
-    global boss
-    boss = Boss()
-    game_world.add_object(boss, 1)
-
     global horn
     horn = Horn()
     game_world.add_object(horn, 1)
@@ -95,7 +89,13 @@ def enter():
     butterflys = [Butterfly() for i in range(4)]
     game_world.add_objects(butterflys, 1)
 
+    global boss
+    boss = Boss()
+    game_world.add_object(boss, 1)
 
+    global character
+    character = Character()
+    game_world.add_object(character, 1)
 
 def exit():
     game_world.clear()
@@ -110,7 +110,7 @@ def resume():
 
 
 def handle_events():
-    global spacestate
+    global spacestate, spacecount
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -125,13 +125,23 @@ def handle_events():
             character.handle_event(event)
 
 def update():
+    global spacecount, butterflydead
+    print(spacecount)
     for game_object in game_world.all_objects():
         game_object.update()
     for butterfly in butterflys:
+        butterflydead = False
         if idle_collide(character, horn):
             if character.idlestate:
                 if spacestate:
-                    game_world.remove_object(butterfly)
+                    horn.bar_x1 += 0.25
+                    horn.w += 0.5
+                    print(horn.w)
+                    spacecount += 1
+                    if spacecount >= 130:
+                        horn.w = 0
+                        game_world.remove_object(butterfly)
+                        butterflydead = True
 
     if idle_collide(character, boss):
         if character.idlestate:
@@ -175,7 +185,6 @@ def update():
                 boss.hitstate = True
                 if boss.hp <= 0:
                     game_world.remove_object(boss)
-
 
 def draw():
     clear_canvas()

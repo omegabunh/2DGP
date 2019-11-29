@@ -137,6 +137,8 @@ def update():
         if character.idlestate:
             if character.idle_op == False and character.hp != 0:
                 character.hp -= 2
+                character.w -= 0.2
+                character.hp_x1 -= 0.1
                 character.idle_op = True
                 if character.hp <= 0:
                     game_framework.quit()
@@ -145,6 +147,8 @@ def update():
         if character.runstate:
             if character.run_op == False and character.hp != 0:
                 character.hp -= 2
+                character.w -= 0.2
+                character.hp_x1 -= 0.1
                 character.run_op = True
                 if character.hp <= 0:
                     character.deadstate = True

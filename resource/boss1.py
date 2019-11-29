@@ -27,9 +27,10 @@ class Boss:
         self.h = 30
         self.h1 = 35
         self.hitstate = False
+        self.skillstate = False
+        self.skillcount = 0
         self.hit_count = 0
         if Boss.image is None:
-            #Boss.image = load_image('boss_phase1(248x245).png')
             Boss.image = load_image('boss1(320x410).png')
         if Boss.attack_image is None:
             Boss.attack_image = load_image('boss1_attack(340x420).png')
@@ -42,6 +43,7 @@ class Boss:
         return self.x - 100, self.y - 100, self.x + 100, self.y + 130
 
     def update(self):
+        print(self.count)
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 15
         if self.hitstate == True:
             self.hit_count += 1
@@ -52,13 +54,29 @@ class Boss:
                 self.hitstate = False
                 self.hit_count = 0
 
+        if self.hp % 50 == 0 and self.count == 0:
+            self.count += 1
+            self.skillstate = True
+
+        #self.hp != 1000 and
+        if self.skillstate == True:
+            self.skillcount += 1
+            if self.skillcount == 30:
+                self.skillcount = 0
+                self.skillstate = False
+
+        if self.hp % 50 == 40:
+            self.count = 0
+
     def draw(self):
         self.font.draw(self.x - 60, self.y + 150, '(hp: %0.0f)' % self.hp, (0, 255, 0))
-
-        if self.hp % 50 < 4 and self.hp != 1000:
+        if self.skillstate:
             self.attack_image.clip_draw(int(self.frame) * 340, 0, 340, 420, self.x - 10, self.y + 4)
         else:
             self.image.clip_draw(int(self.frame) * 320, 0, 320, 410, self.x, self.y)
+
+
+
         draw_rectangle(*self.get_bb())
         self.hp_background.draw(self.hp_x1, self.hp_y1, self.w1, self.h1)
         self.hp_image.draw(self.hp_x, self.hp_y, self.w, self.h)

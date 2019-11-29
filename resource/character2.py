@@ -242,6 +242,9 @@ class Character:
     skill = None
     skill2 = None
     dead = None
+    hp_background = None
+    hp_bar = None
+
     def __init__(self):
         self.x, self.y = 1700 // 2, 300
         self.frame = 0
@@ -263,7 +266,10 @@ class Character:
         self.run_op = False
         self.idle_op_count, self.run_op_count = 0, 0
         self.font = load_font('ENCR10B.TTF', 16)
-        self.hp = 1000
+        self.hp = 1700
+        self.hp_x, self.hp_y = 1700 // 2, 25
+        self.hp_x1, self.hp_y1 = 1700 // 2 + 8, 25 - 8
+        self.w, self.h = 170, 13
         self.skill_damage = False
         self.skill_damage_count = 0
         self.attack_damage = False
@@ -281,7 +287,10 @@ class Character:
             Character.skill2 = load_image('character_skill2(572x406).png')
         if Character.dead == None:
             Character.dead = load_image('character_dead.png')
-
+        if Character.hp_background == None:
+            Character.hp_background = load_image('character_hp_background.png')
+        if Character.hp_bar == None:
+            Character.hp_bar = load_image('character_hp_bar.png')
     def get_idle_collide(self):
         if self.idlestate:
             return self.x - 30, self.y - 38, self.x + 20, self.y + 42
@@ -357,6 +366,8 @@ class Character:
 
     def draw(self):
         self.font.draw(self.x - 60, self.y + 50, '(hp: %0.0f)' % self.hp, (0, 255, 0))
+        self.hp_bar.draw(self.hp_x1, self.hp_y1, self.w, self.h)
+        self.hp_background.draw(self.hp_x, self.hp_y)
         if self.deadstate:
             self.dead.draw(self.x, self.y)
         else:
@@ -369,4 +380,6 @@ class Character:
         elif event.key == SDLK_HOME:
             count += 1
         elif event.key == SDLK_DELETE:
-            self.hp = 1000
+            self.hp = 1700
+            self.hp_x1 = 1700 // 2 + 8
+            self.w = 170

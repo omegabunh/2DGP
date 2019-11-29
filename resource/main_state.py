@@ -172,18 +172,24 @@ def update():
             if character.idlestate:
                 if character.idle_op == False and character.hp != 0:
                     character.hp -= 2
+                    character.w -= 0.2
+                    character.hp_x1 -= 0.1
                     character.idle_op = True
 
         if run_collide(character, boss):
             if character.runstate:
                 if character.run_op == False and character.hp != 0:
                     character.hp -= 2
+                    character.w -= 0.2
+                    character.hp_x1 -= 0.1
                     character.run_op = True
 
         if prone_collide(character, boss):
             if character.pronestate:
                 if character.prone_op == False and character.hp != 0:
                     character.hp -= 2
+                    character.w -= 0.2
+                    character.hp_x1 -= 0.1
                     character.prone_op = True
 
         if skill_collide(character, boss):
@@ -208,18 +214,24 @@ def update():
             if character.idlestate and monster.deadstate == False:
                 if character.idle_op == False and character.hp != 0:
                     character.hp -= 100
+                    character.w -= 10
+                    character.hp_x1 -= 5
                     character.idle_op = True
 
         if run_collide(character, monster):
             if character.runstate and monster.deadstate == False:
                 if character.run_op == False and character.hp != 0:
                     character.hp -= 100
+                    character.w -= 10
+                    character.hp_x1 -= 5
                     character.run_op = True
 
         if prone_collide(character, monster):
             if character.pronestate and monster.deadstate == False:
                 if character.prone_op == False and character.hp != 0:
-                    character.hp -= 500
+                    character.hp -= 100
+                    character.w -= 10
+                    character.hp_x1 -= 5
                     character.prone_op = True
 
         if skill_collide(character, monster):
@@ -243,18 +255,24 @@ def update():
             if character.idlestate and mushroom.deadstate == False:
                 if character.idle_op == False and character.hp != 0:
                     character.hp -= 50
+                    character.w -= 5
+                    character.hp_x1 -= 2.5
                     character.idle_op = True
 
         if run_collide(character, mushroom):
             if character.runstate and mushroom.deadstate == False:
                 if character.run_op == False and character.hp != 0:
                     character.hp -= 50
+                    character.w -= 5
+                    character.hp_x1 -= 2.5
                     character.run_op = True
 
         if prone_collide(character, mushroom):
             if character.pronestate and mushroom.deadstate == False:
                 if character.prone_op == False and character.hp != 0:
                     character.hp -= 50
+                    character.w -= 5
+                    character.hp_x1 -= 2.5
                     character.prone_op = True
 
         if skill_collide(character, mushroom):

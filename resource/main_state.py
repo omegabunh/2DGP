@@ -19,7 +19,6 @@ boss = None
 character = None
 monsters = []
 mushroom = None
-# monsters = None
 running = True
 character_hp = 10000
 

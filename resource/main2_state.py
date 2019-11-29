@@ -2,20 +2,23 @@ from pico2d import *
 import game_framework
 import main_state
 import game_world
+from map3 import Map
 from character2 import Character
 from boss2 import Boss
+from butterfly import Butterfly
+from key import Key
+from horn import Horn
 
 MAP_WIDTH, MAP_HEIGHT = 1997, 950
 
 boss = None
-monster = None
 character = None
-monsters = None
 key = None
 running = True
+butterflys = []
+horn = None
 
-character_hp = 10000
-
+spacestate = False
 
 def idle_collide(a, b):
     if character.idlestate:
@@ -70,16 +73,28 @@ def skill_collide(a, b):
 
 
 def enter():
-    global image, key
-    global boss, monster, character
-    image = load_image('map3.png')
-    key = load_image('key.png')
-    boss = Boss()
-    character = Character()
-    game_world.add_object(image, 0)
+    map = Map()
+    game_world.add_object(map, 0)
+
+    key = Key()
     game_world.add_object(key, 1)
-    game_world.add_object(character, 1)
+
+    global character
+    character = Character()
+    game_world.add_object(character, 1)\
+
+    global boss
+    boss = Boss()
     game_world.add_object(boss, 1)
+
+    global horn
+    horn = Horn()
+    game_world.add_object(horn, 1)
+
+    global butterflys
+    butterflys = [Butterfly() for i in range(4)]
+    game_world.add_objects(butterflys, 1)
+
 
 
 def exit():
@@ -95,19 +110,28 @@ def resume():
 
 
 def handle_events():
+    global spacestate
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             game_framework.change_state(main_state)
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
+            spacestate = True
+        elif (event.type, event.key) == (SDL_KEYUP, SDLK_SPACE):
+            spacestate = False
         else:
             character.handle_event(event)
 
-
 def update():
-    boss.update()
-    character.update()
+    for game_object in game_world.all_objects():
+        game_object.update()
+    for butterfly in butterflys:
+        if idle_collide(character, horn):
+            if character.idlestate:
+                if spacestate:
+                    game_world.remove_object(butterfly)
 
     if idle_collide(character, boss):
         if character.idlestate:
@@ -150,12 +174,9 @@ def update():
 
 
 def draw():
-    global image
     clear_canvas()
-    image.draw(MAP_WIDTH // 2, MAP_HEIGHT // 2)
-    boss.draw()
-    character.draw()
-    key.draw(1700, 50)
+    for game_object in game_world.all_objects():
+        game_object.draw()
     update_canvas()
     delay(0.05)
 # open_canvas(MAP_WIDTH, MAP_HEIGHT)

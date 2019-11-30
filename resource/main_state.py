@@ -6,6 +6,7 @@ from pico2d import *
 import game_framework
 import title_state
 import main2_state
+import over_state
 import game_world
 
 from map2 import Map
@@ -22,6 +23,7 @@ mushroom = None
 running = True
 character_hp = 10000
 timer = 0
+overTimer = 0
 
 def idle_collide(a, b):
     if character.idlestate:
@@ -149,8 +151,9 @@ def draw():
 
 
 def update():
-    global timer
+    global timer, overTimer
     timer += 1
+    print(overTimer)
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -171,6 +174,9 @@ def update():
         if character.hp <= 0:
             character.deadstate = True
             character.hp = 0
+            overTimer += 1
+            if overTimer == 100:
+                game_framework.change_state(over_state)
 
         if idle_collide(character, boss):
             if character.idlestate:

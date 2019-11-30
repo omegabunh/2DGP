@@ -2,6 +2,7 @@ from pico2d import *
 import game_framework
 import main_state
 import game_world
+import end_state
 from map3 import Map
 from character2 import Character
 from boss2 import Boss
@@ -116,7 +117,8 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-            game_framework.change_state(main_state)
+            #game_framework.change_state(main_state)
+            game_framework.push_state(end_state)
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
             spacestate = True
         elif (event.type, event.key) == (SDL_KEYUP, SDLK_SPACE):
@@ -174,6 +176,7 @@ def update():
                 boss.hitstate = True
                 if boss.hp <= 0:
                     game_world.remove_object(boss)
+                    game_framework.push_state(end_state)
 
     if attack_collide(character, boss):
         if character.attackstate:
@@ -185,6 +188,7 @@ def update():
                 boss.hitstate = True
                 if boss.hp <= 0:
                     game_world.remove_object(boss)
+                    game_framework.push_state(end_state)
 
 def draw():
     clear_canvas()

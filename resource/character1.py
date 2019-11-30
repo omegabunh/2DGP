@@ -55,6 +55,7 @@ class IdleState:
     def exit(character, event):
         if event == ALT_DOWN:
             character.jump()
+            character.jumpSound()
             character.jumping = True
             character.idleing = False
 
@@ -101,6 +102,7 @@ class RunState:
     def exit(character, event):
         if event == ALT_DOWN:
             character.jump()
+            character.jumpSound()
             character.jumping = True
 
     @staticmethod
@@ -192,9 +194,9 @@ class SkillState:
     def enter(character, event):
         global count
         character.frame1 = 0
+        character.skillSound()
         if event == HOME_UP:
             count = count + 1
-        character.timer = 8
 
     @staticmethod
     def exit(character, event):
@@ -209,9 +211,11 @@ class SkillState:
         character.skillstate = True
         character.pronestate = False
 
+
     @staticmethod
     def draw(character):
         if character.skillstate:
+            character.skillSound()
             draw_rectangle(*character.get_skill_collide())
             if character.dir == 1 and count % 2 == 0:
                 character.skill.clip_draw(int(character.frame1) * 457, 0 * 260, 457, 260, character.x, character.y + 70)
@@ -305,6 +309,12 @@ class Character:
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
+        self.jump_sound = load_wav('music//Jump.wav')
+        self.jump_sound.set_volume(70)
+        self.skill_sound = load_wav('music//UseSkill.wav')
+        self.skill_sound.set_volume(70)
+        self.eat_sound = load_wav('music//Use.wav')
+        self.eat_sound.set_volume(70)
         if Character.idle == None:
             Character.idle = load_image('sprite//character.png')
         if Character.attack == None:
@@ -460,5 +470,15 @@ class Character:
             count += 1
         elif event.key == SDLK_DELETE:
             self.hp = 1700
+            self.eatSound()
             self.hp_x1 = 1700//2 + 8
             self.w = 170
+
+    def jumpSound(self):
+        self.jump_sound.play()
+
+    def skillSound(self):
+        self.skill_sound.play()
+
+    def eatSound(self):
+        self.eat_sound.play()

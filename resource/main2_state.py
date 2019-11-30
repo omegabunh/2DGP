@@ -77,6 +77,7 @@ def skill_collide(a, b):
 
 
 def enter():
+    global map
     map = Map()
     game_world.add_object(map, 0)
 
@@ -117,9 +118,10 @@ def handle_events():
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
+            map.bgm.stop()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-            #game_framework.change_state(main_state)
             game_framework.push_state(end_state)
+            map.bgm.stop()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
             spacestate = True
         elif (event.type, event.key) == (SDL_KEYUP, SDLK_SPACE):
@@ -137,6 +139,7 @@ def update():
         character.deadstate = True
         character.hp = 0
         overTimer += 1
+        map.bgm.stop()
         if overTimer == 100:
             game_framework.change_state(over_state)
 
@@ -181,6 +184,7 @@ def update():
                 character.skill_damage = True
                 boss.hitstate = True
                 if boss.hp <= 0:
+                    map.bgm.stop()
                     game_world.remove_object(boss)
                     game_framework.push_state(end_state)
 
@@ -193,6 +197,7 @@ def update():
                 character.attack_damage = True
                 boss.hitstate = True
                 if boss.hp <= 0:
+                    map.bgm.stop()
                     game_world.remove_object(boss)
                     game_framework.push_state(end_state)
 

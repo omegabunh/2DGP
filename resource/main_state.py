@@ -91,6 +91,7 @@ def skill_collide(a, b):
 
 
 def enter():
+    global map2
     map2 = Map()
     game_world.add_object(map2, 0)
 
@@ -100,8 +101,6 @@ def enter():
     global boss
     boss = Boss()
     game_world.add_object(boss, 1)
-
-
 
     global monsters
     monsters = [Monster() for i in range(3)]
@@ -133,10 +132,13 @@ def handle_events():
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
+            map2.bgm.stop()
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
+            map2.bgm.stop()
             game_framework.change_state(title_state)
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
+            map2.bgm.stop()
             game_framework.change_state(main2_state)
         else:
             character.handle_event(event)
@@ -169,9 +171,11 @@ def update():
 
         if boss.hp <= 0:
             game_world.remove_object(boss)
+            map2.bgm.stop()
             game_framework.change_state(main2_state)
 
         if character.hp <= 0:
+            map2.bgm.stop()
             character.deadstate = True
             character.hp = 0
             overTimer += 1

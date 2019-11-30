@@ -56,6 +56,7 @@ class IdleState:
     def exit(character, event):
         if event == ALT_DOWN:
             character.jump()
+            character.jumpSound()
             character.jumping = True
             character.idleing = False
 
@@ -98,6 +99,7 @@ class RunState:
     @staticmethod
     def exit(character, event):
         if event == ALT_DOWN:
+            character.jumpSound()
             character.jump()
             character.jumping = True
             character.running = False
@@ -180,6 +182,7 @@ class SkillState:
     def enter(character, event):
         global count
         character.frame1 = 0
+        character.skillSound()
         if event == HOME_UP:
             count = count + 1
 
@@ -262,6 +265,11 @@ class Character:
         self.skillstate = False
         self.event_que = []
         self.cur_state = IdleState
+        self.jump_sound = load_wav('music//Jump.wav')
+        self.jump_sound.set_volume(70)
+        self.skill_sound = load_wav('music//UseSkill.wav')
+        self.skill_sound.set_volume(70)
+
         self.cur_state.enter(self, None)
         if Character.idle is None:
             Character.idle = load_image('sprite//character.png')
@@ -331,3 +339,9 @@ class Character:
             self.add_event(key_event)
         elif event.key == SDLK_HOME:
             count += 1
+
+    def jumpSound(self):
+        self.jump_sound.play()
+
+    def skillSound(self):
+        self.skill_sound.play()

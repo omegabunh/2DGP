@@ -185,6 +185,7 @@ class SkillState:
     def enter(character, event):
         global count
         character.frame1 = 0
+        character.skillSound()
         if event == HOME_UP:
             count = count + 1
 
@@ -200,6 +201,7 @@ class SkillState:
         character.attackstate = False
         character.skillstate = True
         character.pronestate = False
+
 
     @staticmethod
     def draw(character):
@@ -264,6 +266,12 @@ class Character:
         self.deadstate = False
         self.idle_op = False
         self.run_op = False
+        self.jump_sound = load_wav('music//Jump.wav')
+        self.jump_sound.set_volume(70)
+        self.skill_sound = load_wav('music//UseSkill.wav')
+        self.skill_sound.set_volume(70)
+        self.eat_sound = load_wav('music//Use.wav')
+        self.eat_sound.set_volume(70)
         self.idle_op_count, self.run_op_count = 0, 0
         self.font = load_font('Maplestory Bold.ttf', 16)
         self.hp = 1700
@@ -277,20 +285,21 @@ class Character:
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
-        if Character.idle == None:
+        if Character.idle is None:
             Character.idle = load_image('sprite//character.png')
-        if Character.attack == None:
+        if Character.attack is None:
             Character.attack = load_image('sprite//character_attack.png')
-        if Character.skill == None:
+        if Character.skill is None:
             Character.skill = load_image('sprite//character_skill(457x260).png')
-        if Character.skill2 == None:
+        if Character.skill2 is None:
             Character.skill2 = load_image('sprite//character_skill2(572x406).png')
-        if Character.dead == None:
+        if Character.dead is None:
             Character.dead = load_image('sprite//character_dead.png')
-        if Character.hp_background == None:
+        if Character.hp_background is None:
             Character.hp_background = load_image('sprite//character_hp_background.png')
-        if Character.hp_bar == None:
+        if Character.hp_bar is None:
             Character.hp_bar = load_image('sprite//character_hp_bar.png')
+
     def get_idle_collide(self):
         if self.idlestate:
             return self.x - 30, self.y - 38, self.x + 20, self.y + 42
@@ -381,5 +390,15 @@ class Character:
             count += 1
         elif event.key == SDLK_DELETE:
             self.hp = 1700
+            self.eatSound()
             self.hp_x1 = 1700 // 2 + 8
             self.w = 170
+
+    def jumpSound(self):
+        self.jump_sound.play()
+
+    def skillSound(self):
+        self.skill_sound.play()
+
+    def eatSound(self):
+        self.eat_sound.play()

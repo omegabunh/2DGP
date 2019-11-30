@@ -14,7 +14,7 @@ class Monster:
 
     def __init__(self):
         if Monster.image == None:
-            Monster.image = load_image('monster(191x224).png')
+            Monster.image = load_image('sprite//monster(191x224).png')
         self.x, self.y = random.randint(100, 1748), 1000
         self.frame = random.randint(0, 5)
         self.hit = 0

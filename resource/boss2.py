@@ -40,13 +40,13 @@ class Boss:
         self.h1 = 35
         self.hitstate = False
         self.hit_count = 0
-        self.font = load_font('ENCR10B.TTF', 16)
+        self.font = load_font('Maplestory Bold.ttf', 16)
         if Boss.image is None:
-            Boss.image = load_image('boss_phase2(356x384).png')
+            Boss.image = load_image('sprite//boss_phase2(356x384).png')
         if Boss.hp_image is None:
-            Boss.hp_image = load_image('boss_hp.png')
+            Boss.hp_image = load_image('sprite//boss_hp.png')
         if Boss.hp_background is None:
-            Boss.hp_background = load_image('boss_hp_background.png')
+            Boss.hp_background = load_image('sprite//boss_hp_background.png')
 
     def calculate_current_position(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
@@ -65,7 +65,7 @@ class Boss:
         return BehaviorTree.SUCCESS
 
     def get_bb(self):
-        return self.x - 150, self.y - 140, self.x + 130, self.y + 180
+        return self.x - 150, self.y - 140, self.x + 130, self.y + 160
 
     def find_player(self):
         # fill here

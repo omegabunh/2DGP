@@ -9,7 +9,7 @@ logo_time = 0.0
 
 def enter():
     global image
-    image = load_image('start.jpg')
+    image = load_image('sprite//start.jpg')
 
 
 def exit():

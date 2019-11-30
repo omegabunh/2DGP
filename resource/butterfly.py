@@ -19,7 +19,7 @@ class Butterfly:
 
     def __init__(self):
         if Butterfly.image == None:
-            Butterfly.image = load_image('butterfly(92x112).png')
+            Butterfly.image = load_image('sprite//butterfly(92x112).png')
         self.x, self.y = random.randint(100, 1748), random.randint(100, 800)
         self.frame = random.randint(0, 5)
         self.speed = 2

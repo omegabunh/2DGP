@@ -264,15 +264,15 @@ class Character:
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
         if Character.idle is None:
-            Character.idle = load_image('character.png')
+            Character.idle = load_image('sprite//character.png')
         if Character.attack is None:
-            Character.attack = load_image('character_attack.png')
+            Character.attack = load_image('sprite//character_attack.png')
         if Character.prone is None:
-            Character.prone = load_image('character_prone.png')
+            Character.prone = load_image('sprite//character_prone.png')
         if Character.skill is None:
-            Character.skill = load_image('character_skill(457x260).png')
+            Character.skill = load_image('sprite//character_skill(457x260).png')
         if Character.skill2 is None:
-            Character.skill2 = load_image('character_skill2(572x406).png')
+            Character.skill2 = load_image('sprite//character_skill2(572x406).png')
 
     def get_idle_collide(self):
         if self.idlestate:

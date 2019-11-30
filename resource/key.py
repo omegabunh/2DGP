@@ -3,7 +3,7 @@ from pico2d import *
 
 class Key:
     def __init__(self):
-        self.image = load_image('key.PNG')
+        self.image = load_image('sprite//key.PNG')
 
     def update(self):
         pass

@@ -23,11 +23,11 @@ def enter():
     global character
     global npc
     global npc_chat
-    image = load_image('map1.png')
-    key = load_image('key.png')
+    image = load_image('sprite//map1.png')
+    key = load_image('sprite//key.png')
     character = Character()
     npc = Npc()
-    npc_chat = load_image('npc_chat.png')
+    npc_chat = load_image('sprite//npc_chat.png')
     game_world.add_object(image, 0)
     game_world.add_object(key, 1)
     game_world.add_object(character, 1)
@@ -59,6 +59,8 @@ def draw():
     npc.draw()
     if space_cnt % 2 == 1:
         npc_chat.draw(MAP_WIDTH//2, MAP_HEIGHT//2)
+    if 1170 <= character.x <= 1240:
+        npc.font.draw(npc.x - 45, npc.y + 60, 'PRESS SPACE', (255, 0, 0))
     character.draw()
     key.draw(1700, 50)
     update_canvas()

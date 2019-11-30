@@ -279,7 +279,7 @@ class Character:
         self.attackstate = False
         self.skillstate = False
         self.deadstate = False
-        self.font = load_font('ENCR10B.TTF', 16)
+        self.font = load_font('Maplestory Bold.ttf', 16)
         self.hp = 1700
         self.hp_x, self.hp_y = 1700//2, 25
         self.hp_x1, self.hp_y1 = 1700//2 + 8, 25 - 8
@@ -306,21 +306,21 @@ class Character:
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
         if Character.idle == None:
-            Character.idle = load_image('character.png')
+            Character.idle = load_image('sprite//character.png')
         if Character.attack == None:
-            Character.attack = load_image('character_attack.png')
+            Character.attack = load_image('sprite//character_attack.png')
         if Character.prone == None:
-            Character.prone = load_image('character_prone.png')
+            Character.prone = load_image('sprite//character_prone.png')
         if Character.skill == None:
-            Character.skill = load_image('character_skill(457x260).png')
+            Character.skill = load_image('sprite//character_skill(457x260).png')
         if Character.skill2 == None:
-            Character.skill2 = load_image('character_skill2(572x406).png')
+            Character.skill2 = load_image('sprite//character_skill2(572x406).png')
         if Character.dead == None:
-            Character.dead = load_image('character_dead.png')
+            Character.dead = load_image('sprite//character_dead.png')
         if Character.hp_background == None:
-            Character.hp_background = load_image('character_hp_background.png')
+            Character.hp_background = load_image('sprite//character_hp_background.png')
         if Character.hp_bar == None:
-            Character.hp_bar = load_image('character_hp_bar.png')
+            Character.hp_bar = load_image('sprite//character_hp_bar.png')
 
     def get_idle_collide(self):
         if self.idlestate:

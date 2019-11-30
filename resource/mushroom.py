@@ -13,7 +13,7 @@ class Mushroom:
 
     def __init__(self):
         if Mushroom.image == None:
-            Mushroom.image = load_image('mushroom.png')
+            Mushroom.image = load_image('sprite//mushroom.png')
         self.x, self.y = random.randint(100, 1748), 350
         self.frame = 0
         self.velocity = 10

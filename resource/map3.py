@@ -2,7 +2,7 @@ from pico2d import *
 
 class Map:
     def __init__(self):
-        self.image = load_image('map3.png')
+        self.image = load_image('sprite//map3.png')
 
     def update(self):
         pass

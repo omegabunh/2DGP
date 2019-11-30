@@ -12,20 +12,21 @@ class Horn:
     image = None
     spacebar = None
     spacebar_fill = None
+
     def __init__(self):
-        if Horn.image == None:
-            Horn.image = load_image('horn(304x244).png')
-        if Horn.spacebar == None:
-            Horn.spacebar = load_image('KeyDownBar.png')
-        if Horn.spacebar_fill == None:
-            Horn.spacebar_fill = load_image('KeyDownBar2.png')
+        if Horn.image is None:
+            Horn.image = load_image('sprite//horn(304x244).png')
+        if Horn.spacebar is None:
+            Horn.spacebar = load_image('sprite//KeyDownBar.png')
+        if Horn.spacebar_fill is None:
+            Horn.spacebar_fill = load_image('sprite//KeyDownBar2.png')
         self.x, self.y = 1400, 650
         self.bar_x, self.bar_y = 1430, 730
         self.bar_x1, self.bar_y1 = 1397, 730
         self.w, self.h = 0, 8
         self.frame = 0
         self.hit = 0
-        self.font = load_font('ENCR10B.TTF', 16)
+        self.font = load_font('Maplestory Bold.ttf', 16)
         self.deadstate = False
         self.hitstate = False
         self.hit_count = 0
@@ -37,6 +38,7 @@ class Horn:
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
 
     def draw(self):
+        self.font.draw(self.x - 20, self.y + 120, 'PRESS SPACE', (255, 0, 0))
         draw_rectangle(*self.get_bb())
         self.image.clip_draw(int(self.frame) * 304, 0, 304, 244, self.x, self.y)
         self.spacebar.draw(self.bar_x, self.bar_y)

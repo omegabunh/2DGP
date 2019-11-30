@@ -21,7 +21,7 @@ class Boss:
         self.frame1 = 0
         self.hp = 1000
         self.count = 0
-        self.font = load_font('ENCR10B.TTF', 16)
+        self.font = load_font('Maplestory Bold.ttf', 16)
         self.w = 1500
         self.w1 = 1505
         self.h = 30
@@ -31,13 +31,13 @@ class Boss:
         self.skillcount = 0
         self.hit_count = 0
         if Boss.image is None:
-            Boss.image = load_image('boss1(320x410).png')
+            Boss.image = load_image('sprite//boss1(320x410).png')
         if Boss.attack_image is None:
-            Boss.attack_image = load_image('boss1_attack(340x420).png')
+            Boss.attack_image = load_image('sprite//boss1_attack(340x420).png')
         if Boss.hp_image is None:
-            Boss.hp_image = load_image('boss_hp.png')
+            Boss.hp_image = load_image('sprite//boss_hp.png')
         if Boss.hp_background is None:
-            Boss.hp_background = load_image('boss_hp_background.png')
+            Boss.hp_background = load_image('sprite//boss_hp_background.png')
 
     def get_bb(self):
         return self.x - 100, self.y - 100, self.x + 100, self.y + 130

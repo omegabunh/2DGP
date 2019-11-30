@@ -14,9 +14,9 @@ FRAMES_PER_ACTION = 5
 class Bullet:
     image = None
 
-    def __init__(self, x = 800, y = 10, velocity =5, round_bullet_count = 18):
+    def __init__(self, x = 800, y = 10, velocity = 5, round_bullet_count = 18):
         if Bullet.image is None:
-            Bullet.image = load_image('bullet(32x32).png')
+            Bullet.image = load_image('sprite//bullet(32x32).png')
         self.x = x
         self.y = y
         self.frame = random.randint(0, 5)
@@ -25,7 +25,7 @@ class Bullet:
         self.velocity = velocity
         self.round_bullet_count = round_bullet_count
     def get_bb(self):
-        return self.x - 15, self.y - 15, self.x + 15, self.y + 15
+        return self.x - 12, self.y - 12, self.x + 12, self.y + 12
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4

@@ -3,6 +3,7 @@ import game_framework
 import main_state
 import game_world
 import end_state
+import over_state
 from map3 import Map
 from character2 import Character
 from boss2 import Boss
@@ -18,7 +19,7 @@ key = None
 running = True
 butterflys = []
 horn = None
-
+overTimer = 0
 spacestate = False
 spacecount = 0
 butterflydead = False
@@ -127,10 +128,18 @@ def handle_events():
             character.handle_event(event)
 
 def update():
-    global spacecount, butterflydead
+    global spacecount, butterflydead, overTimer
     print(spacecount)
     for game_object in game_world.all_objects():
         game_object.update()
+
+    if character.hp <= 0:
+        character.deadstate = True
+        character.hp = 0
+        overTimer += 1
+        if overTimer == 100:
+            game_framework.change_state(over_state)
+
     for butterfly in butterflys:
         butterflydead = False
         if idle_collide(character, horn):
@@ -152,8 +161,7 @@ def update():
                 character.w -= 0.2
                 character.hp_x1 -= 0.1
                 character.idle_op = True
-                if character.hp <= 0:
-                    game_framework.quit()
+
 
     if run_collide(character, boss):
         if character.runstate:
@@ -162,9 +170,7 @@ def update():
                 character.w -= 0.2
                 character.hp_x1 -= 0.1
                 character.run_op = True
-                if character.hp <= 0:
-                    character.deadstate = True
-                    character.hp = 0
+
 
     if skill_collide(character, boss):
         if character.skillstate:

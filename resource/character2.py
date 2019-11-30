@@ -325,7 +325,7 @@ class Character:
 
     def update(self):
 
-        if self.idle_op == True:
+        if self.idle_op:
             self.idle_op_count += 1
             self.idle.opacify(0.5)
             if self.idle_op_count % 3 == 0:
@@ -334,7 +334,7 @@ class Character:
                 self.idle_op = False
                 self.idle_op_count = 0
 
-        if self.run_op == True:
+        if self.run_op:
             self.run_op_count += 1
             self.idle.opacify(0.5)
             if self.run_op_count % 3 == 0:
@@ -343,14 +343,14 @@ class Character:
                 self.run_op = False
                 self.run_op_count = 0
 
-        if self.skill_damage == True:
+        if self.skill_damage:
             self.skill_damage_count += 1
             print(self.skill_damage_count)
             if self.skill_damage_count == 14:
                 self.skill_damage = False
                 self.skill_damage_count = 0
 
-        if self.attack_damage == True:
+        if self.attack_damage:
             self.attack_damage_count += 1
             print(self.skill_damage_count)
             if self.attack_damage_count == 12:
@@ -374,7 +374,7 @@ class Character:
             self.cur_state.draw(self)
     def handle_event(self, event):
         global count
-        if (event.type, event.key) in key_event_table:
+        if (event.type, event.key) in key_event_table and self.deadstate == False:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
         elif event.key == SDLK_HOME:

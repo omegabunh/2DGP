@@ -453,7 +453,7 @@ class Character:
 
     def handle_event(self, event):
         global count
-        if (event.type, event.key) in key_event_table:
+        if (event.type, event.key) in key_event_table and self.deadstate == False:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
         elif event.key == SDLK_HOME:

@@ -48,7 +48,13 @@ class Boss:
         if Boss.hp_background is None:
             Boss.hp_background = load_image('sprite//boss_hp_background.png')
 
+    def set_background(self, bg):
+        self.bg = bg
+        self.x = self.bg.w / 2
+        self.y = self.bg.h / 2
+
     def calculate_current_position(self):
+        cx, cy = self.x - self.bg.window_left + 196, self.y - self.bg.window_bottom
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
         self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
@@ -65,7 +71,8 @@ class Boss:
         return BehaviorTree.SUCCESS
 
     def get_bb(self):
-        return self.x - 150, self.y - 140, self.x + 130, self.y + 160
+        cx, cy = self.x - self.bg.window_left + 196, self.y - self.bg.window_bottom
+        return cx - 150, cy - 140, cx + 130, cy + 160
 
     def find_player(self):
         # fill here
@@ -100,8 +107,9 @@ class Boss:
                 self.hit_count = 0
 
     def draw(self):
-        self.font.draw(self.x - 60, self.y + 150, '(hp: %0.0f)' % self.hp, (0, 255, 0))
-        self.image.clip_draw(int(self.frame) * 356, 0, 356, 384, self.x, self.y)
+        cx, cy = self.x - self.bg.window_left + 196, self.y - self.bg.window_bottom
+        self.font.draw(cx - 60, cy + 150, '(hp: %0.0f)' % self.hp, (0, 255, 0))
+        self.image.clip_draw(int(self.frame) * 356, 0, 356, 384, cx, cy)
         draw_rectangle(*self.get_bb())
         self.hp_background.draw(self.hp_x1, self.hp_y1, self.w1, self.h1)
         self.hp_image.draw(self.hp_x, self.hp_y, self.w, self.h)

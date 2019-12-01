@@ -102,6 +102,9 @@ def enter():
 
     map.set_center_object(character)
     character.set_background(map)
+    horn.set_background(map)
+    boss.set_background(map)
+
 
 def exit():
     game_world.clear()
@@ -134,7 +137,6 @@ def handle_events():
 
 def update():
     global spacecount, butterflydead, overTimer
-    print(spacecount)
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -153,7 +155,6 @@ def update():
                 if spacestate:
                     horn.bar_x1 += 0.25
                     horn.w += 0.5
-                    print(horn.w)
                     spacecount += 1
                     if spacecount >= 130:
                         horn.w = 0

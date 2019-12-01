@@ -156,7 +156,7 @@ class AttackState:
     @staticmethod
     def enter(character, event):
         character.frame = 0
-
+        character.attackSound()
     @staticmethod
     def exit(character, event):
         pass
@@ -269,6 +269,8 @@ class Character:
         self.jump_sound.set_volume(70)
         self.skill_sound = load_wav('music//UseSkill.wav')
         self.skill_sound.set_volume(70)
+        self.attack_sound = load_wav('music//Attack.wav')
+        self.attack_sound.set_volume(70)
 
         self.cur_state.enter(self, None)
         if Character.idle is None:
@@ -345,3 +347,6 @@ class Character:
 
     def skillSound(self):
         self.skill_sound.play()
+
+    def attackSound(self):
+        self.attack_sound.play()

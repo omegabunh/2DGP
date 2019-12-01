@@ -155,6 +155,7 @@ class AttackState:
     @staticmethod
     def enter(character, event):
         character.frame = 0
+        character.attackSound()
 
     @staticmethod
     def exit(character, event):
@@ -272,6 +273,8 @@ class Character:
         self.skill_sound.set_volume(70)
         self.eat_sound = load_wav('music//Use.wav')
         self.eat_sound.set_volume(70)
+        self.attack_sound = load_wav('music//Attack.wav')
+        self.attack_sound.set_volume(70)
         self.idle_op_count, self.run_op_count = 0, 0
         self.font = load_font('Maplestory Bold.ttf', 16)
         self.hp = 1700
@@ -402,3 +405,6 @@ class Character:
 
     def eatSound(self):
         self.eat_sound.play()
+
+    def attackSound(self):
+        self.attack_sound.play()

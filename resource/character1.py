@@ -164,6 +164,7 @@ class AttackState:
     @staticmethod
     def enter(character, event):
         character.frame = 0
+        character.attackSound()
 
     @staticmethod
     def exit(character, event):
@@ -315,6 +316,8 @@ class Character:
         self.skill_sound.set_volume(70)
         self.eat_sound = load_wav('music//Use.wav')
         self.eat_sound.set_volume(70)
+        self.attack_sound = load_wav('music//Attack.wav')
+        self.attack_sound.set_volume(70)
         if Character.idle == None:
             Character.idle = load_image('sprite//character.png')
         if Character.attack == None:
@@ -404,7 +407,6 @@ class Character:
 
         if self.attack_damage:
             self.attack_damage_count += 1
-            print(self.skill_damage_count)
             if self.attack_damage_count == 12:
                 self.attack_damage = False
                 self.attack_damage_count = 0
@@ -482,3 +484,6 @@ class Character:
 
     def eatSound(self):
         self.eat_sound.play()
+
+    def attackSound(self):
+        self.attack_sound.play()

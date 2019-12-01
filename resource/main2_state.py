@@ -100,6 +100,9 @@ def enter():
     character = Character()
     game_world.add_object(character, 1)
 
+    map.set_center_object(character)
+    character.set_background(map)
+
 def exit():
     game_world.clear()
 

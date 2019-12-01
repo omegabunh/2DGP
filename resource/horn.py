@@ -31,6 +31,11 @@ class Horn:
         self.hitstate = False
         self.hit_count = 0
 
+    def set_background(self, bg):
+        self.bg = bg
+        self.x = self.bg.w / 2
+        self.y = self.bg.h / 2
+
     def get_bb(self):
         return self.x - 100, self.y - 120, self.x + 100, self.y + 100
 

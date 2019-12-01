@@ -81,12 +81,13 @@ class IdleState:
 
     @staticmethod
     def draw(character):
+        cx, cy = character.x - character.bg.window_left, character.y - character.bg.window_bottom
         if character.idlestate:
             draw_rectangle(*character.get_idle_collide())
             if character.dir == 1:
-                character.idle.clip_draw(int(character.frame) * 92, 0 * 96, 92, 96, character.x, character.y)
+                character.idle.clip_draw(int(character.frame) * 92, 0 * 96, 92, 96, cx, cy)
             elif character.dir == -1:
-                character.idle.clip_draw(int(character.frame) * 92, 1 * 96, 92, 96, character.x, character.y)
+                character.idle.clip_draw(int(character.frame) * 92, 1 * 96, 92, 96, cx, cy)
 
 
 
@@ -125,8 +126,8 @@ class RunState:
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         character.x += character.velocity * game_framework.frame_time
         character.y += character.velocity_y * game_framework.frame_time
-        character.x = clamp(25, character.x, 1600 - 25)
-        character.y = clamp(25, character.y, 1550 - 25 )
+        character.x = clamp(25, character.x, character.bg.w - 25)
+        character.y = clamp(25, character.y, character.bg.h - 25)
         character.running = True
         character.idlestate = False
         character.runstate = True
@@ -135,20 +136,21 @@ class RunState:
 
     @staticmethod
     def draw(character):
+        cx, cy = character.x - character.bg.window_left, character.y - character.bg.window_bottom
         if character.runstate:
             draw_rectangle(*character.get_run_collide())
             if character.velocity > 0:
-                character.idle.clip_draw(int(character.frame) * 92, 2 * 96, 92, 96, character.x, character.y)
+                character.idle.clip_draw(int(character.frame) * 92, 2 * 96, 92, 96, cx, cy)
                 character.dir = 1
             elif character.velocity < 0:
-                character.idle.clip_draw(int(character.frame) * 92, 3 * 96, 92, 96, character.x, character.y)
+                character.idle.clip_draw(int(character.frame) * 92, 3 * 96, 92, 96, cx, cy)
                 character.dir = -1
             else:
                 if character.velocity_y > 0 or character.velocity_y < 0:
                     if character.dir == 1:
-                        character.idle.clip_draw(int(character.frame) * 92, 2 * 96, 92, 96, character.x, character.y)
+                        character.idle.clip_draw(int(character.frame) * 92, 2 * 96, 92, 96, cx, cy)
                     else:
-                        character.idle.clip_draw(int(character.frame) * 92, 3 * 96, 92, 96, character.x, character.y)
+                        character.idle.clip_draw(int(character.frame) * 92, 3 * 96, 92, 96, cx, cy)
 
 
 class AttackState:
@@ -172,12 +174,13 @@ class AttackState:
 
     @staticmethod
     def draw(character):
+        cx, cy = character.x - character.bg.window_left, character.y - character.bg.window_bottom
         if character.attackstate:
             draw_rectangle(*character.get_attack_collide())
             if character.dir == 1:
-                character.attack.clip_draw(int(character.frame) * 260, 1 * 172, 260, 172, character.x, character.y + 23)
+                character.attack.clip_draw(int(character.frame) * 260, 1 * 172, 260, 172, cx, cy + 23)
             else:
-                character.attack.clip_draw(int(character.frame) * 260, 0 * 172, 260, 172, character.x, character.y + 23)
+                character.attack.clip_draw(int(character.frame) * 260, 0 * 172, 260, 172, cx, cy + 23)
 
 
 class SkillState:
@@ -207,15 +210,16 @@ class SkillState:
     @staticmethod
     def draw(character):
         if character.skillstate:
+            cx, cy = character.x - character.bg.window_left, character.y - character.bg.window_bottom
             draw_rectangle(*character.get_skill_collide())
             if character.dir == 1 and count % 2 == 0:
-                character.skill.clip_draw(int(character.frame1) * 457, 0 * 260, 457, 260, character.x, character.y + 70)
+                character.skill.clip_draw(int(character.frame1) * 457, 0 * 260, 457, 260, cx, cy + 70)
             elif character.dir != 1 and count % 2 == 0:
-                character.skill.clip_draw(int(character.frame1) * 457, 1 * 260, 457, 260, character.x, character.y + 70)
+                character.skill.clip_draw(int(character.frame1) * 457, 1 * 260, 457, 260, cx, cy + 70)
             if character.dir == 1 and count % 2 == 1:
-                character.skill2.clip_draw(int(character.frame1) * 572, 0 * 406, 573, 406, character.x, character.y + 40)
+                character.skill2.clip_draw(int(character.frame1) * 572, 0 * 406, 573, 406, cx, cy + 40)
             elif character.dir != 1 and count % 2 == 1:
-                character.skill2.clip_draw(int(character.frame1) * 572, 1 * 406, 573, 406, character.x, character.y + 40)
+                character.skill2.clip_draw(int(character.frame1) * 572, 1 * 406, 573, 406, cx, cy + 40)
 
 
 next_state_table = {
@@ -249,7 +253,6 @@ class Character:
     hp_bar = None
 
     def __init__(self):
-        self.x, self.y = 1700 // 2, 300
         self.frame = 0
         self.dir = 1
         self.jump_force = 430
@@ -303,34 +306,39 @@ class Character:
         if Character.hp_bar is None:
             Character.hp_bar = load_image('sprite//character_hp_bar.png')
 
+    def set_background(self, bg):
+        self.bg = bg
+        self.x = self.bg.w / 2
+        self.y = self.bg.h / 2
+
     def get_idle_collide(self):
         if self.idlestate:
-            return self.x - 30, self.y - 38, self.x + 20, self.y + 42
+            return self.x - self.bg.window_left - 30, self.y - self.bg.window_bottom - 38, self.x - self.bg.window_left + 20, self.y - self.bg.window_bottom + 42
 
     def get_run_collide(self):
         if self.runstate:
-            return self.x - 30, self.y - 38, self.x + 20, self.y + 42
+            return self.x - self.bg.window_left - 30, self.y - self.bg.window_bottom - 38, self.x - self.bg.window_left + 20, self.y - self.bg.window_bottom + 42
 
     def get_prone_collide(self):
         if self.pronestate:
             if self.dir == 1:
-                return self.x - 70, self.y - 38, self.x + 10, self.y + 20
+                return self.x - self.bg.window_left - 70, self.y - self.bg.window_bottom - 38, self.x - self.bg.window_left + 10, self.y - self.bg.window_bottom + 20
             else:
-                return self.x - 10, self.y - 38, self.x + 70, self.y + 20
+                return self.x - self.bg.window_left - 10, self.y - self.bg.window_bottom - 38, self.x - self.bg.window_left + 70, self.y - self.bg.window_bottom + 20
 
     def get_attack_collide(self):
         if self.attackstate:
             if self.dir == 1:
-                return self.x - 50, self.y - 38, self.x + 120, self.y + 100
+                return self.x - self.bg.window_left - 50, self.y - self.bg.window_bottom - 38, self.x - self.bg.window_left + 120, self.y - self.bg.window_bottom + 100
             else:
-                return self.x - 120, self.y - 38, self.x + 50, self.y + 100
+                return self.x - self.bg.window_left - 120, self.y - self.bg.window_bottom - 38, self.x - self.bg.window_left + 50, self.y - self.bg.window_bottom + 100
 
     def get_skill_collide(self):
         if self.skillstate:
             if self.dir == 1:
-                return self.x - 50, self.y - 38, self.x + 280, self.y + 200
+                return self.x - self.bg.window_left - 50, self.y - self.bg.window_bottom - 38, self.x - self.bg.window_left + 280, self.y - self.bg.window_bottom + 200
             else:
-                return self.x - 280, self.y - 38, self.x + 50, self.y + 200
+                return self.x - self.bg.window_left - 280, self.y - self.bg.window_bottom - 38, self.x - self.bg.window_left + 50, self.y - self.bg.window_bottom + 200
 
     def add_event(self, event):
         self.event_que.insert(0, event)
@@ -377,7 +385,7 @@ class Character:
             self.cur_state.enter(self, event)
 
     def draw(self):
-        self.font.draw(self.x - 60, self.y + 50, '(hp: %0.0f)' % self.hp, (0, 255, 0))
+        self.font.draw(self.x - self.bg.window_left - 60, self.y - self.bg.window_bottom + 50, '(hp: %0.0f)' % self.hp, (0, 255, 0))
         self.hp_bar.draw(self.hp_x1, self.hp_y1, self.w, self.h)
         self.hp_background.draw(self.hp_x, self.hp_y)
         if self.deadstate:

@@ -1,13 +1,10 @@
-import random
-import json
-import os
-
 from pico2d import *
 import game_framework
 import title_state
 import main2_state
 import over_state
 import game_world
+import boss1_clear
 
 from map2 import Map
 from key import Key
@@ -23,6 +20,7 @@ mushroom = None
 running = True
 timer = 0
 overTimer = 0
+
 
 def idle_collide(a, b):
     if character.idlestate:
@@ -142,28 +140,12 @@ def handle_events():
         else:
             character.handle_event(event)
 
+
 def update():
     global timer, overTimer
     timer += 1
     for game_object in game_world.all_objects():
         game_object.update()
-
-    if mushroom.hit >= 30:
-        mushroom.deadstate = True
-        game_world.remove_object(mushroom)
-
-    if boss.hp <= 0:
-        game_world.remove_object(boss)
-        map2.bgm.stop()
-        game_framework.change_state(main2_state)
-
-    if character.hp <= 0:
-        map2.bgm.stop()
-        character.deadstate = True
-        character.hp = 0
-        overTimer += 1
-        if overTimer == 100:
-            game_framework.change_state(over_state)
 
     if idle_collide(character, boss):
         if character.idlestate:
@@ -295,10 +277,29 @@ def update():
                     character.attack_damage = True
                     monster.hitstate = True
 
+    if mushroom.hit >= 30:
+        mushroom.deadstate = True
+        game_world.remove_object(mushroom)
+
+    if boss.hp <= 0:
+        boss.hp = 0
+        game_world.remove_object(boss)
+        map2.bgm.stop()
+        game_framework.change_state(boss1_clear)
+        #game_framework.change_state(main2_state)
+
+    if character.hp <= 0:
+        map2.bgm.stop()
+        character.deadstate = True
+        character.hp = 0
+        overTimer += 1
+        if overTimer == 100:
+            game_framework.change_state(over_state)
+
+
 def draw():
     clear_canvas()
     for game_object in game_world.all_objects():
         game_object.draw()
     update_canvas()
-    delay(0.05)
-
+    # delay(0.01)

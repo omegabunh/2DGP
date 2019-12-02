@@ -416,4 +416,3 @@ class Character:
 
     def attackSound(self):
         self.attack_sound.play()
-

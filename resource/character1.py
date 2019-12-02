@@ -216,7 +216,6 @@ class SkillState:
     @staticmethod
     def draw(character):
         if character.skillstate:
-            character.skillSound()
             draw_rectangle(*character.get_skill_collide())
             if character.dir == 1 and count % 2 == 0:
                 character.skill.clip_draw(int(character.frame1) * 457, 0 * 260, 457, 260, character.x, character.y + 70)

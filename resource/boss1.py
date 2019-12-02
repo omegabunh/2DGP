@@ -74,9 +74,6 @@ class Boss:
             self.attack_image.clip_draw(int(self.frame) * 340, 0, 340, 420, self.x - 10, self.y + 4)
         else:
             self.image.clip_draw(int(self.frame) * 320, 0, 320, 410, self.x, self.y)
-
-
-
         draw_rectangle(*self.get_bb())
         self.hp_background.draw(self.hp_x1, self.hp_y1, self.w1, self.h1)
         self.hp_image.draw(self.hp_x, self.hp_y, self.w, self.h)

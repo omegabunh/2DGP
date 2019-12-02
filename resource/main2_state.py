@@ -11,7 +11,16 @@ from butterfly import Butterfly
 from key import Key
 from horn import Horn
 
-MAP_WIDTH, MAP_HEIGHT = 1997, 950
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 10.0  # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+# zombie Action Speed
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 10
 
 boss = None
 character = None
@@ -88,10 +97,6 @@ def enter():
     horn = Horn()
     game_world.add_object(horn, 1)
 
-    global butterflys
-    butterflys = [Butterfly() for i in range(4)]
-    game_world.add_objects(butterflys, 1)
-
     global boss
     boss = Boss()
     game_world.add_object(boss, 1)
@@ -99,6 +104,10 @@ def enter():
     global character
     character = Character()
     game_world.add_object(character, 1)
+
+    global butterflys
+    butterflys = [Butterfly(character) for i in range(4)]
+    game_world.add_objects(butterflys, 1)
 
     map.set_center_object(character)
     character.set_background(map)
@@ -153,9 +162,9 @@ def update():
         if idle_collide(character, horn):
             if character.idlestate:
                 if spacestate:
-                    horn.bar_x1 += 0.25
-                    horn.w += 0.5
-                    spacecount += 1
+                    horn.bar_x1 += 0.25 * FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time
+                    horn.w += 0.5 * FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time
+                    spacecount += 1 * FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time
                     if spacecount >= 130:
                         horn.w = 0
                         game_world.remove_object(butterfly)
@@ -210,5 +219,5 @@ def draw():
     for game_object in game_world.all_objects():
         game_object.draw()
     update_canvas()
-    delay(0.05)
+    #delay(0.05)
 # open_canvas(MAP_WIDTH, MAP_HEIGHT)

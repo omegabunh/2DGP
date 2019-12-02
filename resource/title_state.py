@@ -68,7 +68,7 @@ def draw():
     character.draw()
     key.image.draw(1700, 50)
     update_canvas()
-    delay(0.05)
+    #delay(0.05)
 
 def update():
     character.update()

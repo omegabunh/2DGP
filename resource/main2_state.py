@@ -90,9 +90,6 @@ def enter():
     map = Map()
     game_world.add_object(map, 0)
 
-    key = Key()
-    game_world.add_object(key, 1)
-
     global horn
     horn = Horn()
     game_world.add_object(horn, 1)
@@ -108,6 +105,9 @@ def enter():
     global butterflys
     butterflys = [Butterfly(character) for i in range(4)]
     game_world.add_objects(butterflys, 1)
+
+    key = Key()
+    game_world.add_object(key, 1)
 
     map.set_center_object(character)
     character.set_background(map)

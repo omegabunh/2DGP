@@ -46,7 +46,7 @@ class Butterfly:
         if self.bullet_draw_time > 2.0:
             while self.bullet_count < 360:
                 self.bullet_count += 30
-                bullets = Bullet(self.x - self.character.bg.window_left, self.y - self.character.bg.window_bottom, 5, self.bullet_count)
+                bullets = Bullet(self.x, self.y, 5, self.bullet_count)
                 game_world.add_object(bullets, 1)
             self.bullet_draw_time = 0
             self.bullet_count = 0

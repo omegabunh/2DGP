@@ -386,12 +386,12 @@ class Character:
 
     def draw(self):
         self.font.draw(self.x - self.bg.window_left - 60, self.y - self.bg.window_bottom + 50, '(hp: %0.0f)' % self.hp, (0, 255, 0))
-        self.hp_bar.draw(self.hp_x1, self.hp_y1, self.w, self.h)
-        self.hp_background.draw(self.hp_x, self.hp_y)
         if self.deadstate:
             self.dead.draw(self.x, self.y)
         else:
             self.cur_state.draw(self)
+        self.hp_bar.draw(self.hp_x1, self.hp_y1, self.w, self.h)
+        self.hp_background.draw(self.hp_x, self.hp_y)
     def handle_event(self, event):
         global count
         if (event.type, event.key) in key_event_table and self.deadstate == False:

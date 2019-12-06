@@ -15,13 +15,14 @@ class Monster:
     def __init__(self):
         if Monster.image == None:
             Monster.image = load_image('sprite//monster(191x224).png')
-        self.x, self.y = random.randint(100, 1748), 1000
+        self.x, self.y = random.randint(800, 1200), 1100
         self.frame = random.randint(0, 5)
         self.hit = 0
         self.font = load_font('ENCR10B.TTF', 16)
         self.deadstate = False
         self.hitstate = False
         self.hit_count = 0
+        self.op_count = 0
 
     def get_bb(self):
         return self.x - 80, self.y - 100, self.x + 80, self.y + 100
@@ -29,7 +30,7 @@ class Monster:
     def update(self):
         #self.frame = random.randint(0, 5)
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
-        if main_state.boss.hp % 50 == 0 and main_state.boss.hp != 1000 and main_state.boss.hp != 0:
+        if main_state.boss.hp % 500 == 0 and main_state.boss.hp != 1000 and main_state.boss.hp != 0:
             if self.y > 330:
                 self.y -= 50
             elif self.y < 330:
@@ -37,13 +38,13 @@ class Monster:
         if self.hit >= 30:
             self.deadstate = True
         if self.hitstate == True:
-            self.hit_count += 1
+            self.op_count += 1
             self.image.opacify(0.8)
-            if self.hit_count % 10 == 0:
+            if self.op_count % 10:
                 self.image.opacify(1.0)
-            if self.hit_count == 30:
+            if self.op_count == 30:
                 self.hitstate = False
-                self.hit_count = 0
+                self.op_count = 0
 
     def draw(self):
         self.font.draw(self.x - 60, self.y + 70, '(hit: %0.0f)' % self.hit, (0, 255, 0))

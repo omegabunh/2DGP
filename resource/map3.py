@@ -12,8 +12,8 @@ class Map:
         self.bgm.repeat_play()
         self.w = self.image.w
         self.h = self.image.h
-
-
+        self.window_left = 0
+        self.window_bottom = 0
 
     def set_center_object(self, character):
         self.center_object = character

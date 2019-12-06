@@ -6,7 +6,11 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 3
 
-
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 4
+FRAMES_PER_ACTION1 = 8
+FRAMES_PER_ACTION2 = 3
 class Boss:
     image = None
     hp_image = None
@@ -54,7 +58,7 @@ class Boss:
                 self.hitstate = False
                 self.hit_count = 0
 
-        if self.hp % 50 == 0 and self.count == 0:
+        if self.hp % 500 == 0 and self.count == 0:
             self.count += 1
             self.skillstate = True
 
@@ -65,7 +69,7 @@ class Boss:
                 self.skillcount = 0
                 self.skillstate = False
 
-        if self.hp % 50 == 40:
+        if self.hp % 500 == 40:
             self.count = 0
 
     def draw(self):

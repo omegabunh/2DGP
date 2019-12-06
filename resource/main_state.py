@@ -100,7 +100,7 @@ def enter():
     game_world.add_object(boss, 1)
 
     global monsters
-    monsters = [Monster() for i in range(3)]
+    monsters = [Monster() for i in range(1)]
     # monsters = Monster()
     game_world.add_objects(monsters, 1)
 

@@ -214,7 +214,7 @@ def update():
                 character.prone_op = True
 
     if skill_collide(character, mushroom):
-        if mushroom.hit >= 30:
+        if mushroom.hit >= 100:
             game_world.remove_object(mushroom)
         if character.skillstate:
             if character.mushroom_skill_damage == False or character.mushroom_skill2_damage == False and mushroom.hitstate == False:
@@ -224,6 +224,8 @@ def update():
                 mushroom.hitstate = True
 
     if attack_collide(character, mushroom):
+        if mushroom.hit >= 100:
+            game_world.remove_object(mushroom)
         if character.attackstate:
             if character.attack_damage == False and mushroom.hitstate == False:
                 mushroom.hit += 1

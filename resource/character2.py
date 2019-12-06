@@ -83,7 +83,7 @@ class IdleState:
     def draw(character):
         cx, cy = character.x - character.bg.window_left, character.y - character.bg.window_bottom
         if character.idlestate:
-            draw_rectangle(*character.get_idle_collide())
+            #draw_rectangle(*character.get_idle_collide())
             if character.dir == 1:
                 character.idle.clip_draw(int(character.frame) * 92, 0 * 96, 92, 96, cx, cy)
             elif character.dir == -1:
@@ -138,7 +138,7 @@ class RunState:
     def draw(character):
         cx, cy = character.x - character.bg.window_left, character.y - character.bg.window_bottom
         if character.runstate:
-            draw_rectangle(*character.get_run_collide())
+            #draw_rectangle(*character.get_run_collide())
             if character.velocity > 0:
                 character.idle.clip_draw(int(character.frame) * 92, 2 * 96, 92, 96, cx, cy)
                 character.dir = 1
@@ -176,7 +176,7 @@ class AttackState:
     def draw(character):
         cx, cy = character.x - character.bg.window_left, character.y - character.bg.window_bottom
         if character.attackstate:
-            draw_rectangle(*character.get_attack_collide())
+            #draw_rectangle(*character.get_attack_collide())
             if character.dir == 1:
                 character.attack.clip_draw(int(character.frame) * 260, 1 * 172, 260, 172, cx, cy + 23)
             else:
@@ -211,7 +211,7 @@ class SkillState:
     def draw(character):
         if character.skillstate:
             cx, cy = character.x - character.bg.window_left, character.y - character.bg.window_bottom
-            draw_rectangle(*character.get_skill_collide())
+            #draw_rectangle(*character.get_skill_collide())
             if character.dir == 1 and count % 2 == 0:
                 character.skill.clip_draw(int(character.frame1) * 457, 0 * 260, 457, 260, cx, cy + 70)
             elif character.dir != 1 and count % 2 == 0:
@@ -348,18 +348,18 @@ class Character:
         if self.idle_op:
             self.idle_op_count += 1
             self.idle.opacify(0.5)
-            if self.idle_op_count % 3 == 0:
+            if self.idle_op_count % 10 == 0:
                 self.idle.opacify(1.0)
-            if self.idle_op_count == 15:
+            if self.idle_op_count == 50:
                 self.idle_op = False
                 self.idle_op_count = 0
 
         if self.run_op:
             self.run_op_count += 1
             self.idle.opacify(0.5)
-            if self.run_op_count % 3 == 0:
+            if self.run_op_count % 10 == 0:
                 self.idle.opacify(1.0)
-            if self.run_op_count == 15:
+            if self.run_op_count == 50:
                 self.run_op = False
                 self.run_op_count = 0
 

@@ -72,7 +72,7 @@ class IdleState:
     @staticmethod
     def draw(character):
         if character.idlestate:
-            draw_rectangle(*character.get_idle_collide())
+            #draw_rectangle(*character.get_idle_collide())
             if character.dir == 1 and character.idleing:
                 character.idle.clip_draw(int(character.frame) * 92, 0 * 96, 92, 96, character.x, character.y)
             elif character.dir == 1 and character.idleing == False:
@@ -120,7 +120,7 @@ class RunState:
     @staticmethod
     def draw(character):
         if character.runstate:
-            draw_rectangle(*character.get_run_collide())
+            #draw_rectangle(*character.get_run_collide())
             if character.dir == 1 and character.running:
                 character.idle.clip_draw(int(character.frame) * 92, 2 * 96, 92, 96, character.x, character.y)
             elif character.dir == 1 and character.running == False:
@@ -153,7 +153,7 @@ class ProneState:
     @staticmethod
     def draw(character):
         if character.pronestate:
-            draw_rectangle(*character.get_prone_collide())
+            #draw_rectangle(*character.get_prone_collide())
             if character.dir == 1:
                 character.prone.clip_draw(int(character.frame) * 140, 1 * 55, 140, 55, character.x, character.y - 15)
             else:
@@ -182,7 +182,7 @@ class AttackState:
     @staticmethod
     def draw(character):
         if character.attackstate:
-            draw_rectangle(*character.get_attack_collide())
+            #draw_rectangle(*character.get_attack_collide())
             if character.dir == 1:
                 character.attack.clip_draw(int(character.frame) * 260, 1 * 172, 260, 172, character.x, character.y + 23)
             else:
@@ -216,7 +216,7 @@ class SkillState:
     @staticmethod
     def draw(character):
         if character.skillstate:
-            draw_rectangle(*character.get_skill_collide())
+            #draw_rectangle(*character.get_skill_collide())
             if character.dir == 1 and count % 2 == 0:
                 character.skill.clip_draw(int(character.frame1) * 457, 0 * 260, 457, 260, character.x, character.y + 70)
             elif character.dir != 1 and count % 2 == 0:
@@ -380,27 +380,27 @@ class Character:
         if self.idle_op:
             self.idle_op_count += 1
             self.idle.opacify(0.5)
-            if self.idle_op_count % 3 == 0:
+            if self.idle_op_count % 10 == 0:
                 self.idle.opacify(1.0)
-            if self.idle_op_count == 15:
+            if self.idle_op_count == 50:
                 self.idle_op = False
                 self.idle_op_count = 0
 
         if self.run_op:
             self.run_op_count += 1
             self.idle.opacify(0.5)
-            if self.run_op_count % 3 == 0:
+            if self.run_op_count % 10 == 0:
                 self.idle.opacify(1.0)
-            if self.run_op_count == 15:
+            if self.run_op_count == 50:
                 self.run_op = False
                 self.run_op_count = 0
 
         if self.prone_op:
             self.prone_op_count += 1
             self.prone.opacify(0.5)
-            if self.prone_op_count % 3 == 0:
+            if self.prone_op_count % 10 == 0:
                 self.prone.opacify(1.0)
-            if self.prone_op_count == 15:
+            if self.prone_op_count == 50:
                 self.prone_op = False
                 self.prone_op_count = 0
 

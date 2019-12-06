@@ -3,6 +3,7 @@ import random
 import game_world
 import game_framework
 import map3
+import main2_state
 
 PIXEL_PER_METER = (10.0 / 0.3)
 TIME_PER_ACTION = 0.5
@@ -48,8 +49,11 @@ class Horn:
         cx, cy = self.x - self.bg.window_left + 526, self.y - self.bg.window_bottom + 175
         cx1, cy1 = self.bar_x - self.bg.window_left + 556, self.bar_y - self.bg.window_bottom + 255
         cx2, cy2 = self.bar_x1 - self.bg.window_left + 523, self.bar_y1 - self.bg.window_bottom + 255
-        self.font.draw(cx - 20, cy + 120, 'PRESS SPACE', (255, 0, 0))
-        draw_rectangle(*self.get_bb())
+
+        if main2_state.boss.hp <= 900:
+            self.font.draw(cx - 20, cy + 120, 'PRESS SPACE', (255, 0, 0))
+            self.spacebar.draw(cx1, cy1+30)
+            self.spacebar_fill.draw(cx2, cy2+30, self.w, self.h)
         self.image.clip_draw(int(self.frame) * 304, 0, 304, 244, cx, cy)
-        self.spacebar.draw(cx1, cy1)
-        self.spacebar_fill.draw(cx2, cy2, self.w, self.h)
+        #draw_rectangle(*self.get_bb())
+

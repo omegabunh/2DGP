@@ -6,11 +6,6 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 3
 
-TIME_PER_ACTION = 0.5
-ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 4
-FRAMES_PER_ACTION1 = 8
-FRAMES_PER_ACTION2 = 3
 class Boss:
     image = None
     hp_image = None
@@ -52,24 +47,24 @@ class Boss:
         if self.hitstate == True:
             self.hit_count += 1
             self.image.opacify(0.8)
-            if self.hit_count % 10 == 0:
+            if self.hit_count % 30 == 0:
                 self.image.opacify(1.0)
-            if self.hit_count == 30:
+            if self.hit_count == 90:
                 self.hitstate = False
                 self.hit_count = 0
 
-        if self.hp % 500 == 0 and self.count == 0:
+        if self.hp % 50 == 0 and self.count == 0:
             self.count += 1
             self.skillstate = True
 
         #self.hp != 1000 and
         if self.skillstate == True:
             self.skillcount += 1
-            if self.skillcount == 30:
+            if self.skillcount == 50:
                 self.skillcount = 0
                 self.skillstate = False
 
-        if self.hp % 500 == 40:
+        if self.hp % 50 == 40:
             self.count = 0
 
     def draw(self):
@@ -78,7 +73,7 @@ class Boss:
             self.attack_image.clip_draw(int(self.frame) * 340, 0, 340, 420, self.x - 10, self.y + 4)
         else:
             self.image.clip_draw(int(self.frame) * 320, 0, 320, 410, self.x, self.y)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         self.hp_background.draw(self.hp_x1, self.hp_y1, self.w1, self.h1)
         self.hp_image.draw(self.hp_x, self.hp_y, self.w, self.h)
 

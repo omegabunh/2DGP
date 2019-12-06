@@ -70,7 +70,7 @@ class IdleState:
     @staticmethod
     def draw(character):
         if character.idlestate:
-            draw_rectangle(*character.get_idle_collide())
+            #draw_rectangle(*character.get_idle_collide())
             if character.dir == 1 and character.idleing:
                 character.idle.clip_draw(int(character.frame) * 92, 0 * 96, 92, 96, character.x, character.y)
             elif character.dir == 1 and character.idleing == False:
@@ -106,7 +106,7 @@ class RunState:
 
     @staticmethod
     def do(character):
-        draw_rectangle(*character.get_idle_collide())
+        #draw_rectangle(*character.get_idle_collide())
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         character.x += character.velocity * game_framework.frame_time
         character.x = clamp(25, character.x, 1600 - 25)
@@ -116,7 +116,7 @@ class RunState:
     @staticmethod
     def draw(character):
         if character.runstate:
-            draw_rectangle(*character.get_idle_collide())
+            #draw_rectangle(*character.get_idle_collide())
             if character.dir == 1 and character.running:
                 character.idle.clip_draw(int(character.frame) * 92, 2 * 96, 92, 96, character.x, character.y)
             elif character.dir == 1 and character.running == False:
@@ -145,7 +145,7 @@ class ProneState:
     @staticmethod
     def draw(character):
         if character.pronestate:
-            draw_rectangle(*character.get_prone_collide())
+            #draw_rectangle(*character.get_prone_collide())
             if character.dir == 1:
                 character.prone.clip_draw(int(character.frame) * 140, 1 * 55, 140, 55, character.x, character.y - 15)
             else:
@@ -169,7 +169,7 @@ class AttackState:
     @staticmethod
     def draw(character):
         if character.attackstate:
-            draw_rectangle(*character.get_attack_collide())
+            #draw_rectangle(*character.get_attack_collide())
             if character.dir == 1:
                 character.attack.clip_draw(int(character.frame) * 260, 1 * 172, 260, 172, character.x, character.y + 23)
             else:
@@ -198,7 +198,7 @@ class SkillState:
     @staticmethod
     def draw(character):
         if character.skillstate:
-            draw_rectangle(*character.get_skill_collide())
+            #draw_rectangle(*character.get_skill_collide())
             if character.dir == 1 and count % 2 == 0:
                 character.skill.clip_draw(int(character.frame1) * 457, 0 * 260, 457, 260, character.x, character.y + 70)
             elif character.dir != 1 and count % 2 == 0:
@@ -332,7 +332,7 @@ class Character:
 
     def draw(self):
         self.cur_state.draw(self)
-        # draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
         global count

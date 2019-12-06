@@ -161,7 +161,7 @@ def update():
         butterflydead = False
         if idle_collide(character, horn):
             if character.idlestate:
-                if spacestate:
+                if spacestate and boss.hp <= 900:
                     horn.bar_x1 += 0.25 * FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time
                     horn.w += 0.5 * FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time
                     spacecount += 1 * FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time

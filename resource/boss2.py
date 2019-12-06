@@ -110,6 +110,6 @@ class Boss:
         cx, cy = self.x - self.bg.window_left + 196, self.y - self.bg.window_bottom
         self.font.draw(cx - 60, cy + 150, '(hp: %0.0f)' % self.hp, (0, 255, 0))
         self.image.clip_draw(int(self.frame) * 356, 0, 356, 384, cx, cy)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         self.hp_background.draw(self.hp_x1, self.hp_y1, self.w1, self.h1)
         self.hp_image.draw(self.hp_x, self.hp_y, self.w, self.h)

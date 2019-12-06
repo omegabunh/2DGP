@@ -57,7 +57,7 @@ class Bullet:
 
     def draw(self):
         cx, cy = self.x - main2_state.character.bg.window_left, self.y - main2_state.character.bg.window_bottom
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         angle = self.round_bullet_count * 3.141592 / 180
         self.x = self.x + self.r * math.cos(angle) * FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time
         self.y = self.y + self.r * math.sin(angle) * FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time

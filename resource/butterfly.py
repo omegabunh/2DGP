@@ -52,5 +52,5 @@ class Butterfly:
             self.bullet_count = 0
 
     def draw(self):
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         self.image.clip_draw(int(self.frame) * 92, 0, 92, 112, self.x - self.character.bg.window_left, self.y - self.character.bg.window_bottom)

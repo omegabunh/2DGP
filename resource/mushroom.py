@@ -35,20 +35,20 @@ class Mushroom:
         elif self.x < 100:
             self.side = 1
         self.x += self.velocity * game_framework.frame_time * self.side
-        if self.hit >= 30:
+        if self.hit >= 100:
             self.deadstate = True
         if self.hitstate == True:
             self.hit_count += 1
             self.image.opacify(0.8)
-            if self.hit_count % 10 == 0:
+            if self.hit_count % 30 == 0:
                 self.image.opacify(1.0)
-            if self.hit_count == 30:
+            if self.hit_count == 90:
                 self.hitstate = False
                 self.hit_count = 0
 
     def draw(self):
         self.font.draw(self.x - 60, self.y + 70, '(hit: %0.0f)' % self.hit, (0, 255, 0))
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         if self.side == 1:
             self.image.clip_composite_draw(int(self.frame) * 175, 0, 175, 280, 0.0, 'h', self.x, self.y, 175, 280)
 

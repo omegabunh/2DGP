@@ -1,6 +1,8 @@
 import game_framework
 from pico2d import *
 import title_state
+from map0 import Map
+import game_world
 
 name = "StartState"
 image = None
@@ -8,13 +10,12 @@ logo_time = 0.0
 
 
 def enter():
-    global image
-    image = load_image('sprite//start.jpg')
-
+    global map2
+    map2 = Map()
+    game_world.add_object(map2, 0)
 
 def exit():
-    global image
-    del(image)
+    game_world.clear()
 
 
 def update():
@@ -30,9 +31,8 @@ def update():
 
 
 def draw():
-    global image
     clear_canvas()
-    image.draw(900, 500)
+    map2.image.draw(1748 // 2, 950 // 2)
     update_canvas()
 
 def handle_events():

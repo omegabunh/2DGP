@@ -278,6 +278,8 @@ class Character:
         self.eat_sound.set_volume(70)
         self.attack_sound = load_wav('music//Attack.wav')
         self.attack_sound.set_volume(70)
+        self.dead_sound = load_wav('music//Tombstone.wav')
+        self.dead_sound.set_volume(80)
         self.idle_op_count, self.run_op_count = 0, 0
         self.font = load_font('Maplestory Bold.ttf', 16)
         self.hp = 1700
@@ -388,6 +390,7 @@ class Character:
         self.font.draw(self.x - self.bg.window_left - 60, self.y - self.bg.window_bottom + 50, '(hp: %0.0f)' % self.hp, (0, 255, 0))
         if self.deadstate:
             self.dead.draw(self.x, self.y)
+            self.dead_sound()
         else:
             self.cur_state.draw(self)
         self.hp_bar.draw(self.hp_x1, self.hp_y1, self.w, self.h)
@@ -416,3 +419,6 @@ class Character:
 
     def attackSound(self):
         self.attack_sound.play()
+
+    def deadSound(self):
+        self.dead_sound.play()

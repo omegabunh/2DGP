@@ -1,26 +1,26 @@
 import game_framework
 from pico2d import *
 import main2_state
-
+import game_world
+from clear1 import Map
 name = "boss1Clear"
 image = None
 logo_time = 0.0
 
 
 def enter():
-    global image
-    image = load_image('sprite//boss1clear.jpg')
+    global map
+    map = Map()
+    game_world.add_object(map, 0)
 
 
 def exit():
-    global image
-    del(image)
-
+    game_world.clear()
 
 def update():
     global logo_time
 
-    if (logo_time > 2.0):
+    if (logo_time > 6.0):
         logo_time = 0
         # game_framework.quit()
         game_framework.change_state(main2_state)
@@ -30,9 +30,8 @@ def update():
 
 
 def draw():
-    global image
     clear_canvas()
-    image.draw(1748//2, 950//2)
+    map.image.draw(1748//2, 950//2)
     update_canvas()
 
 def handle_events():

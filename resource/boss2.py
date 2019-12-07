@@ -100,9 +100,9 @@ class Boss:
         if self.hitstate == True:
             self.hit_count += 1
             self.image.opacify(0.8)
-            if self.hit_count % 10 == 0:
+            if self.hit_count % 50 == 0:
                 self.image.opacify(1.0)
-            if self.hit_count == 30:
+            if self.hit_count == 150:
                 self.hitstate = False
                 self.hit_count = 0
 

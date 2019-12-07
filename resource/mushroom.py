@@ -35,14 +35,14 @@ class Mushroom:
         elif self.x < 100:
             self.side = 1
         self.x += self.velocity * game_framework.frame_time * self.side
-        if self.hit >= 100:
+        if self.hit >= 300:
             self.deadstate = True
         if self.hitstate == True:
             self.hit_count += 1
             self.image.opacify(0.8)
-            if self.hit_count % 30 == 0:
+            if self.hit_count % 50 == 0:
                 self.image.opacify(1.0)
-            if self.hit_count == 90:
+            if self.hit_count == 150:
                 self.hitstate = False
                 self.hit_count = 0
 

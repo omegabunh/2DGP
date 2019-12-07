@@ -382,27 +382,27 @@ class Character:
         if self.idle_op:
             self.idle_op_count += 1
             self.idle.opacify(0.5)
-            if self.idle_op_count % 10 == 0:
+            if self.idle_op_count % 50 == 0:
                 self.idle.opacify(1.0)
-            if self.idle_op_count == 50:
+            if self.idle_op_count == 150:
                 self.idle_op = False
                 self.idle_op_count = 0
 
         if self.run_op:
             self.run_op_count += 1
             self.idle.opacify(0.5)
-            if self.run_op_count % 10 == 0:
+            if self.run_op_count % 50 == 0:
                 self.idle.opacify(1.0)
-            if self.run_op_count == 50:
+            if self.run_op_count == 150:
                 self.run_op = False
                 self.run_op_count = 0
 
         if self.prone_op:
             self.prone_op_count += 1
             self.prone.opacify(0.5)
-            if self.prone_op_count % 10 == 0:
+            if self.prone_op_count % 50 == 0:
                 self.prone.opacify(1.0)
-            if self.prone_op_count == 50:
+            if self.prone_op_count == 150:
                 self.prone_op = False
                 self.prone_op_count = 0
 

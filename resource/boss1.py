@@ -37,30 +37,34 @@ class Boss:
             Boss.hp_image = load_image('sprite//boss_hp.png')
         if Boss.hp_background is None:
             Boss.hp_background = load_image('sprite//boss_hp_background.png')
+        self.dead_sound = load_wav('music//lucid_die1.wav')
+        self.dead_sound.set_volume(80)
+        self.skill_sound = load_wav('music//lucid_skill.wav')
+        self.skill_sound.set_volume(80)
 
     def get_bb(self):
         return self.x - 100, self.y - 100, self.x + 100, self.y + 130
 
     def update(self):
-        print(self.count)
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 15
         if self.hitstate == True:
             self.hit_count += 1
             self.image.opacify(0.8)
-            if self.hit_count % 30 == 0:
+            if self.hit_count % 50 == 0:
                 self.image.opacify(1.0)
-            if self.hit_count == 90:
+            if self.hit_count == 150:
                 self.hitstate = False
                 self.hit_count = 0
 
         if self.hp % 50 == 0 and self.count == 0:
+            self.skillSound()
             self.count += 1
             self.skillstate = True
 
         #self.hp != 1000 and
         if self.skillstate == True:
             self.skillcount += 1
-            if self.skillcount == 50:
+            if self.skillcount == 220:
                 self.skillcount = 0
                 self.skillstate = False
 
@@ -77,3 +81,8 @@ class Boss:
         self.hp_background.draw(self.hp_x1, self.hp_y1, self.w1, self.h1)
         self.hp_image.draw(self.hp_x, self.hp_y, self.w, self.h)
 
+    def deadSound(self):
+        self.dead_sound.play()
+
+    def skillSound(self):
+        self.skill_sound.play()

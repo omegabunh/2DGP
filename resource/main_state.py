@@ -20,7 +20,7 @@ mushroom = None
 running = True
 timer = 0
 overTimer = 0
-
+deadcount = 0
 
 def idle_collide(a, b):
     if character.idlestate:
@@ -136,13 +136,13 @@ def handle_events():
             game_framework.change_state(title_state)
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
             map2.bgm.stop()
-            game_framework.change_state(main2_state)
+            game_framework.change_state(boss1_clear)
         else:
             character.handle_event(event)
 
 
 def update():
-    global timer, overTimer
+    global timer, overTimer, deadcount
     timer += 1
     for game_object in game_world.all_objects():
         game_object.update()
@@ -150,33 +150,33 @@ def update():
     if idle_collide(character, boss):
         if character.idlestate:
             if character.idle_op == False and character.hp != 0:
-                character.hp -= 2
-                character.w -= 0.2
-                character.hp_x1 -= 0.1
+                character.hp -= 300
+                character.w -= 30
+                character.hp_x1 -= 15
                 character.idle_op = True
 
     if run_collide(character, boss):
         if character.runstate:
             if character.run_op == False and character.hp != 0:
-                character.hp -= 2
-                character.w -= 0.2
-                character.hp_x1 -= 0.1
+                character.hp -= 300
+                character.w -= 30
+                character.hp_x1 -= 15
                 character.run_op = True
 
     if prone_collide(character, boss):
         if character.pronestate:
             if character.prone_op == False and character.hp != 0:
-                character.hp -= 2
-                character.w -= 0.2
-                character.hp_x1 -= 0.1
+                character.hp -= 300
+                character.w -= 30
+                character.hp_x1 -= 15
                 character.prone_op = True
 
     if skill_collide(character, boss):
         if character.skillstate:
             if character.boss_skill_damage == False and boss.hitstate == False:
-                boss.w += -3
-                boss.hp_x += -1.5
-                boss.hp -= 2
+                boss.w += -6
+                boss.hp_x += -3
+                boss.hp -= 4
                 character.boss_skill_damage = True
                 boss.hitstate = True
 
@@ -214,7 +214,7 @@ def update():
                 character.prone_op = True
 
     if skill_collide(character, mushroom):
-        if mushroom.hit >= 100:
+        if mushroom.hit >= 300:
             game_world.remove_object(mushroom)
         if character.skillstate:
             if character.mushroom_skill_damage == False or character.mushroom_skill2_damage == False and mushroom.hitstate == False:
@@ -224,7 +224,7 @@ def update():
                 mushroom.hitstate = True
 
     if attack_collide(character, mushroom):
-        if mushroom.hit >= 100:
+        if mushroom.hit >= 300:
             game_world.remove_object(mushroom)
         if character.attackstate:
             if character.attack_damage == False and mushroom.hitstate == False:
@@ -234,7 +234,7 @@ def update():
 
     for monster in monsters:
 
-        if monster.hit >= 30:
+        if monster.hit >= 300:
             monster.deadstate = True
             game_world.remove_object(monster)
 
@@ -263,8 +263,6 @@ def update():
                     character.prone_op = True
 
         if skill_collide(character, monster):
-            if monster.hit >= 30:
-                game_world.remove_object(monster)
             if character.skillstate:
                 if character.monster_skill_damage == False or character.monster_skill2_damage == False and monster.hitstate == False:
                     monster.hit += 2
@@ -279,15 +277,18 @@ def update():
                     character.attack_damage = True
                     monster.hitstate = True
 
-    if mushroom.hit >= 30:
+    if mushroom.hit >= 300:
         mushroom.deadstate = True
         game_world.remove_object(mushroom)
 
     if boss.hp <= 0:
         boss.hp = 0
+        boss.deadSound()
         game_world.remove_object(boss)
-        map2.bgm.stop()
-        game_framework.change_state(boss1_clear)
+        deadcount += 1
+        if deadcount == 200:
+            map2.bgm.stop()
+            game_framework.change_state(boss1_clear)
         #game_framework.change_state(main2_state)
 
     if character.hp <= 0:

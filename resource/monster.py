@@ -30,19 +30,19 @@ class Monster:
     def update(self):
         #self.frame = random.randint(0, 5)
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
-        if main_state.boss.hp % 500 == 0 and main_state.boss.hp != 1000 and main_state.boss.hp != 0:
+        if 495 <= main_state.boss.hp <= 500 and main_state.boss.hp != 0:
             if self.y > 330:
-                self.y -= 50
+                self.y -= 10
             elif self.y < 330:
                 self.y = 330
-        if self.hit >= 30:
+        if self.hit >= 300:
             self.deadstate = True
         if self.hitstate == True:
             self.op_count += 1
             self.image.opacify(0.8)
-            if self.op_count % 30:
+            if self.op_count % 50:
                 self.image.opacify(1.0)
-            if self.op_count == 90:
+            if self.op_count == 150:
                 self.hitstate = False
                 self.op_count = 0
 

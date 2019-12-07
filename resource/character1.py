@@ -317,6 +317,8 @@ class Character:
         self.eat_sound.set_volume(70)
         self.attack_sound = load_wav('music//Attack.wav')
         self.attack_sound.set_volume(70)
+        self.dead_sound = load_wav('music//Tombstone.wav')
+        self.dead_sound.set_volume(80)
         if Character.idle == None:
             Character.idle = load_image('sprite//character.png')
         if Character.attack == None:
@@ -458,6 +460,7 @@ class Character:
         self.hp_bar.draw(self.hp_x1, self.hp_y1, self.w, self.h)
         self.hp_background.draw(self.hp_x, self.hp_y)
         if self.deadstate:
+            self.deadSound()
             self.dead.draw(self.x, self.y)
         else:
             self.cur_state.draw(self)
@@ -486,3 +489,6 @@ class Character:
 
     def attackSound(self):
         self.attack_sound.play()
+
+    def deadSound(self):
+        self.dead_sound.play()

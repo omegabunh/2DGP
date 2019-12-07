@@ -295,6 +295,7 @@ def update():
         character.deadstate = True
         character.hp = 0
         overTimer += 1
+
         if overTimer == 100:
             game_framework.change_state(over_state)
 

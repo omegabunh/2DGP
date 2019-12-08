@@ -47,6 +47,6 @@ class Monster:
                 self.op_count = 0
 
     def draw(self):
-        self.font.draw(self.x - 60, self.y + 70, '(hit: %0.0f)' % self.hit, (0, 255, 0))
+        #self.font.draw(self.x - 60, self.y + 70, '(hit: %0.0f)' % self.hit, (0, 255, 0))
         #draw_rectangle(*self.get_bb())
         self.image.clip_draw(int(self.frame) * 191, 0, 191, 224, self.x, self.y)

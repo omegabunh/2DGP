@@ -385,7 +385,7 @@ class Character:
             self.cur_state.enter(self, event)
 
     def draw(self):
-        self.font.draw(self.x - self.bg.window_left - 60, self.y - self.bg.window_bottom + 50, '(hp: %0.0f)' % self.hp, (0, 255, 0))
+        #self.font.draw(self.x - self.bg.window_left - 60, self.y - self.bg.window_bottom + 50, '(hp: %0.0f)' % self.hp, (0, 255, 0))
         if self.deadstate:
             self.dead.draw(self.x, self.y)
             self.deadSound()

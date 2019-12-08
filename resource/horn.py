@@ -50,7 +50,7 @@ class Horn:
         cx1, cy1 = self.bar_x - self.bg.window_left + 556, self.bar_y - self.bg.window_bottom + 255
         cx2, cy2 = self.bar_x1 - self.bg.window_left + 523, self.bar_y1 - self.bg.window_bottom + 255
 
-        if main2_state.boss.hp <= 900:
+        if main2_state.boss.hp <= 500:
             self.font.draw(cx - 20, cy + 120, 'PRESS SPACE', (255, 0, 0))
             self.spacebar.draw(cx1, cy1+30)
             self.spacebar_fill.draw(cx2, cy2+30, self.w, self.h)

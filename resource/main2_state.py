@@ -145,7 +145,7 @@ def handle_events():
             character.handle_event(event)
 
 def update():
-    global spacecount, butterflydead, overTimer
+    global spacecount, butterflydead, overTimer, deadcount
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -157,11 +157,19 @@ def update():
         if overTimer == 100:
             game_framework.change_state(over_state)
 
+    if boss.hp <= 0:
+        boss.deadSound()
+        game_world.remove_object(boss)
+        deadcount += 1
+        if deadcount == 200:
+            map.bgm.stop()
+            game_framework.push_state(end_state)
+
     for butterfly in butterflys:
         butterflydead = False
         if idle_collide(character, horn):
             if character.idlestate:
-                if spacestate and boss.hp <= 900:
+                if spacestate and boss.hp <= 500:
                     horn.bar_x1 += 0.25 * FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time
                     horn.w += 0.5 * FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time
                     spacecount += 1 * FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time
@@ -191,15 +199,12 @@ def update():
     if skill_collide(character, boss):
         if character.skillstate:
             if character.skill_damage == False and boss.hitstate == False:
-                boss.w += -3
-                boss.hp_x += -1.5
-                boss.hp -= 2
+                boss.w += -6
+                boss.hp_x += -3
+                boss.hp -= 4
                 character.skill_damage = True
                 boss.hitstate = True
-                if boss.hp <= 0:
-                    map.bgm.stop()
-                    game_world.remove_object(boss)
-                    game_framework.push_state(end_state)
+
 
     if attack_collide(character, boss):
         if character.attackstate:
@@ -209,10 +214,7 @@ def update():
                 boss.hp -= 1
                 character.attack_damage = True
                 boss.hitstate = True
-                if boss.hp <= 0:
-                    map.bgm.stop()
-                    game_world.remove_object(boss)
-                    game_framework.push_state(end_state)
+
 
 def draw():
     clear_canvas()

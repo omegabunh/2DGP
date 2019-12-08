@@ -41,6 +41,8 @@ class Boss:
         self.hitstate = False
         self.hit_count = 0
         self.font = load_font('Maplestory Bold.ttf', 16)
+        self.dead_sound = load_wav('music//lucid_die2.wav')
+        self.dead_sound.set_volume(80)
         if Boss.image is None:
             Boss.image = load_image('sprite//boss_phase2(356x384).png')
         if Boss.hp_image is None:
@@ -113,3 +115,6 @@ class Boss:
         #draw_rectangle(*self.get_bb())
         self.hp_background.draw(self.hp_x1, self.hp_y1, self.w1, self.h1)
         self.hp_image.draw(self.hp_x, self.hp_y, self.w, self.h)
+
+    def deadSound(self):
+        self.dead_sound.play()

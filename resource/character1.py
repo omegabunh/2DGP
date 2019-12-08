@@ -456,7 +456,7 @@ class Character:
             self.cur_state.enter(self, event)
 
     def draw(self):
-        self.font.draw(self.x - 60, self.y + 50, '(hp: %0.0f)' % self.hp, (0, 255, 0))
+        #self.font.draw(self.x - 60, self.y + 50, '(hp: %0.0f)' % self.hp, (0, 255, 0))
         self.hp_bar.draw(self.hp_x1, self.hp_y1, self.w, self.h)
         self.hp_background.draw(self.hp_x, self.hp_y)
         if self.deadstate:

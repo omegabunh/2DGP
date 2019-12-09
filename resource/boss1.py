@@ -71,11 +71,11 @@ class Boss:
         if self.hp % 50 == 40:
             self.count = 0
 
-        if self.hp == 0:
+        if self.hp <= 0:
             self.deadSound()
 
     def draw(self):
-        self.font.draw(self.x - 60, self.y + 150, '(hp: %0.0f)' % self.hp, (0, 255, 0))
+        #self.font.draw(self.x - 60, self.y + 150, '(hp: %0.0f)' % self.hp, (0, 255, 0))
         if self.skillstate:
             self.attack_image.clip_draw(int(self.frame) * 340, 0, 340, 420, self.x - 10, self.y + 4)
         else:

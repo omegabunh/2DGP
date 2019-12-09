@@ -20,12 +20,12 @@ def exit():
 def update():
     global logo_time
 
-    if (logo_time > 6.0):
+    if (logo_time > 0.12):
         logo_time = 0
         # game_framework.quit()
         game_framework.change_state(main2_state)
     delay(0.01)
-    logo_time += 0.01
+    logo_time += 0.01 * game_framework.frame_time
 
 
 

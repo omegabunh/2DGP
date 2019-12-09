@@ -104,7 +104,7 @@ def enter():
     game_world.add_object(character, 1)
 
     global butterflys
-    butterflys = [Butterfly(character) for i in range(4)]
+    butterflys = [Butterfly(character) for i in range(7)]
     game_world.add_objects(butterflys, 1)
 
     key = Key()
@@ -164,12 +164,7 @@ def update():
         if overTimer == 100:
             game_framework.change_state(over_state)
 
-    if boss.hp <= 0:
-        game_world.remove_object(boss)
-        deadcount += 1
-        if deadcount == 800:
-            map.bgm.stop()
-            game_framework.push_state(end_state)
+
 
     for butterfly in butterflys:
         butterflydead = False
@@ -184,9 +179,17 @@ def update():
                         game_world.remove_object(butterfly)
                         butterflydead = True
 
+        if boss.hp <= 0:
+            game_world.remove_object(boss)
+            game_world.remove_object(butterfly)
+            deadcount += 1 * game_framework.frame_time
+            if deadcount >= 30:
+                map.bgm.stop()
+                game_framework.push_state(end_state)
+
     if idle_collide(character, boss):
         if character.idlestate:
-            if character.idle_op == False and character.hp != 0:
+            if character.idle_op == False and character.hp != 0 and boss.deadstate == False:
                 character.hp -= 2
                 character.w -= 0.2
                 character.hp_x1 -= 0.1
@@ -195,7 +198,7 @@ def update():
 
     if run_collide(character, boss):
         if character.runstate:
-            if character.run_op == False and character.hp != 0:
+            if character.run_op == False and character.hp != 0 and boss.deadstate == False:
                 character.hp -= 2
                 character.w -= 0.2
                 character.hp_x1 -= 0.1
@@ -204,7 +207,7 @@ def update():
 
     if skill_collide(character, boss):
         if character.skillstate:
-            if character.skill_damage == False and boss.hitstate == False:
+            if character.skill_damage == False and boss.hitstate == False and boss.deadstate == False:
                 boss.w += -6
                 boss.hp_x += -3
                 boss.hp -= 4
@@ -214,7 +217,7 @@ def update():
 
     if attack_collide(character, boss):
         if character.attackstate:
-            if not character.attack_damage and boss.hitstate == False:
+            if not character.attack_damage and boss.hitstate == False and boss.deadstate == False:
                 boss.w += -1.5
                 boss.hp_x += -0.725
                 boss.hp -= 1

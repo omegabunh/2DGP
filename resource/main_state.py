@@ -285,11 +285,13 @@ def update():
 
     if boss.hp <= 0:
         boss.hp = 0
+        monster.deadstate = True
+        mushroom.deadstate = True
         game_world.remove_object(boss)
         game_world.remove_object(mushroom)
         game_world.remove_object(monster)
-        deadcount += 1
-        if deadcount == 800:
+        deadcount += 1 * game_framework.frame_time
+        if deadcount >= 6:
             map2.bgm.stop()
             game_framework.change_state(boss1_clear)
         #game_framework.change_state(main2_state)

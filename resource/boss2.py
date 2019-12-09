@@ -15,7 +15,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # zombie Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 10
+FRAMES_PER_ACTION = 8
 
 
 class Boss:
@@ -40,6 +40,7 @@ class Boss:
         self.h1 = 35
         self.hitstate = False
         self.hit_count = 0
+        self.deadstate = False
         self.font = load_font('Maplestory Bold.ttf', 16)
         self.dead_sound = load_wav('music//lucid_die2.wav')
         self.dead_sound.set_volume(80)
@@ -107,12 +108,13 @@ class Boss:
             if self.hit_count == 150:
                 self.hitstate = False
                 self.hit_count = 0
-        if self.hp == 0:
+        if self.hp <= 0:
+            self.deadstate = True
             self.deadSound()
 
     def draw(self):
         cx, cy = self.x - self.bg.window_left + 196, self.y - self.bg.window_bottom
-        self.font.draw(cx - 60, cy + 150, '(hp: %0.0f)' % self.hp, (0, 255, 0))
+        #self.font.draw(cx - 60, cy + 150, '(hp: %0.0f)' % self.hp, (0, 255, 0))
         self.image.clip_draw(int(self.frame) * 356, 0, 356, 384, cx, cy)
         #draw_rectangle(*self.get_bb())
         self.hp_background.draw(self.hp_x1, self.hp_y1, self.w1, self.h1)

@@ -1,5 +1,6 @@
 import game_framework
 from pico2d import *
+import game_world
 
 name = "endState"
 image = None
@@ -9,12 +10,10 @@ logo_time = 0.0
 def enter():
     global image
     image = load_image('sprite//gameclear.png')
-
+    game_world.add_object(image, 0)
 
 def exit():
-    global image
-    del(image)
-
+    game_world.clear()
 
 def update():
    pass
@@ -22,7 +21,6 @@ def update():
 
 
 def draw():
-    global image
     clear_canvas()
     image.draw(1748//2, 950//2)
     update_canvas()

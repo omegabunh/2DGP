@@ -107,6 +107,8 @@ class Boss:
             if self.hit_count == 150:
                 self.hitstate = False
                 self.hit_count = 0
+        if self.hp == 0:
+            self.deadSound()
 
     def draw(self):
         cx, cy = self.x - self.bg.window_left + 196, self.y - self.bg.window_bottom

@@ -135,8 +135,13 @@ def handle_events():
             map2.bgm.stop()
             game_framework.change_state(title_state)
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-            map2.bgm.stop()
-            game_framework.change_state(boss1_clear)
+            #map2.bgm.stop()
+            #game_framework.change_state(boss1_clear)
+            boss.hp = 0
+        elif (event.type, event.key) == (SDL_KEYUP, SDLK_PAGEUP):
+            boss.w += -750
+            boss.hp_x += -375
+            boss.hp -= 500
         else:
             character.handle_event(event)
 
@@ -283,10 +288,9 @@ def update():
 
     if boss.hp <= 0:
         boss.hp = 0
-        boss.deadSound()
         game_world.remove_object(boss)
         deadcount += 1
-        if deadcount == 200:
+        if deadcount == 800:
             map2.bgm.stop()
             game_framework.change_state(boss1_clear)
         #game_framework.change_state(main2_state)

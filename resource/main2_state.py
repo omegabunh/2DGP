@@ -32,6 +32,7 @@ overTimer = 0
 spacestate = False
 spacecount = 0
 butterflydead = False
+deadcount = 0
 
 def idle_collide(a, b):
     if character.idlestate:
@@ -141,6 +142,12 @@ def handle_events():
             spacestate = True
         elif (event.type, event.key) == (SDL_KEYUP, SDLK_SPACE):
             spacestate = False
+        elif (event.type, event.key) == (SDL_KEYUP, SDLK_PAGEDOWN):
+            boss.hp = 0
+        elif (event.type, event.key) == (SDL_KEYUP, SDLK_PAGEUP):
+            boss.w += -300
+            boss.hp_x += -150
+            boss.hp -= 200
         else:
             character.handle_event(event)
 
@@ -158,10 +165,9 @@ def update():
             game_framework.change_state(over_state)
 
     if boss.hp <= 0:
-        boss.deadSound()
         game_world.remove_object(boss)
         deadcount += 1
-        if deadcount == 200:
+        if deadcount == 800:
             map.bgm.stop()
             game_framework.push_state(end_state)
 

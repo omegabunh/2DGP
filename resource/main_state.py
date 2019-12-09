@@ -1,7 +1,6 @@
 from pico2d import *
 import game_framework
 import title_state
-import main2_state
 import over_state
 import game_world
 import boss1_clear
@@ -15,7 +14,7 @@ from mushroom import Mushroom
 
 boss = None
 character = None
-monsters = []
+monster = None
 mushroom = None
 running = True
 timer = 0
@@ -99,10 +98,10 @@ def enter():
     boss = Boss()
     game_world.add_object(boss, 1)
 
-    global monsters
-    monsters = [Monster() for i in range(1)]
+    global monster
+    monster = Monster()
     # monsters = Monster()
-    game_world.add_objects(monsters, 1)
+    game_world.add_object(monster, 1)
 
     global mushroom
     mushroom = Mushroom()
@@ -237,50 +236,48 @@ def update():
                 character.attack_damage = True
                 mushroom.hitstate = True
 
-    for monster in monsters:
+    if monster.hit >= 300:
+        monster.deadstate = True
+        game_world.remove_object(monster)
 
-        if monster.hit >= 300:
-            monster.deadstate = True
-            game_world.remove_object(monster)
+    if idle_collide(character, monster):
+        if character.idlestate and monster.deadstate == False:
+            if character.idle_op == False and character.hp != 0:
+                character.hp -= 100
+                character.w -= 10
+                character.hp_x1 -= 5
+                character.idle_op = True
 
-        if idle_collide(character, monster):
-            if character.idlestate and monster.deadstate == False:
-                if character.idle_op == False and character.hp != 0:
-                    character.hp -= 100
-                    character.w -= 10
-                    character.hp_x1 -= 5
-                    character.idle_op = True
+    if run_collide(character, monster):
+        if character.runstate and monster.deadstate == False:
+            if character.run_op == False and character.hp != 0:
+                character.hp -= 100
+                character.w -= 10
+                character.hp_x1 -= 5
+                character.run_op = True
 
-        if run_collide(character, monster):
-            if character.runstate and monster.deadstate == False:
-                if character.run_op == False and character.hp != 0:
-                    character.hp -= 100
-                    character.w -= 10
-                    character.hp_x1 -= 5
-                    character.run_op = True
+    if prone_collide(character, monster):
+        if character.pronestate and monster.deadstate == False:
+            if character.prone_op == False and character.hp != 0:
+                character.hp -= 100
+                character.w -= 10
+                character.hp_x1 -= 5
+                character.prone_op = True
 
-        if prone_collide(character, monster):
-            if character.pronestate and monster.deadstate == False:
-                if character.prone_op == False and character.hp != 0:
-                    character.hp -= 100
-                    character.w -= 10
-                    character.hp_x1 -= 5
-                    character.prone_op = True
+    if skill_collide(character, monster):
+        if character.skillstate:
+            if character.monster_skill_damage == False or character.monster_skill2_damage == False and monster.hitstate == False:
+                monster.hit += 2
+                character.monster_skill_damage = True
+                character.monster_skill2_damage = True
+                monster.hitstate = True
 
-        if skill_collide(character, monster):
-            if character.skillstate:
-                if character.monster_skill_damage == False or character.monster_skill2_damage == False and monster.hitstate == False:
-                    monster.hit += 2
-                    character.monster_skill_damage = True
-                    character.monster_skill2_damage = True
-                    monster.hitstate = True
-
-        if attack_collide(character, monster):
-            if character.attackstate:
-                if character.attack_damage == False and monster.hitstate == False:
-                    monster.hit += 1
-                    character.attack_damage = True
-                    monster.hitstate = True
+    if attack_collide(character, monster):
+        if character.attackstate:
+            if character.attack_damage == False and monster.hitstate == False:
+                monster.hit += 1
+                character.attack_damage = True
+                monster.hitstate = True
 
     if mushroom.hit >= 300:
         mushroom.deadstate = True
@@ -289,6 +286,8 @@ def update():
     if boss.hp <= 0:
         boss.hp = 0
         game_world.remove_object(boss)
+        game_world.remove_object(mushroom)
+        game_world.remove_object(monster)
         deadcount += 1
         if deadcount == 800:
             map2.bgm.stop()
